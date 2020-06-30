@@ -27,6 +27,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             <li><a href="/">home</a></li>
                             <li><a href="/schedule/">schedule</a></li>
+                        </ul>
 
                             <!--/.nav-collapse -->
                     </div>
