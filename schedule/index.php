@@ -35,7 +35,7 @@ function formatdate($date) {
 
 <h1><a href="https://tilderadio.org"><img style="width:75px;" src="../logos/tilderadio-green.png">tilderadio.org</a></h1>
 <h4>upcoming broadcasts</h4>
-<p>all times in UTC. current time is <?=formatdate("now")?>.</p>
+<p>all times in UTC. current time is <span id="utcdate"><?=formatdate("now")?></span>.</p>
 
 <table class="table table-striped">
     <thead>
@@ -55,5 +55,18 @@ function formatdate($date) {
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<script>
+// Update the timer as time passes.
+// Because PHP gives the time on page load, people who disable Javascript won't be missing out on much.
+let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+let daysOfWeek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+function update_date() {
+    var d = new Date();
+    document.getElementById("utcdate").innerText = daysOfWeek[d.getUTCDay()]+" "+months[d.getUTCMonth()]+" "+d.getUTCDate().toString()+" "+d.getUTCHours().toString()+":"+d.getUTCMinutes().toString();
+    setTimeout(update_date,15000);
+}
+setTimeout(update_date,15000);
+</script>
 
 <?php include '../footer.php'; ?>
