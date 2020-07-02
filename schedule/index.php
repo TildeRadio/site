@@ -63,7 +63,7 @@ let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov",
 let daysOfWeek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 function update_date() {
     var d = new Date();
-    document.getElementById("utcdate").innerText = daysOfWeek[d.getUTCDay()]+" "+months[d.getUTCMonth()]+" "+d.getUTCDate().toString()+" "+d.getUTCHours().toString()+":"+d.getUTCMinutes().toString();
+    document.getElementById("utcdate").innerText = daysOfWeek[d.getUTCDay()]+" "+months[d.getUTCMonth()]+" "+d.getUTCDate().toString()+" "+d.getUTCHours().toString().padStart(2,'0')+":"+d.getUTCMinutes().toString().padStart(2,'0');
     setTimeout(update_date,15000);
 }
 setTimeout(update_date,15000);
