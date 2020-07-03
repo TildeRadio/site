@@ -11,8 +11,8 @@ $context = stream_context_create([
     ]
 ]);
 
-$from = gmdate("Y-m-d\TH:i:s\Z", strtotime("now + 1 day"));
-$to   = gmdate("Y-m-d\TH:i:s\Z", strtotime("now + 8 days"));
+$from = gmdate("Y-m-d\T00:00:00\Z", strtotime(date("w") ? "last sunday" : "sunday"));
+$to   = gmdate("Y-m-d\T00:00:00\Z", strtotime(date("w") ? "sunday" : "next sunday"));
 
 $schedule = json_decode(
     file_get_contents(
@@ -31,35 +31,48 @@ function formatdate($date) {
     return gmdate("Ymd\THis\Z", strtotime($date));
 }
 
-header("Content-Type: text/calendar");
-
 // ICS generation. Here be dragons.
 // I created the file using a Python script and reverse-engineered it to figure this out.
 
+header("Content-Type: text/calendar");
+
+// the iCalendar Validator throws a hissy fit if lines aren't CRLF terminated
+define("ICS_EOL","\r\n");
+
 // Header.
-echo "BEGIN:VCALENDAR".PHP_EOL;
-echo "VERSION:2.0".PHP_EOL;
-echo "PRODID:tilderadio schedule".PHP_EOL;
+echo "BEGIN:VCALENDAR".ICS_EOL;
+echo "VERSION:2.0".ICS_EOL;
+echo "PRODID:tilderadio schedule".ICS_EOL;
+echo "DTSTAMP:".formatdate("now").ICS_EOL;
 
 foreach ($schedule as $event) {
 	// The VEVENT structure's pretty easy to generate, especially since we're already in UTC.
-	echo "BEGIN:VEVENT".PHP_EOL;
-	// First, the event start and end.
-	echo "DTEND:".formatdate($event["end"]).PHP_EOL;
-	echo "DTSTART:".formatdate($event["start"]).PHP_EOL;
+	echo "BEGIN:VEVENT".ICS_EOL;
+	// First, we need a creation date.
+	// Just go with now.
+	echo "DTSTAMP:".formatdate("now").ICS_EOL;
+	// Next, the event start and end.
+	echo "DTEND:".formatdate($event["end"]).ICS_EOL;
+	echo "DTSTART:".formatdate($event["start"]).ICS_EOL;
+	// Next, the recurrence rule.
+	// We assume the format is weekly. (No DJs have requested any other frequency yet.)
+	echo "RRULE:FREQ=WEEKLY".ICS_EOL;
 	// Next, the event title, or "summary" as the spec calls it.
-	echo "SUMMARY:DJ ".$event["title"].PHP_EOL;
+	echo "SUMMARY:DJ ".$event["title"].ICS_EOL;
 	// Finally, a unique ID for this event.
 	// To make absolutely certain we don't repeat the same event ID, I decided to use a SHA256 hash of the event structure.
 	echo "UID:";
 	echo hash("sha256",json_encode($event));
-	echo "@tilderadio.org".PHP_EOL;
+	// to avoid the validator complaining about lines longer than 75 characters, split after the hash
+	echo ICS_EOL." ";
+	// Now finish the address UID
+	echo "@tilderadio.org".ICS_EOL;
 	// Finally, close the VEVENT structure.
-	echo "END:VEVENT".PHP_EOL;
+	echo "END:VEVENT".ICS_EOL;
 	// Next event?
 }
 
 // Finally, close out the VCALENDAR structure.
-echo "END:VCALENDAR".PHP_EOL;
+echo "END:VCALENDAR".ICS_EOL;
 
 ?>
