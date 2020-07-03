@@ -1,6 +1,6 @@
 <?php
 $from = gmdate("Y-m-d\T00:00:00\Z", strtotime(date("w") ? "last sunday" : "sunday"));
-$to   = gmdate("Y-m-d\T00:00:00\Z", strtotime(date("w") ? "sunday" : "next sunday"));
+$to   = gmdate("Y-m-d\T00:00:00\Z", strtotime("2 days ago",strtotime(date("w") ? "sunday" : "next sunday")));
 include 'schedule.php';
 
 function ics_formatdate($date) {
