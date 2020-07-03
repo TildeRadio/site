@@ -1,35 +1,7 @@
 <?php
-include 'apikey.php';
-
-if (empty($apikey)) {
-    die("missing api key");
-}
-$context = stream_context_create([
-    "http" => [
-        "method" => "GET",
-        "header" => "X-API-Key: $apikey\r\n"
-    ]
-]);
-
 $from = gmdate("Y-m-d\T00:00:00\Z", strtotime(date("w") ? "last sunday" : "sunday"));
 $to   = gmdate("Y-m-d\T00:00:00\Z", strtotime(date("w") ? "sunday" : "next sunday"));
-
-$schedule = json_decode(
-    file_get_contents(
-        "https://radio.tildeverse.org/api/station/1/streamers/schedule?start=$from&end=$to",
-        false,
-        $context
-    ),
-    true
-);
-
-usort($schedule, function ($a, $b) {
-    return $a["start"] <=> $b["start"];
-});
-
-function formatdate($date) {
-    return gmdate("Ymd\THis\Z", strtotime($date));
-}
+include 'schedule.php';
 
 // ICS generation. Here be dragons.
 // I created the file using a Python script and reverse-engineered it to figure this out.
