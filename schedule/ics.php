@@ -10,7 +10,10 @@ function ics_formatdate($date) {
 // ICS generation. Here be dragons.
 // I created the file using a Python script and reverse-engineered it to figure this out.
 
+// text/calendar MIME type for ICS files
 header("Content-Type: text/calendar");
+// It should download as a .ics file
+header('Content-Disposition: attachment; filename="tilderadio.ics"');
 
 // the iCalendar Validator throws a hissy fit if lines aren't CRLF terminated
 define("ICS_EOL","\r\n");
