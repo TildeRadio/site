@@ -2,7 +2,7 @@
 
 <h1><a href="https://tilderadio.org"><img style="width:75px;" src="./logos/tilderadio-green.png">tilderadio.org</a></h1>
 	<h4>
-		<?=file_get_contents("https://radiobot.tilde.chat/slogan.php")?>
+		<?=json_decode(file_get_contents("https://bot.tildegit.org/api/slogan"))?>
 	</h4>
 
 <br>
