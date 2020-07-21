@@ -31,6 +31,9 @@ usort($schedule, function ($a, $b) {
     return $a["start"] <=> $b["start"];
 });
 
+if (isset($_GET["json"]) && $_GET["json"] === "yes")
+    echo json_encode($schedule);
+
 function formatdate($date) {
     return gmdate("D M d H:i", strtotime($date));
 }
