@@ -1,525 +1,63 @@
 <section class="calendar-wrapper">
+<?php
+function check_in_range($start_date, $end_date, $checkdate) {
+  $start_ts = strtotime($start_date);
+  $end_ts = strtotime($end_date);
+  $user_ts = strtotime($checkdate);
+  return (($user_ts >= $start_ts) && ($user_ts < $end_ts));
+}
+
+$begin = new DateTime($schedule[0]['start']);
+$end = new DateTime(end($schedule)['start']);
+
+$daterange = new DatePeriod($begin, new DateInterval('P1D'), $end);
+
+?>
 <table class="calendar">
   <thead>
     <tr>
       <th></th>
-      <th>
-        <span class="day">1</span>
-        <span class="long">Monday</span>
-        <span class="short">Mon</span>
-      </th>
-      <th>
-        <span class="day">2</span>
-        <span class="long">Tuesday</span>
-        <span class="short">Tue</span>
-      </th>
-      <th>
-        <span class="day">3</span>
-        <span class="long">Wendsday</span>
-        <span class="short">We</span>
-      </th>
-      <th>
-        <span class="day">4</span>
-        <span class="long">Thursday</span>
-        <span class="short">Thur</span>
-      </th>
-      <th>
-        <span class="day">5</span>
-        <span class="long">Friday</span>
-        <span class="short">Fri</span>
-      </th>
-      <th>
-        <span class="day">6</span>
-        <span class="long">Saturday</span>
-        <span class="short">Sat</span>
-      </th>
-      <th>
-        <span class="day">7</span>
-        <span class="long">Sunday</span>
-        <span class="short">Sun</span>
-      </th>
+<?php
+foreach($daterange as $date){
+?>
+    <th>
+      <span class="day"><?php echo $date->format("d") ?></span>
+      <span class="long"><?php echo $date->format("l") ?></span>
+      <span class="short"><?php echo $date->format("D") ?></span>
+    </th>
+<?php
+}
+?>
     </tr>
   </thead>
-
   <tbody>
+<?php
+$time = mktime(0, 0, 0, 1, 1); // time will count us by 30-min increments through the day
+for ($i = 0; $i < 86400; $i += 1800) {  // 1800 = half hour, 86400 = one day
+?>
     <tr>
-      <td class="hour" rowspan="2"><span>00:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td class="hour" rowspan="2"><span>01:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+<?php
+  // Only show row if we're on a full hour block
+  if ((($i / 1800) % 2) === 0 ) {
+?>
+      <td class="hour" rowspan="2"><span><?php echo date('H', $time + $i) ?>:00</span></td>
+<?php
+  }
+?>
 
-    <tr>
-      <td class="hour" rowspan="2"><span>02:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+<?php
+  foreach($daterange as $date){
+    // merge date (changing days) and time (incrementing by 30 min) to draw calendar by row.
+    $merge = new DateTime($date->format('Y-m-d') .' ' .date('H:i:s', $time + $i));
+?>
+      <td><?php echo $merge->format('Y-m-d H:i:s'); ?></td>
+<?php
+  }
+?>
     </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>03:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>04:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>05:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>06:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>07:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>08:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>09:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>10:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>11:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>12:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>13:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>14:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>15:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>16:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>17:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>18:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>19:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>20:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>21:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>22:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-
-    <tr>
-      <td class="hour" rowspan="2"><span>23:00</span></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
+<?php
+}
+?>
   </tbody>
 </table>
 </section>
