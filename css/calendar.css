@@ -1,7 +1,7 @@
 .calendar-wrapper {
   display: block;
-  max-height: 500px;
-  overflow-y: scroll;
+  /* max-height: 500px; */
+  /* overflow-y: scroll; */
 }
 .calendar {
   font-family: sans-serif;
@@ -12,10 +12,11 @@
   margin-bottom: 50px;
 }
 .calendar thead tr th {
-  background: #626E7E;
-  color: #d1d5db;
+  background: #1c201b;
   padding: 0.5em;
   overflow: hidden;
+  text-align: center;
+  border-bottom: 1px solid #26d700;
 }
 .calendar thead tr th:first-child {
   border-radius: 3px 0 0 0;
@@ -45,10 +46,10 @@
   font-size: 2em;
 }
 .calendar tbody tr {
-  background: #d1d5db;
+  background: #1c201b;
 }
 .calendar tbody tr:nth-child(odd) {
-  background: #c8cdd4;
+  background: #313e2f;
 }
 .calendar tbody tr:nth-child(2n+0) td {
   border-bottom: 1px solid #626E7E;
@@ -67,8 +68,7 @@
 .calendar tbody tr td.hour {
   font-size: 2em;
   padding: 0;
-  color: #626E7E;
-  background: #fff;
+  background: #072000;
   border-bottom: 1px solid #626E7E;
   border-collapse: separate;
   min-width: 100px;
