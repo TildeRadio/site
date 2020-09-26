@@ -1,8 +1,3 @@
-.calendar-wrapper {
-  display: block;
-  /* max-height: 500px; */
-  /* overflow-y: scroll; */
-}
 .calendar {
   font-family: sans-serif;
   width: 100%;
@@ -61,6 +56,7 @@
   position: relative;
   height: 32px;
   cursor: pointer;
+	overflow: hidden;
 }
 .calendar tbody tr td:last-child {
   border-right: 1px solid #626E7E;
@@ -78,6 +74,16 @@
   display: block;
 }
 @media (max-width: 60em) {
+  .calendar-wrapper {
+    display: block;
+    overflow-x: scroll;
+  }
+  .calendar {
+    min-width: 800px;
+  }
+  .calendar tbody tr td.hour {
+    font-size: 16px;
+  }
   .calendar thead tr th .long {
     display: none;
   }
@@ -91,6 +97,17 @@
   }
 }
 @media (max-width: 27em) {
+  .calendar-wrapper {
+    display: block;
+    overflow-x: scroll;
+  }
+  .calendar {
+    min-width: 800px;
+  }
+  .calendar tbody tr td.hour {
+    font-size: 16px;
+    text-align: right;
+  }
   .calendar thead tr th {
     font-size: 65%;
   }
@@ -106,9 +123,6 @@
   .calendar thead tr th .day.active {
     background: #d1d5db;
     color: #626E7E;
-  }
-  .calendar tbody tr td.hour {
-    font-size: 1.7em;
   }
   .calendar tbody tr td.hour span {
     transform: translateY(16px) rotate(270deg);
