@@ -1,4 +1,6 @@
 <?php
+$from = gmdate("Y-m-d\T00:00:00\Z",strtotime("today"));
+$to = gmdate("Y-m-d\T00:00:00\Z",strtotime("today + 8 days"));
 include 'schedule.php';
 
 function ics_formatdate($date) {
