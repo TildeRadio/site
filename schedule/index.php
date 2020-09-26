@@ -9,6 +9,10 @@ include 'schedule.php';
 <p>all times in UTC. current time is <span id="utcdate"><?=formatdate("now")?></span>.</p>
 <p>this schedule is also available in <a href="https://icalendar.org/validator.html?url=https://tilderadio.org/schedule/ics.php">iCalendar format</a>. point your calendar client at <code>https://tilderadio.org/schedule/ics.php</code>.</p>
 
+<?php
+include 'calendar.php';
+?>
+
 <table class="table table-striped">
     <thead>
         <tr>
