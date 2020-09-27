@@ -1,0 +1,132 @@
+.calendar {
+  font-family: sans-serif;
+  width: 100%;
+  border-spacing: 0;
+  border-collapse: separate;
+  table-layout: fixed;
+  margin-bottom: 50px;
+}
+.calendar thead tr th {
+  background: #1c201b;
+  padding: 0.5em;
+  overflow: hidden;
+  text-align: center;
+  border-bottom: 1px solid #26d700;
+}
+.calendar thead tr th:first-child {
+  border-radius: 3px 0 0 0;
+}
+.calendar thead tr th:last-child {
+  border-radius: 0 3px  0 0;
+}
+.calendar thead tr th .day {
+  display: block;
+  font-size: 1.2em;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  margin: 0 auto 5px;
+  padding: 5px;
+  line-height: 1.8;
+}
+.calendar thead tr th .day.active {
+  background: #d1d5db;
+  color: #626E7E;
+}
+.calendar thead tr th .short {
+  display: none;
+}
+.calendar thead tr th i {
+  vertical-align: middle;
+  font-size: 2em;
+}
+.calendar tbody tr {
+  background: #1c201b;
+}
+.calendar tbody tr:nth-child(odd) {
+  background: #313e2f;
+}
+.calendar tbody tr:nth-child(2n+0) td {
+  border-bottom: 1px solid #626E7E;
+}
+.calendar tbody tr td {
+  text-align: center;
+  vertical-align: middle;
+  border-left: 1px solid #626E7E;
+  position: relative;
+  height: 32px;
+  cursor: pointer;
+	overflow: hidden;
+}
+.calendar tbody tr td:last-child {
+  border-right: 1px solid #626E7E;
+}
+.calendar tbody tr td.hour {
+  font-size: 2em;
+  padding: 0;
+  background: #072000;
+  border-bottom: 1px solid #626E7E;
+  border-collapse: separate;
+  min-width: 100px;
+  cursor: default;
+}
+.calendar tbody tr td.hour span {
+  display: block;
+}
+@media (max-width: 60em) {
+  .calendar-wrapper {
+    display: block;
+    overflow-x: scroll;
+  }
+  .calendar {
+    min-width: 800px;
+  }
+  .calendar tbody tr td.hour {
+    font-size: 16px;
+  }
+  .calendar thead tr th .long {
+    display: none;
+  }
+  .calendar thead tr th .short {
+    display: block;
+  }
+  .calendar tbody tr td.hour span {
+    transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+  }
+}
+@media (max-width: 27em) {
+  .calendar-wrapper {
+    display: block;
+    overflow-x: scroll;
+  }
+  .calendar {
+    min-width: 800px;
+  }
+  .calendar tbody tr td.hour {
+    font-size: 16px;
+    text-align: right;
+  }
+  .calendar thead tr th {
+    font-size: 65%;
+  }
+  .calendar thead tr th .day {
+    display: block;
+    font-size: 1.2em;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    margin: 0 auto 5px;
+    padding: 5px;
+  }
+  .calendar thead tr th .day.active {
+    background: #d1d5db;
+    color: #626E7E;
+  }
+  .calendar tbody tr td.hour span {
+    transform: translateY(16px) rotate(270deg);
+    -webkit-transform: translateY(16px) rotate(270deg);
+    -moz-transform: translateY(16px) rotate(270deg);
+  }
+}

@@ -304,7 +304,8 @@ th {
 
 .img-thumbnail,
 body {
-	background-color: #040304
+	background-color: #040304;
+	overflow-x: hidden;
 }
 
 @font-face {
@@ -1585,7 +1586,7 @@ h6 {
 
 .h1,
 h1 {
-	font-size: 48px
+	font-size: 38px
 }
 
 .h2,
@@ -1834,6 +1835,11 @@ dd {
 }
 
 @media (min-width:768px) {
+	.h1,
+	h1 {
+		font-size: 48px
+	}
+
 	.dl-horizontal dt {
 		float: left;
 		width: 160px;
