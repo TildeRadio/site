@@ -28,8 +28,9 @@ echo "DTSTAMP:".ics_formatdate("now").ICS_EOL;
 $event_ids = array();
 
 foreach ($schedule as $event) {
-	if (!in_array($event["id"],$event_ids)){
-		array_push($event_ids,$event["id"]);
+	$id = strval($event["id"]).gmdate("DHis").gmdate("DHis");
+	if (!in_array($id,$event_ids)){
+		array_push($event_ids,$id);
 		// The VEVENT structure's pretty easy to generate, especially since we're already in UTC.
 		echo "BEGIN:VEVENT".ICS_EOL;
 		// First, we need a creation date.
