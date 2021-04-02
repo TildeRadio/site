@@ -21,6 +21,5 @@ trigger:
 steps:
     - name: deploy
       commands:
-          - cd /usr/share/nginx/tilderadio.org
-          - git pull origin master
+          - git -C /usr/share/nginx/tilderadio.org pull --rebase origin master
 
