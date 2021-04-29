@@ -1,5 +1,5 @@
 <?php include 'header.php'; ?>
-    <h1><a href="https://tilderadio.org"><img style="width:75px;" src="./logos/tilderadio-green.png">tilderadio.org</a></h1>
+    <h1><a href="https://tilderadio.org"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="./logos/tilderadio.png">tilderadio.org</a></h1>
 <br>
 <br>
 <p><b>Digital Millennium Copyright Act ("DMCA")</b></p>
