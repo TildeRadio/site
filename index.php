@@ -1,7 +1,7 @@
 <?php include 'header.php'; ?>
 
 <h1>
-  <a href="/"><img style="width:75px;" src="./logos/tilderadio-green.png" alt="">tilderadio.org</a>
+  <a href="/"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="./logos/tilderadio.png" alt="">tilderadio.org</a>
 </h1>
 <h4><?=json_decode(file_get_contents("https://bot.tildegit.org/api/slogan"))?></h4>
 
