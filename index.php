@@ -10,6 +10,7 @@ TildeRadio is Internet radio streamed by / for users of the <a href="https://til
 </p>
 
 <p><a href="https://kiwi.tilde.chat/#tilderadio" target="_blank">Join us in #tilderadio</a>, our dedicated IRC channel on <a href="https://tilde.chat">tilde.chat</a></p>
+<p>Follow us on Mastodon where we announce when DJ's go live! <a href="https://tilde.zone/@tilderadio" target="_blank">@tilderadio</a></p>
 
 
 <hr>
