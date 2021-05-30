@@ -49,23 +49,40 @@ for ($i = 0; $i < 86400; $i += 1800) {
 ?>
 
 <?php
+  $now = new DateTime();
+  $halfhour = new DateInterval('PT30M');
+  $wrotepointer = false;
   // Loop over each day of the week for this 30 min span
   foreach($daterange as $date){
     // merge date (changing days) and time (incrementing by 30 min) to draw calendar by row.
     $merge = new DateTime($date->format('Y-m-d') .' ' .date('H:i:s', $time + $i));
+    // Set id for this time span, for referencing in JS.
+    $props = 'id="show-'.$merge->getTimestamp().'"';
     // We'll now use $merge to see if any shows are airing at this time
-    $match = false;
+    $matchedshow = null;
     foreach ($schedule as $show) {
       if (check_in_range($show['start'], $show['end'], $merge->format('Y-m-d H:i:s'))) {
-        echo "<td>" . $show['title'] . "</td>\n";
-        $match = true;
+        $matchedshow = $show;
         break;
       }
     }
-    // if no match was found, leave an empty node
-    if (! $match) {
-      echo "<td></td>\n";
+    echo "<td $props>";
+    if ($matchedshow) {
+        echo '<div class="show-title">'.$matchedshow['title'].'</div>';
+        // if no match was found, leave an empty node
     }
+    if (!$wrotepointer) {
+        // If current time is in this range, draw pointer.
+        $end = DateTimeImmutable::createFromMutable($merge)->add($halfhour);
+        if ($now >= $merge && $now < $end) {
+            // Cell height here should be synced with height of '.calendar tbody tr td' in ../css/calendar.css
+            $height = 32;
+            $top = round(date_diff($merge, $now)->format('%i') / 30 * ($height-1));
+            echo '<div id="pointer" style="top:'.$top.'px"></div>';
+        }
+        $wrotepointer = true;
+    }
+    echo "</td>\n";
   }
 ?>
     </tr>
