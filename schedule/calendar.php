@@ -66,21 +66,26 @@ for ($i = 0; $i < 86400; $i += 1800) {
         break;
       }
     }
+    $active = false;
+    if (!$wrotepointer) {
+      // If current time is in this range, draw pointer.
+      $end = DateTimeImmutable::createFromMutable($merge)->add($halfhour);
+      if ($now >= $merge && $now < $end) {
+        $active = true;
+        $props .= ' class="active"';
+      }
+    }
     echo "<td $props>";
     if ($matchedshow) {
         echo '<div class="show-title">'.$matchedshow['title'].'</div>';
         // if no match was found, leave an empty node
     }
-    if (!$wrotepointer) {
-        // If current time is in this range, draw pointer.
-        $end = DateTimeImmutable::createFromMutable($merge)->add($halfhour);
-        if ($now >= $merge && $now < $end) {
-            // Cell height here should be synced with height of '.calendar tbody tr td' in ../css/calendar.css
-            $height = 32;
-            $top = round(date_diff($merge, $now)->format('%i') / 30 * ($height-1));
-            echo '<div id="pointer" style="top:'.$top.'px"></div>';
-        }
-        $wrotepointer = true;
+    if ($active) {
+      // Cell height here should be synced with height of '.calendar tbody tr td' in ../css/calendar.css
+      $height = 32;
+      $top = round(date_diff($merge, $now)->format('%i') / 30 * ($height-1));
+      echo '<div id="pointer" style="top:'.$top.'px"></div>';
+      $wrotepointer = true;
     }
     echo "</td>\n";
   }

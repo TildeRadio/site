@@ -73,6 +73,9 @@
 .calendar tbody tr td.hour span {
   display: block;
 }
+.calendar tbody tr td.active {
+  border: 1px solid yellow;
+}
 #pointer {
   position: absolute;
   left: 0;
@@ -82,6 +85,9 @@
 }
 .pointer-label {
   color: red;
+}
+.pointer-label-wrapper {
+  color: yellow;
 }
 .show-title {
   position: relative;
