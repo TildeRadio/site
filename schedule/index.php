@@ -54,7 +54,7 @@ let currentRangeI = 0;
 function getCurrentRange(now) {
     for (i = currentRangeI; i < ranges.length; i++) {
         const range = ranges[i];
-        if (!range) return;
+        if (!range) continue;
         const rangeStart = range.startTime;
         if (rangeStart <= now && (rangeStart + halfHour) > now) {
             return range;
@@ -81,7 +81,7 @@ if (!pointer) {
     pointer.id = 'pointer';
 }
 
-let prevRange;
+let prevRange = getCurrentRange(new Date().getTime());
 function updatePointer(d) {
     // Find current cell
     const range = getCurrentRange(d.getTime());
@@ -89,15 +89,17 @@ function updatePointer(d) {
         // Done with schedule. Remove pointer. Need to refresh.
         if (prevRange) {
             prevRange.cell.removeChild(pointer);
+            prevRange.cell.classList.remove('active');
             prevRange = null;
         }
+        return;
     }
     // Move pointer to different cell if changed cell.
     if (range !== prevRange) {
-        const prevCell = prevRange && prevRange.cell
-        if (prevCell) prevCell.classList.remove('active');
+        if (prevRange) prevRange.cell.classList.remove('active');
         range.cell.classList.add('active');
         range.cell.appendChild(pointer);
+        prevRange = range;
     }
     // Move pointer based on time in current cell.
     const progress = (d.getTime() - range.startTime) / halfHour;
