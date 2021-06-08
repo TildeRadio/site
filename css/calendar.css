@@ -53,6 +53,7 @@
   vertical-align: middle;
   border-left: 1px solid #626E7E;
   position: relative;
+  /* Height here should be synced with $cell_height in ../schedule/calendar.php */
   height: 32px;
   cursor: pointer;
 	overflow: hidden;
@@ -71,6 +72,26 @@
 }
 .calendar tbody tr td.hour span {
   display: block;
+}
+.calendar tbody tr td.active {
+  border: 1px solid yellow;
+}
+#pointer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid red;
+  z-index: 1;
+}
+.pointer-label {
+  color: red;
+}
+.pointer-label-wrapper {
+  color: yellow;
+}
+.show-title {
+  position: relative;
+  z-index: 2;
 }
 @media (max-width: 60em) {
   .calendar-wrapper {
