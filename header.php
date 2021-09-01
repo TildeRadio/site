@@ -32,5 +32,8 @@
 
                             <!--/.nav-collapse -->
                     </div>
+                </div>
             </nav>
-            <br><br>
+        </div>
+        <br>
+        <br>
