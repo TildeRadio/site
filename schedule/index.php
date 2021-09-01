@@ -4,8 +4,7 @@ include '../header.php';
 include 'schedule.php';
 ?>
 
-<h1><a href="https://tilderadio.org"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="../logos/tilderadio.png">tilderadio.org</a></h1>
-<h4>upcoming broadcasts</h4>
+<h1><a href="https://tilderadio.org"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="../logos/tilderadio.png" alt="tilderadio logo">tilderadio.org</a></h1>
 <p>all times in UTC. current time is <span id="utcdate"><?=formatdate("now")?></span>
 <span class="pointer-label-wrapper">(</span><span class="pointer-label">&mdash;</span><span class="pointer-label-wrapper">)</span>.</p>
 <p>this schedule is also available in <a href="https://icalendar.org/validator.html?url=https://tilderadio.org/schedule/ics.php">iCalendar format</a>. point your calendar client at <code>https://tilderadio.org/schedule/ics.php</code>.</p>

@@ -16,17 +16,17 @@ TildeRadio is Internet radio streamed by / for users of the <a href="https://til
 <hr>
 <h4>how to listen</h4>
 <p><em><?php include 'schedule/nextdj.php'; ?></em></p>
-<p>
-  <iframe src="https://radio.tildeverse.org/public/tilderadio/embed" frameborder="0" allowtransparency="true" style="width: 100%; min-height: 160px; border: 0;"></iframe>
-</p>
+
+<iframe src="https://radio.tildeverse.org/public/tilderadio/embed"  style="width: 100%; min-height: 160px; border: 0;"></iframe>
 
 <p>
 Or use the following links in your media player of choice:
-<ul>
-<li>https://radio.tildeverse.org/radio/8000/radio.ogg</li>
-<li>https://radio.tildeverse.org/radio/8000/radio.mp3</li>
-</ul>
 </p>
+
+<ul>
+  <li>https://radio.tildeverse.org/radio/8000/radio.ogg</li>
+  <li>https://radio.tildeverse.org/radio/8000/radio.mp3</li>
+</ul>
 
 <hr>
 
