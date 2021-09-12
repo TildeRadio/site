@@ -54,7 +54,7 @@ ontop = 1
 lcd_auto = 0
 
 [Tilde]
-address = radio.tildeverse.org
+address = azuracast.tilderadio.org
 # live stream
 port = 8005
 # test stream

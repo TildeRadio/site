@@ -19,7 +19,7 @@ if (empty($apikey)) {
 
   $schedule = json_decode(
       file_get_contents(
-          "https://radio.tildeverse.org/api/station/1/schedule?rows=2",
+          "https://azuracast.tilderadio.org/api/station/1/schedule?rows=2",
           false,
           $context
       ),

@@ -1,6 +1,6 @@
 # redirect proper start
 <IfModule mod_rewrite.c>
 RewriteEngine On
-Redirect 302 /listen https://radio.tildeverse.org/radio/8000/radio.ogg
+Redirect 302 /listen https://azuracast.tilderadio.org/radio/8000/radio.ogg
 </IfModule>
 # redirect proper end
