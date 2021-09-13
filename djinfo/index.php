@@ -1,16 +1,6 @@
-<!doctype html>
-<html lang="en">
-
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="x-ua-compatible" content="ie=edge">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="/css/hacker.css">
-		<title>tilderadio dj info</title>
-	</head>
-
-	<body>
-		<div class="container">
+<?php
+	include __DIR__.'/../header.php';
+?>
 			<h1>how to stream</h1>
 
             <dl>
@@ -57,7 +47,5 @@ All volume sliders to 100%
 			<a href="https://azuracast.tilderadio.org/public/test">here</a>
             or <a href="https://azuracast.tilderadio.org/radio/8010/radio.ogg">here as ogg</a></p>
 
-		</div>
-	</body>
-</html>
-
+<?php
+include __DIR__.'/../footer.php';

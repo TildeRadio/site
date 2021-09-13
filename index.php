@@ -16,16 +16,33 @@
 
 
 <hr>
-<h4>how to listen</h4>
+<h2>how to listen</h2>
+<p>go to <a href="https://tilderadio.org/listen">https://tilderadio.org/listen</a></p>
+
 <p><em><?php include 'schedule/nextdj.php'; ?></em></p>
 
 <iframe src="https://azuracast.tilderadio.org/public/tilderadio/embed"  style="width: 100%; min-height: 160px; border: 0;"></iframe>
 
+
 <p>Or use the following links in your media player of choice:</p>
 
 <ul>
-    <li>https://azuracast.tilderadio.org/radio/8000/radio.ogg</li>
-    <li>https://azuracast.tilderadio.org/radio/8000/radio.mp3</li>
+    <li>
+        <a href="https://azuracast.tilderadio.org/radio/8000/radio.ogg">
+        https://azuracast.tilderadio.org/radio/8000/radio.ogg</a> (default, 192 kbps ogg vorbus)
+    </li>
+    <li>
+        <a href="https://azuracast.tilderadio.org/radio/8000/320k.ogg">
+        https://azuracast.tilderadio.org/radio/8000/320k.ogg</a> (320 kbps ogg vorbus)
+    </li>
+    <li>
+        <a href="https://azuracast.tilderadio.org/radio/8000/radio.mp3">
+        https://azuracast.tilderadio.org/radio/8000/radio.mp3</a> (192 kbps mp3)
+    </li>
+    <li>
+        <a href="https://azuracast.tilderadio.org/radio/8000/320k.mp3">
+        https://azuracast.tilderadio.org/radio/8000/320k.mp3</a> (320 kbps mp3)
+    </li>
 </ul>
 
 <hr>
