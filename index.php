@@ -1,16 +1,18 @@
 <?php include 'header.php'; ?>
 
-<h1>
-  <a href="/"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="./logos/tilderadio.png" alt="">tilderadio.org</a>
-</h1>
-<h4><?=json_decode(file_get_contents("https://bot.tildegit.org/api/slogan"))?></h4>
+<blockquote><?=json_decode(file_get_contents("https://bot.tildegit.org/api/slogan"))?></blockquote>
+
+<p>tilderadio is internet radio streamed by / for users of the <a href="https://tildeverse.org/">tildeverse</a>.</p>
 
 <p>
-TildeRadio is Internet radio streamed by / for users of the <a href="https://tildeverse.org/">tildeverse</a>.
+    <a href="https://tilde.chat/kiwi/#tilderadio" target="_blank">Join us in #tilderadio</a>,
+    our dedicated IRC channel on <a href="https://tilde.chat">tilde.chat</a>
 </p>
 
-<p><a href="https://kiwi.tilde.chat/#tilderadio" target="_blank">Join us in #tilderadio</a>, our dedicated IRC channel on <a href="https://tilde.chat">tilde.chat</a></p>
-<p>Follow us on Mastodon where we announce when DJ's go live! <a href="https://tilde.zone/@tilderadio" target="_blank">@tilderadio</a></p>
+<p>
+    follow us on mastodon where we announce when DJ's go live!
+    <a href="https://tilde.zone/@tilderadio" target="_blank">@tilderadio</a>
+</p>
 
 
 <hr>
@@ -19,13 +21,11 @@ TildeRadio is Internet radio streamed by / for users of the <a href="https://til
 
 <iframe src="https://azuracast.tilderadio.org/public/tilderadio/embed"  style="width: 100%; min-height: 160px; border: 0;"></iframe>
 
-<p>
-Or use the following links in your media player of choice:
-</p>
+<p>Or use the following links in your media player of choice:</p>
 
 <ul>
-  <li>https://azuracast.tilderadio.org/radio/8000/radio.ogg</li>
-  <li>https://azuracast.tilderadio.org/radio/8000/radio.mp3</li>
+    <li>https://azuracast.tilderadio.org/radio/8000/radio.ogg</li>
+    <li>https://azuracast.tilderadio.org/radio/8000/radio.mp3</li>
 </ul>
 
 <hr>

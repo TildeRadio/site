@@ -1,13 +1,19 @@
 <?php
-$additional_head='<link rel="alternate" type="text/calendar" href="https://tilderadio.org/schedule/ics.php">';
-include '../header.php';
+$additional_head='<link rel="stylesheet" href="/css/calendar.css">
+<link rel="alternate" type="text/calendar" href="https://tilderadio.org/schedule/ics.php">';
+include __DIR__ . '/../header.php';
 include 'schedule.php';
 ?>
 
-<h1><a href="https://tilderadio.org"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="../logos/tilderadio.png" alt="tilderadio logo">tilderadio.org</a></h1>
-<p>all times in UTC. current time is <span id="utcdate"><?=formatdate("now")?></span>
-<span class="pointer-label-wrapper">(</span><span class="pointer-label">&mdash;</span><span class="pointer-label-wrapper">)</span>.</p>
-<p>this schedule is also available in <a href="https://icalendar.org/validator.html?url=https://tilderadio.org/schedule/ics.php">iCalendar format</a>. point your calendar client at <code>https://tilderadio.org/schedule/ics.php</code>.</p>
+<p>
+    all times in UTC. current time is <span id="utcdate"><?=formatdate("now")?></span>
+    <span class="pointer-label-wrapper">(</span><span class="pointer-label">&mdash;</span><span class="pointer-label-wrapper">)</span>.
+</p>
+
+<p>
+    this schedule is also available in <a href="https://icalendar.org/validator.html?url=https://tilderadio.org/schedule/ics.php">iCalendar format</a>.
+    point your calendar client at <code>https://tilderadio.org/schedule/ics.php</code>.
+</p>
 
 <?php
 include 'calendar.php';
@@ -63,15 +69,19 @@ function getCurrentRange(now) {
 
 // Update the timer and pointer as time passes.
 // Because PHP gives the time on page load, people who disable Javascript won't be missing out on much.
-let months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-let daysOfWeek = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+let daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
 function update_date() {
     var d = new Date();
-    document.getElementById("utcdate").innerText = daysOfWeek[d.getUTCDay()]+" "+months[d.getUTCMonth()]+" "+d.getUTCDate().toString()+" "+d.getUTCHours().toString().padStart(2,'0')+":"+d.getUTCMinutes().toString().padStart(2,'0');
-    setTimeout(update_date,15000);
+    document.getElementById("utcdate").innerText = 
+        daysOfWeek[d.getUTCDay()] + " " + months[d.getUTCMonth()] + " " +
+        d.getUTCDate().toString() + " " + d.getUTCHours().toString().padStart(2,'0') +
+        ":" + d.getUTCMinutes().toString().padStart(2,'0');
+    setTimeout(update_date, 15000);
     updatePointer(d);
 }
-setTimeout(update_date,15000);
+setTimeout(update_date, 15000);
 
 let pointer = document.getElementById("pointer");
 // Create pointer in case it wasn't added in the page generation.
@@ -102,11 +112,10 @@ function updatePointer(d) {
     }
     // Move pointer based on time in current cell.
     const progress = (d.getTime() - range.startTime) / halfHour;
-    pointer.style.top = (progress * (range.cell.offsetHeight-1)).toFixed(0) + 'px';
+    pointer.style.top = (progress * (range.cell.offsetHeight - 1)).toFixed(0) + 'px';
 }
 // Update pointer immediately
 updatePointer(new Date());
-
 </script>
 
-<?php include '../footer.php'; ?>
+<?php include __DIR__.'/../footer.php'; ?>

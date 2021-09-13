@@ -8,8 +8,8 @@
         </title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/css/hacker.css">
-        <link rel="stylesheet" href="/css/calendar.css">
-        <link rel="icon" type="image/png" href="https://tilderadio.org/logos/tilderadio.png"><?=isset($additional_head)?PHP_EOL."        ".$additional_head.PHP_EOL:""?>
+        <link rel="icon" type="image/png" href="/logos/tilderadio.png">
+        <?=isset($additional_head) ? PHP_EOL . "        " . $additional_head . PHP_EOL : ""?>
     </head>
 
     <body>
@@ -37,3 +37,8 @@
         </div>
         <br>
         <br>
+        <div class="container">
+            <h1>
+                <a href="/"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="/logos/tilderadio.png" alt="">tilderadio.org</a>
+            </h1>
+            <hr>
