@@ -1,5 +1,6 @@
 <?php include 'header.php'; ?>
 
+<p><em><?php include 'schedule/nextdj.php'; ?></em></p>
 <blockquote><?=json_decode(file_get_contents("https://bot.tildegit.org/api/slogan"))?></blockquote>
 
 <p>tilderadio is internet radio streamed by / for users of the <a href="https://tildeverse.org/">tildeverse</a>.</p>
@@ -16,17 +17,15 @@
 
 
 <hr>
+
+
+
 <h2>how to listen</h2>
-<p>go to <a href="https://tilderadio.org/listen">https://tilderadio.org/listen</a></p>
 
-<p><em><?php include 'schedule/nextdj.php'; ?></em></p>
-
-<iframe src="https://azuracast.tilderadio.org/public/tilderadio/embed"  style="width: 100%; min-height: 160px; border: 0;"></iframe>
-
-
-<p>Or use the following links in your media player of choice:</p>
+<p>use one of the following links in your media player of choice or visit them in your browser:</p>
 
 <ul>
+    <li><a href="https://tilderadio.org/listen">https://tilderadio.org/listen</a></li>
     <li>
         <a href="https://azuracast.tilderadio.org/radio/8000/radio.ogg">
         https://azuracast.tilderadio.org/radio/8000/radio.ogg</a> (default, 192 kbps ogg vorbus)
@@ -46,5 +45,6 @@
 </ul>
 
 <hr>
+<iframe src="https://azuracast.tilderadio.org/public/tilderadio/embed"  style="width: 100%; min-height: 160px; border: 0;"></iframe>
 
 <?php include 'footer.php'; ?>
