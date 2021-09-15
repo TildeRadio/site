@@ -22,17 +22,17 @@
 
 <h2>how to listen</h2>
 
-<p>use one of the following links in your media player of choice or visit them in your browser:</p>
+<p>use the player at the bottom of the page, or use one of the following links in your media player of choice or visit them in your browser:</p>
 
 <ul>
     <li><a href="https://tilderadio.org/listen">https://tilderadio.org/listen</a></li>
     <li>
         <a href="https://azuracast.tilderadio.org/radio/8000/radio.ogg">
-        https://azuracast.tilderadio.org/radio/8000/radio.ogg</a> (default, 192 kbps ogg vorbus)
+        https://azuracast.tilderadio.org/radio/8000/radio.ogg</a> (default, 192 kbps ogg vorbis)
     </li>
     <li>
         <a href="https://azuracast.tilderadio.org/radio/8000/320k.ogg">
-        https://azuracast.tilderadio.org/radio/8000/320k.ogg</a> (320 kbps ogg vorbus)
+        https://azuracast.tilderadio.org/radio/8000/320k.ogg</a> (320 kbps ogg vorbis)
     </li>
     <li>
         <a href="https://azuracast.tilderadio.org/radio/8000/radio.mp3">
