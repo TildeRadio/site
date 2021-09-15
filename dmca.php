@@ -1,7 +1,4 @@
 <?php include 'header.php'; ?>
-    <h1><a href="https://tilderadio.org"><img style="width:72px;margin-top:-30px;margin-right:5px;" src="./logos/tilderadio.png">tilderadio.org</a></h1>
-<br>
-<br>
 <p><b>Digital Millennium Copyright Act ("DMCA")</b></p>
 
 <p>tilderadio respects the intellectual property rights of others. Per the DMCA, tilderadio will respond expeditiously to claims of copyright infringement on the Site if submitted to tilderadio's Copyright Agent as described below. Upon receipt of a notice alleging copyright infringement, tilderadio will take whatever action it deems appropriate within its sole discretion, including removal of the allegedly infringing materials and termination of access for repeat infringers of copyright protected content.</p>
