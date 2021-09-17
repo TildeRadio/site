@@ -16,7 +16,7 @@
 			<a href="https://www.azuracast.com/station-management/djs/streaming_software.html">
 				azuracast wiki</a></p>
             <p>if you're having trouble, try setting your software to broadcast 128kbps mp3</p>
-            <p><a href="butt.cfg.txt">example butt config</a></p>
+            <p><a href="/butt.cfg.txt">example butt config</a></p>
 
             <p>pulseaudio wizardry</p>
             <pre>
