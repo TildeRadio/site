@@ -19,8 +19,8 @@ if (empty($apikey)) {
 
     // allow ics.php to overwrite $from and $to
     if (!isset($from, $to)) {
-        $from = gmdate("Y-m-d\TH:i:s\Z", strtotime("now + 1 day"));
-        $to   = gmdate("Y-m-d\TH:i:s\Z", strtotime("now + 8 days"));
+        $from = gmdate("Y-m-d\TH:i:s\Z", strtotime("today"));
+        $to   = gmdate("Y-m-d\TH:i:s\Z", strtotime("today + 8 days"));
     }
 
     $schedule = json_decode(
