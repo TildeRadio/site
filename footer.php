@@ -1,11 +1,11 @@
             <footer class="text-center">
-                <a href="https://tildegit.org/tilderadio/site">page source</a> | <a href="/dmca.php">DMCA</a>
+                <a href="https://tildegit.org/tilderadio/site">page source</a> | <a href="<?= htmlspecialchars(asset('dmca.php'), ENT_QUOTES, 'UTF-8') ?>">DMCA</a>
             </footer>
 
         </div>
 
-        <script src="/js/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
+        <script src="<?= htmlspecialchars(asset('js/jquery.min.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
+        <script src="<?= htmlspecialchars(asset('js/bootstrap.min.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
     </body>
 
 </html>

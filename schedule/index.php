@@ -1,7 +1,7 @@
 <?php
-$additional_head='<link rel="stylesheet" href="/css/calendar.css">
+$additional_head='<link rel="stylesheet" href="../css/calendar.css">
 <link rel="alternate" type="text/calendar" href="https://tilderadio.org/schedule/ics.php">';
-include __DIR__ . '/../header.php';
+include '../header.php';
 include 'schedule.php';
 ?>
 
@@ -118,4 +118,4 @@ function updatePointer(d) {
 updatePointer(new Date());
 </script>
 
-<?php include __DIR__.'/../footer.php'; ?>
+<?php include '../footer.php'; ?>
