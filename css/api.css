@@ -1,0 +1,43 @@
+.tr-api-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: 18px;
+    background: var(--tr-line)
+}
+
+.tr-api-card {
+    min-width: 0;
+    padding: 16px;
+    background: var(--tr-bg)
+}
+
+.tr-api-card h2 {
+    margin: 0 0 8px;
+    font-size: 1rem
+}
+
+.tr-api-card p {
+    margin: 5px 0
+}
+
+.tr-api-card code,
+.tr-api-examples code {
+    overflow-wrap: anywhere
+}
+
+.tr-api-examples {
+    display: grid;
+    gap: 10px
+}
+
+.tr-api-examples pre {
+    margin: 0;
+    overflow-x: auto
+}
+
+@media (max-width: 700px) {
+    .tr-api-grid {
+        grid-template-columns: 1fr
+    }
+}

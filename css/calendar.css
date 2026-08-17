@@ -1,152 +1,101 @@
+.calendar-wrapper {
+  width: 100%;
+  margin-top: 24px;
+  overflow-x: auto;
+}
+
 .calendar {
   width: 100%;
+  min-width: 760px;
+  margin-bottom: 38px;
   border-spacing: 0;
-  border-collapse: separate;
+  border-collapse: collapse;
   table-layout: fixed;
-  margin-bottom: 50px;
 }
-.calendar thead tr th {
-  background: #1c201b;
-  padding: 0.5em;
-  overflow: hidden;
+
+.calendar thead th {
+  padding: 9px 5px;
+  border-bottom: 1px solid var(--tr-line);
+  color: var(--tr-muted);
+  font-size: .75rem;
+  font-weight: 400;
   text-align: center;
-  border-bottom: 1px solid #26d700;
 }
-.calendar thead tr th:first-child {
-  border-radius: 3px 0 0 0;
-}
-.calendar thead tr th:last-child {
-  border-radius: 0 3px  0 0;
-}
-.calendar thead tr th .day {
+
+.calendar thead th .day {
   display: block;
-  font-size: 1.2em;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  margin: 0 auto 5px;
-  padding: 5px;
-  line-height: 1.8;
+  color: var(--tr-fg);
+  font-size: 1rem;
 }
-.calendar thead tr th .day.active {
-  background: #d1d5db;
-  color: #626E7E;
+
+.calendar thead th .day.active {
+  color: var(--tr-accent-bright)
 }
-.calendar thead tr th .short {
-  display: none;
+
+.calendar thead th .short {
+  display: none
 }
-.calendar thead tr th i {
-  vertical-align: middle;
-  font-size: 2em;
-}
-.calendar tbody tr {
-  background: #1c201b;
-}
-.calendar tbody tr:nth-child(odd) {
-  background: #313e2f;
-}
-.calendar tbody tr:nth-child(2n+0) td {
-  border-bottom: 1px solid #626E7E;
-}
-.calendar tbody tr td {
-  text-align: center;
-  vertical-align: middle;
-  border-left: 1px solid #626E7E;
+
+.calendar tbody td {
   position: relative;
-  /* Height here should be synced with $cell_height in ../schedule/calendar.php */
   height: 32px;
-  cursor: pointer;
-	overflow: hidden;
+  overflow: hidden;
+  border-right: 1px solid var(--tr-line);
+  border-bottom: 1px solid var(--tr-line);
+  background: var(--tr-surface);
+  color: #b8beb5;
+  font-size: .76rem;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer
 }
-.calendar tbody tr td:last-child {
-  border-right: 1px solid #626E7E;
+
+.calendar tbody tr:nth-child(odd) td {
+  background: #151915
 }
-.calendar tbody tr td.hour {
-  font-size: 2em;
-  padding: 0;
-  background: #072000;
-  border-bottom: 1px solid #626E7E;
-  border-collapse: separate;
-  min-width: 100px;
-  cursor: default;
+
+.calendar tbody td:first-child {
+  border-left: 1px solid var(--tr-line)
 }
-.calendar tbody tr td.hour span {
-  display: block;
+
+.calendar tbody td.hour {
+  min-width: 78px;
+  padding: 0 8px;
+  background: var(--tr-bg);
+  color: var(--tr-muted);
+  font-size: .75rem;
+  text-align: right;
+  cursor: default
 }
-.calendar tbody tr td.active {
-  border: 1px solid yellow;
+
+.calendar tbody td.active {
+  color: var(--tr-accent-bright)
 }
+
 #pointer {
   position: absolute;
-  left: 0;
-  right: 0;
-  border-top: 1px solid red;
   z-index: 1;
+  right: 0;
+  left: 0;
+  border-top: 1px solid var(--tr-live)
 }
-.pointer-label {
-  color: red;
-}
+
+.pointer-label,
 .pointer-label-wrapper {
-  color: yellow;
+  color: var(--tr-live)
 }
+
 .show-title {
   position: relative;
-  z-index: 2;
+  z-index: 2
 }
+
 @media (max-width: 60em) {
-  .calendar-wrapper {
-    display: block;
-    overflow-x: scroll;
+  .calendar thead th .long {
+    display: none
   }
-  .calendar {
-    min-width: 800px;
-  }
-  .calendar tbody tr td.hour {
-    font-size: 16px;
-  }
-  .calendar thead tr th .long {
-    display: none;
-  }
-  .calendar thead tr th .short {
-    display: block;
-  }
-  .calendar tbody tr td.hour span {
-    transform: rotate(270deg);
-    -webkit-transform: rotate(270deg);
-    -moz-transform: rotate(270deg);
-  }
-}
-@media (max-width: 27em) {
-  .calendar-wrapper {
-    display: block;
-    overflow-x: scroll;
-  }
-  .calendar {
-    min-width: 800px;
-  }
-  .calendar tbody tr td.hour {
-    font-size: 16px;
-    text-align: right;
-  }
-  .calendar thead tr th {
-    font-size: 65%;
-  }
-  .calendar thead tr th .day {
-    display: block;
-    font-size: 1.2em;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    margin: 0 auto 5px;
-    padding: 5px;
-  }
-  .calendar thead tr th .day.active {
-    background: #d1d5db;
-    color: #626E7E;
-  }
-  .calendar tbody tr td.hour span {
-    transform: translateY(16px) rotate(270deg);
-    -webkit-transform: translateY(16px) rotate(270deg);
-    -moz-transform: translateY(16px) rotate(270deg);
+
+  .calendar thead th .short {
+    display: block
   }
 }

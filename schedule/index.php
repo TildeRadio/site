@@ -1,4 +1,47 @@
 <?php
+require_once dirname(__DIR__) . '/lib/api.php';
+
+if (tr_terminal_request()) {
+    require_once dirname(__DIR__) . '/lib/radio.php';
+
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: public, max-age=60');
+
+    $now = time();
+    $events = array_values(array_filter(
+        tr_schedule(14),
+        static fn (array $event): bool => !is_int($event['end_ts'] ?? null) || $event['end_ts'] >= $now
+    ));
+
+    $lines = ['~ tilderadio schedule ~', ''];
+    foreach (array_slice($events, 0, 50) as $event) {
+        if (!is_int($event['start_ts'] ?? null)) {
+            continue;
+        }
+        $name = trim((string) ($event['name'] ?? 'unknown'));
+        $end = is_int($event['end_ts'] ?? null)
+            ? ' - ' . gmdate('H:i', $event['end_ts'])
+            : '';
+        $lines[] = sprintf(
+            '%s %-18s %s%s UTC',
+            !empty($event['is_live']) ? '*' : ' ',
+            $name,
+            gmdate('D M d H:i', $event['start_ts']),
+            $end
+        );
+    }
+    if (count($lines) === 2) {
+        $lines[] = 'no upcoming shows are currently listed.';
+    }
+    $lines[] = '';
+    $lines[] = '* currently on air';
+    $lines[] = 'calendar: https://tilderadio.org/schedule/';
+    $lines[] = 'ical:     https://tilderadio.org/schedule/ics.php';
+    $lines[] = 'api:      https://tilderadio.org/api/schedule/';
+    echo implode("\n", $lines) . "\n";
+    exit;
+}
+
 $additional_head='<link rel="stylesheet" href="../css/calendar.css">
 <link rel="alternate" type="text/calendar" href="https://tilderadio.org/schedule/ics.php">';
 include '../header.php';
