@@ -1,0 +1,263 @@
+.tr-home-now {
+    padding-top: 0
+}
+
+.tr-now-layout {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start
+}
+
+.tr-art-frame {
+    aspect-ratio: 1;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid var(--tr-line);
+    background: var(--tr-surface)
+}
+
+.tr-now-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+}
+
+.tr-now-art.is-fallback {
+    padding: 23%;
+    object-fit: contain;
+    filter: saturate(.72) brightness(.95)
+}
+
+.tr-now-main {
+    min-width: 0
+}
+
+.tr-now-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+    min-height: 24px
+}
+
+.tr-mode {
+    font-size: .72rem;
+    letter-spacing: .08em
+}
+
+.tr-mode.is-live {
+    color: var(--tr-live)
+}
+
+.tr-mode.is-auto {
+    color: var(--tr-muted)
+}
+
+.tr-now-listeners {
+    margin-left: auto;
+    color: var(--tr-muted);
+    font-size: .74rem
+}
+
+.tr-now-copy {
+    min-height: 104px;
+    padding: 16px 0 12px
+}
+
+.tr-now-copy h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+    overflow-wrap: anywhere
+}
+
+.tr-now-byline,
+.tr-now-context {
+    margin: 3px 0
+}
+
+.tr-now-byline {
+    color: #b5bbb2
+}
+
+.tr-now-context {
+    color: var(--tr-muted);
+    font-size: .82rem
+}
+
+.tr-home-player.tr-player {
+    padding: 13px 0 0;
+    border: 0;
+    border-top: 1px solid var(--tr-line);
+    background: transparent
+}
+
+.tr-home-player .row.top {
+    grid-template-columns: minmax(0, 1fr) auto
+}
+
+.tr-home-player .controls {
+    flex-wrap: wrap
+}
+
+.tr-home-player .tr-eq {
+    margin-left: 2px
+}
+
+.tr-home-details {
+    margin-top: 15px;
+    color: var(--tr-muted);
+    font-size: .8rem
+}
+
+.tr-home-details summary {
+    width: max-content;
+    max-width: 100%;
+    cursor: pointer;
+    color: var(--tr-muted)
+}
+
+.tr-home-details summary:hover,
+.tr-home-details summary:focus-visible {
+    color: var(--tr-accent-bright)
+}
+
+.tr-recent-details .tr-history,
+.tr-stream-details .tr-links {
+    margin-top: 13px
+}
+
+.tr-title-split {
+    justify-content: space-between
+}
+
+.tr-section-tools {
+    color: var(--tr-muted);
+    font-size: .72rem;
+    font-weight: 400;
+    letter-spacing: 0
+}
+
+.tr-upcoming-list {
+    border-top: 1px solid var(--tr-line)
+}
+
+.tr-upcoming-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 24px;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--tr-line)
+}
+
+.tr-upcoming-item:last-child {
+    border-bottom: 0
+}
+
+.tr-upcoming-item.is-next {
+    padding-top: 14px;
+    padding-bottom: 14px
+}
+
+.tr-upcoming-who {
+    min-width: 0
+}
+
+.tr-upcoming-who > a {
+    font-weight: 600
+}
+
+.tr-upcoming-who > span {
+    display: block;
+    margin-top: 2px;
+    color: var(--tr-muted);
+    font-size: .78rem;
+    overflow-wrap: anywhere
+}
+
+.tr-upcoming-when {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    color: var(--tr-muted);
+    font-size: .78rem;
+    text-align: right;
+    white-space: nowrap
+}
+
+.tr-countdown {
+    color: var(--tr-live)
+}
+
+.tr-home-about blockquote {
+    margin-top: 0
+}
+
+.tr-home-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 18px;
+    margin-top: 18px;
+    font-size: .8rem
+}
+
+.tr-home-links a::before {
+    margin-right: 6px;
+    color: var(--tr-muted);
+    content: ">"
+}
+
+.tr-stream-details {
+    margin-top: 18px
+}
+
+@media (max-width: 700px) {
+    .tr-now-layout {
+        grid-template-columns: 150px minmax(0, 1fr);
+        gap: 22px
+    }
+
+    .tr-now-copy {
+        min-height: 0
+    }
+}
+
+@media (max-width: 560px) {
+    .tr-now-layout {
+        grid-template-columns: 1fr
+    }
+
+    .tr-art-frame {
+        width: min(72vw, 240px)
+    }
+
+    .tr-now-listeners {
+        width: 100%;
+        margin-left: 0
+    }
+
+    .tr-home-player .row.top,
+    .tr-upcoming-item {
+        grid-template-columns: 1fr
+    }
+
+    .tr-home-player .source {
+        justify-self: start
+    }
+
+    .tr-upcoming-item {
+        gap: 4px
+    }
+
+    .tr-upcoming-when {
+        text-align: left
+    }
+
+    .tr-title-split {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px
+    }
+}

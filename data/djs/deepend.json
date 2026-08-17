@@ -1,0 +1,53 @@
+{
+  "name": "deepend",
+  "published": true,
+  "tagline": "Heavy bass, sharp bars, strange covers, and whatever else survives shuffle.",
+  "bio": [
+    "deepend is a longtime tilde and IRC dweller who spends an unreasonable amount of time running servers, writing code, breaking things, fixing them again, and generally living somewhere between a terminal and an IRC window.",
+    "Musically, genre boundaries are mostly treated as suggestions. Expect bass-heavy electronic music, trap, dubstep, hip-hop and freestyle, industrial and metal, remixes, mashups, covers, and the occasional song that makes absolutely no sense beside anything that came before it.",
+    "There is no formal show yet. For now, the plan is simple: play interesting things, dig up tracks people may not have heard, revisit old favourites, and never worry too much about whether the playlist belongs in one neat category."
+  ],
+  "pronouns": "he/him",
+  "location": "Calgary, Alberta, Canada",
+  "tilde": "tilde.club",
+  "irc": "deepend",
+  "links": [
+    {
+      "label": "homepage",
+      "url": "https://tilde.club/~deepend/"
+    },
+    {
+      "label": "mastodon",
+      "url": "https://tilde.zone/@deepend"
+    }
+  ],
+
+  "favorites": {
+    "artists": [
+      "Harry Mack",
+      "NF",
+      "Eminem",
+      "Apashe",
+      "TroyBoi",
+      "RL Grime",
+      "Knife Party",
+      "KMFDM",
+      "Avenged Sevenfold"
+    ],
+    "tracks": [
+      "deadmau5 - Raise Your Weapon",
+      "Knife Party - Centipede",
+      "TroyBoi - Mmmm",
+      "Apashe & Black Tiger Sex Machine - The Grave",
+      "KMFDM - Megalomaniac",
+      "Johnny Cash - Hurt",
+      "Lord Huron - Love Me Like You Used To"
+    ]
+  },
+
+  "notes": [
+    "No fixed show format yet.",
+    "Remixes and covers are fair game.",
+    "Genre consistency is not guaranteed."
+  ]
+}

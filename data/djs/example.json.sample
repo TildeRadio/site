@@ -1,0 +1,52 @@
+{
+  "name": "deepend",
+  "published": true,
+  "tagline": "IRC, terminals, and whatever sounded good this week.",
+  "bio": [
+    "A short first-person bio can go here.",
+    "Use an array when you want more than one paragraph."
+  ],
+  "avatar": "/logos/djs/deepend.png",
+  "pronouns": "he/him",
+  "location": "Calgary, Alberta",
+  "tilde": "tilde.club",
+  "irc": "deepend",
+  "since": "2026",
+  "links": [
+    {
+      "label": "homepage",
+      "url": "https://example.com/"
+    },
+    {
+      "label": "mastodon",
+      "url": "https://example.social/@deepend"
+    }
+  ],
+  "show": {
+    "title": "/dev/random",
+    "tagline": "Music selected with questionable scientific rigor.",
+    "description": "Electronic, industrial, ambient, synthwave, and whatever else fell out of the music directory.",
+    "genres": [
+      "electronic",
+      "industrial",
+      "ambient",
+      "synthwave"
+    ]
+  },
+  "favorites": {
+    "artists": [
+      "Boards of Canada",
+      "Kraftwerk"
+    ],
+    "albums": [
+      "Music Has the Right to Children"
+    ],
+    "tracks": [
+      "Aphex Twin - Xtal"
+    ]
+  },
+  "notes": [
+    "Requests are welcome when the show is live.",
+    "Usually found in #tilderadio before and after the show."
+  ]
+}

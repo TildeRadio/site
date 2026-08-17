@@ -1,0 +1,180 @@
+.tr-djinfo-hero h1 {
+    margin: 0 0 8px;
+    font-size: clamp(1.7rem, 5vw, 2.45rem);
+    letter-spacing: -.04em
+}
+
+.tr-djinfo-hero .tr-lede {
+    max-width: 72ch;
+    margin-bottom: 24px;
+    color: #b5bbb2
+}
+
+.tr-djinfo-paths {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: 24px;
+    background: var(--tr-line)
+}
+
+.tr-djinfo-paths article {
+    min-width: 0;
+    padding: 20px;
+    background: var(--tr-surface)
+}
+
+.tr-djinfo-kicker {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--tr-muted);
+    font-size: .7rem;
+    font-weight: 600;
+    letter-spacing: .13em;
+    text-transform: uppercase
+}
+
+.tr-djinfo-paths h2 {
+    margin: 0 0 9px;
+    font-size: 1.12rem
+}
+
+.tr-djinfo-paths p {
+    margin: 0 0 15px;
+    color: #b5bbb2
+}
+
+.tr-djinfo-action {
+    display: inline-block;
+    padding: 6px 10px;
+    border: 1px solid var(--tr-accent);
+    font-size: .82rem
+}
+
+.tr-djinfo-action:hover,
+.tr-djinfo-action:focus-visible {
+    text-decoration: none
+}
+
+.tr-djinfo-jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 18px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--tr-line);
+    font-size: .78rem
+}
+
+.tr-djinfo-jump a::before {
+    color: var(--tr-muted);
+    content: "#"
+}
+
+.tr-djinfo-steps {
+    display: grid;
+    gap: 13px;
+    margin: 18px 0 22px;
+    padding-left: 24px
+}
+
+.tr-djinfo-steps li {
+    padding-left: 5px
+}
+
+.tr-djinfo-steps strong,
+.tr-djinfo-steps span {
+    display: block
+}
+
+.tr-djinfo-steps span {
+    margin-top: 3px;
+    color: var(--tr-muted)
+}
+
+.tr-djinfo-connection {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin: 18px 0;
+    background: var(--tr-line)
+}
+
+.tr-djinfo-connection > div {
+    min-width: 0;
+    padding: 15px;
+    background: var(--tr-surface)
+}
+
+.tr-djinfo-connection span,
+.tr-djinfo-connection strong {
+    display: block
+}
+
+.tr-djinfo-connection span {
+    margin-bottom: 4px;
+    color: var(--tr-muted);
+    font-size: .7rem;
+    letter-spacing: .08em;
+    text-transform: uppercase
+}
+
+.tr-djinfo-connection strong {
+    overflow-wrap: anywhere;
+    color: var(--tr-fg);
+    font-size: .92rem;
+    font-weight: 600
+}
+
+.tr-djinfo-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 18px;
+    margin: 16px 0
+}
+
+.tr-djinfo-note {
+    margin-top: 18px;
+    padding: 14px 16px;
+    border-left: 2px solid var(--tr-accent);
+    background: var(--tr-surface)
+}
+
+.tr-djinfo-checklist {
+    display: grid;
+    gap: 8px;
+    margin: 16px 0;
+    padding-left: 22px
+}
+
+.tr-djinfo-details {
+    margin: 16px 0
+}
+
+.tr-djinfo-details summary {
+    cursor: pointer;
+    color: var(--tr-accent-bright)
+}
+
+.tr-djinfo-details[open] summary {
+    margin-bottom: 12px
+}
+
+.tr-djinfo-details pre,
+.tr-section pre {
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 14px 16px;
+    border: 1px solid var(--tr-line);
+    background: var(--tr-surface)
+}
+
+@media (max-width: 760px) {
+    .tr-djinfo-paths,
+    .tr-djinfo-connection {
+        grid-template-columns: 1fr
+    }
+
+    .tr-djinfo-jump {
+        gap: 7px 14px
+    }
+}

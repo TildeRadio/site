@@ -1,0 +1,9 @@
+{
+  "title": "compiled from source",
+  "by": "your-nick",
+  "file": "compiled-from-source.ogg",
+  "description": "A short TildeRadio station ID.",
+  "license": "CC BY 4.0",
+  "url": "https://example.com/",
+  "published": true
+}
