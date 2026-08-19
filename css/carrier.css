@@ -1,0 +1,142 @@
+.tr-carrier-grid,
+.tr-carrier-two {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin: 0;
+    background: var(--tr-line)
+}
+
+.tr-carrier-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr))
+}
+
+.tr-carrier-card,
+.tr-carrier-two > div {
+    min-width: 0;
+    padding: 18px;
+    background: var(--tr-bg)
+}
+
+.tr-carrier-card h2,
+.tr-carrier-two h3 {
+    margin: 5px 0 10px
+}
+
+.tr-carrier-card p,
+.tr-carrier-two p {
+    margin: 0 0 12px
+}
+
+.tr-carrier-kicker {
+    color: var(--tr-muted);
+    font-size: .72rem;
+    letter-spacing: .08em
+}
+
+.tr-carrier-commands {
+    display: grid;
+    grid-template-columns: minmax(170px, .7fr) minmax(0, 1.6fr);
+    gap: 0;
+    margin: 16px 0;
+    border-top: 1px solid var(--tr-line)
+}
+
+.tr-carrier-commands > div {
+    display: contents
+}
+
+.tr-carrier-commands code,
+.tr-carrier-commands span {
+    padding: 9px 10px;
+    border-bottom: 1px solid var(--tr-line)
+}
+
+.tr-carrier-commands code {
+    color: var(--tr-accent-bright);
+    white-space: nowrap
+}
+
+.tr-carrier-commands span {
+    color: #b5bbb2
+}
+
+.tr-carrier-flow,
+.tr-carrier-note {
+    margin: 20px 0 0;
+    padding: 14px 16px;
+    border-left: 2px solid var(--tr-accent);
+    background: var(--tr-surface)
+}
+
+.tr-carrier-flow strong {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--tr-muted);
+    font-size: .72rem;
+    letter-spacing: .08em;
+    text-transform: uppercase
+}
+
+.tr-carrier-flow pre,
+.tr-carrier-card pre,
+.tr-carrier-two pre,
+.tr-section > pre {
+    overflow-x: auto
+}
+
+.tr-carrier-flow pre {
+    margin: 0
+}
+
+.tr-carrier-steps {
+    display: grid;
+    gap: 12px;
+    margin: 18px 0;
+    padding-left: 24px
+}
+
+.tr-carrier-steps li {
+    padding-left: 5px
+}
+
+.tr-carrier-steps strong,
+.tr-carrier-steps span {
+    display: block
+}
+
+.tr-carrier-steps span {
+    margin-top: 3px;
+    color: var(--tr-muted)
+}
+
+.tr-section h3 {
+    margin: 22px 0 6px;
+    font-size: .9rem
+}
+
+@media (max-width: 760px) {
+    .tr-carrier-grid,
+    .tr-carrier-two {
+        grid-template-columns: 1fr
+    }
+}
+
+@media (max-width: 560px) {
+    .tr-carrier-commands {
+        grid-template-columns: 1fr
+    }
+
+    .tr-carrier-commands > div {
+        display: grid
+    }
+
+    .tr-carrier-commands code {
+        padding-bottom: 2px;
+        border-bottom: 0
+    }
+
+    .tr-carrier-commands span {
+        padding-top: 2px
+    }
+}
