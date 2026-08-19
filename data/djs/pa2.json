@@ -1,0 +1,26 @@
+{
+  "name": "pa2",
+  "published": true,
+  "tagline": "Astral Peaks -~- New Classical Music",
+  "bio": "Aging Hippie SysAdmin, Retired",
+  "avatar": "https://fprtf.net/logo.png",
+  "pronouns": "all of them, it is easier that way",
+  "location": "FPR&TF",
+  "tilde": "Hashnix.Club",
+  "irc": "pa2",
+  "since": "IRC v1.0 was still in beta",
+  "links": {
+    "FPRTF.NET": "http://fprtf.net/"
+  },
+  "show": {
+    "title": "Astral Peaks -~- New Classical Music",
+    "tagline": "The future of Classical Musical",
+    "description": "Enjoying the classics of today knowing they will become the Classical Music of tomorrow.",
+    "genres": [
+      "Respect",
+      "Innovation",
+      "Evolution"
+    ]
+  },
+  "notes": "\"Music should be as ignorable as it is listenable.\" – Brian Eno"
+}
