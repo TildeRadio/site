@@ -21,7 +21,11 @@ include dirname(__DIR__) . '/header.php';
     <div class="tr-title"><span class="tr-badge">COMMUNITY</span></div>
     <h1>make the station weirder</h1>
     <p class="tr-lede">TildeRadio works best when the station sounds like the people around it. Short IDs, jingles, one-off shows, takeovers, and other experiments all belong here.</p>
-    <p><a href="<?= htmlspecialchars(asset('community/contribute/'), ENT_QUOTES, 'UTF-8') ?>">how to contribute &rarr;</a></p>
+    <p>
+        <a href="<?= htmlspecialchars(asset('community/contribute/'), ENT_QUOTES, 'UTF-8') ?>">how to contribute &rarr;</a>
+        &nbsp;&middot;&nbsp;
+        <a href="<?= htmlspecialchars(asset('community/carrier/'), ENT_QUOTES, 'UTF-8') ?>">Carrier IRC bot guide &rarr;</a>
+    </p>
 </section>
 
 <section class="tr-section">
