@@ -1,92 +1,106 @@
-<section class="calendar-wrapper">
-<h4>upcoming broadcasts</h4>
 <?php
-function check_in_range($start_date, $end_date, $checkdate) {
-    $start_ts = strtotime($start_date);
-    $end_ts   = strtotime($end_date);
-    $ch_ts    = strtotime($checkdate);
-    return (($ch_ts >= $start_ts) && ($ch_ts < $end_ts));
+$calendarNow = time();
+$calendarStart = strtotime(gmdate('Y-m-d 00:00:00', $calendarNow) . ' UTC');
+$calendarDays = [];
+for ($dayIndex = 0; $dayIndex < 7; $dayIndex++) {
+    $calendarDays[] = $calendarStart + ($dayIndex * 86400);
 }
 
-// Create a date range between the schedule start and end dates
-$begin     = new DateTime($schedule[0]['start']);
-$end       = new DateTime(end($schedule)['start']);
-$daterange = new DatePeriod($begin, new DateInterval('P1D'), $end);
+$eventAt = static function (int $slotStart) use ($calendarEvents): ?array {
+    $slotEnd = $slotStart + 1800;
+    foreach ($calendarEvents as $event) {
+        $start = is_int($event['start_ts'] ?? null) ? $event['start_ts'] : null;
+        if ($start === null) {
+            continue;
+        }
+        $end = is_int($event['end_ts'] ?? null) ? $event['end_ts'] : $start + 1800;
+        if ($start < $slotEnd && $end > $slotStart) {
+            return $event;
+        }
+    }
+    return null;
+};
 ?>
 
-<table class="calendar">
-    <thead>
-        <tr>
-            <th></th>
-        <?php
-        // Loop over our date range to draw the headers
-        foreach($daterange as $date){ ?>
-            <th>
-                <span class="day"><?php echo $date->format("d") ?></span>
-                <span class="long"><?php echo $date->format("l") ?></span>
-                <span class="short"><?php echo $date->format("D") ?></span>
-            </th>
-        <?php } ?>
-        </tr>
-    </thead>
-    <tbody>
-<?php
-// time will count us by 30-min increments through the day
-$time = mktime(0, 0, 0, 1, 1);
-// Loop over the day in 30 min increments
-for ($i = 0; $i < 86400; $i += 1800) { ?>
-    <tr>
-    <?php
-    // Only show row if we're on a full hour block. It's a rowspan 2
-    if ((($i / 1800) % 2) === 0 ) { ?>
-        <td class="hour" rowspan="2"><span><?php echo date('H', $time + $i) ?>:00</span></td>
-    <?php } ?>
+<?php if (!$calendarEvents): ?>
+    <p class="tr-muted">No live broadcasts are scheduled in the next seven days.</p>
+<?php else: ?>
+<div class="calendar-wrapper">
+    <table class="calendar">
+        <thead>
+            <tr>
+                <th scope="col"><span class="tr-calendar-zone">UTC</span></th>
+                <?php foreach ($calendarDays as $dayTs): ?>
+                    <th scope="col">
+                        <span class="day"><?= tr_schedule_h(gmdate('d', $dayTs)) ?></span>
+                        <span class="long"><?= tr_schedule_h(gmdate('l', $dayTs)) ?></span>
+                        <span class="short"><?= tr_schedule_h(gmdate('D', $dayTs)) ?></span>
+                    </th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php for ($seconds = 0; $seconds < 86400; $seconds += 1800): ?>
+                <tr>
+                    <?php if ((($seconds / 1800) % 2) === 0): ?>
+                        <td class="hour" rowspan="2"><span><?= tr_schedule_h(gmdate('H:i', $calendarStart + $seconds)) ?></span></td>
+                    <?php endif; ?>
 
-    <?php
-    $now = new DateTime();
-    $halfhour = new DateInterval('PT30M');
-    $wrotepointer = false;
-    // Loop over each day of the week for this 30 min span
-    foreach ($daterange as $date) {
-        // merge date (changing days) and time (incrementing by 30 min) to draw calendar by row.
-        $merge = new DateTime($date->format('Y-m-d') . ' ' . date('H:i:s', $time + $i));
-        // Set id for this time span, for referencing in JS.
-        $props = 'id="show-' . $merge->getTimestamp() . '"';
-        // We'll now use $merge to see if any shows are airing at this time
-        $matchedshow = null;
-        foreach ($schedule as $show) {
-            if (check_in_range($show['start'], $show['end'], $merge->format('Y-m-d H:i:s'))) {
-                $matchedshow = $show;
-                break;
-            }
-        }
+                    <?php foreach ($calendarDays as $dayTs): ?>
+                        <?php
+                        $slotTs = $dayTs + $seconds;
+                        $event = $eventAt($slotTs);
+                        $classes = [];
+                        $title = '';
+                        $showStart = false;
 
-        $active = false;
-        if (!$wrotepointer) {
-            // If current time is in this range, draw pointer.
-            $end = DateTimeImmutable::createFromMutable($merge)->add($halfhour);
-            if ($now >= $merge && $now < $end) {
-                $active = true;
-                $props .= ' class="active"';
-            }
-        }
-        echo "<td $props>";
-        if ($matchedshow) {
-            echo '<div class="show-title">' . $matchedshow['title'] . '</div>';
-            // if no match was found, leave an empty node
-        }
-        if ($active) {
-            // Cell height here should be synced with height of '.calendar tbody tr td' in ../css/calendar.css
-            $height = 32;
-            $top = round(date_diff($merge, $now)->format('%i') / 30 * ($height-1));
-            echo '<div id="pointer" style="top:'.$top.'px"></div>';
-            $wrotepointer = true;
-        }
-        echo "</td>\n";
-    }
-    ?>
-    </tr>
-<?php } ?>
-    </tbody>
-</table>
-</section>
+                        if ($event !== null) {
+                            $classes[] = 'has-show';
+                            $profile = tr_schedule_profile_for_event($event, $catalog);
+                            $info = tr_schedule_show_info($profile);
+                            $name = is_array($profile) && !empty($profile['name'])
+                                ? trim((string) $profile['name'])
+                                : trim((string) ($event['name'] ?? 'unknown DJ'));
+                            $showLabel = $info['title'] ?? $name;
+                            $title = $name . ($info['title'] !== null && strcasecmp($info['title'], $name) !== 0
+                                ? ' — ' . $info['title']
+                                : '');
+                            $showStart = (int) $event['start_ts'] >= $slotTs && (int) $event['start_ts'] < $slotTs + 1800;
+                            if ($showStart) {
+                                $classes[] = 'show-start';
+                            }
+                        }
+
+                        $active = $slotTs <= $calendarNow && $calendarNow < $slotTs + 1800;
+                        if ($active) {
+                            $classes[] = 'active';
+                        }
+                        ?>
+                        <td
+                            id="show-<?= $slotTs ?>"
+                            data-slot-ts="<?= $slotTs ?>"
+                            class="<?= tr_schedule_h(implode(' ', $classes)) ?>"
+                            <?= $title !== '' ? 'title="' . tr_schedule_h($title) . '"' : '' ?>
+                        >
+                            <?php if ($event !== null && $showStart): ?>
+                                <?php $slug = trim((string) ($event['_profile_slug'] ?? $event['slug'] ?? '')); ?>
+                                <div class="show-title">
+                                    <?php if ($slug !== ''): ?>
+                                        <a href="<?= tr_schedule_h(asset('djs/?dj=' . rawurlencode($slug))) ?>"><?= tr_schedule_h($showLabel) ?></a>
+                                    <?php else: ?>
+                                        <?= tr_schedule_h($showLabel) ?>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endif; ?>
+                            <?php if ($active): ?>
+                                <?php $top = (int) round((($calendarNow - $slotTs) / 1800) * 31); ?>
+                                <div id="pointer" style="top: <?= max(0, min(31, $top)) ?>px"></div>
+                            <?php endif; ?>
+                        </td>
+                    <?php endforeach; ?>
+                </tr>
+            <?php endfor; ?>
+        </tbody>
+    </table>
+</div>
+<?php endif; ?>

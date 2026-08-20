@@ -1,0 +1,513 @@
+.tr-schedule-hero {
+    padding: 0 0 30px
+}
+
+.tr-schedule-hero.is-live {
+    border-bottom-color: #46523f
+}
+
+.tr-schedule-hero-grid,
+.tr-schedule-idle-grid {
+    display: grid;
+    gap: 28px;
+    align-items: start
+}
+
+.tr-schedule-hero-grid {
+    grid-template-columns: 104px minmax(0, 1fr)
+}
+
+.tr-schedule-idle-grid {
+    grid-template-columns: minmax(0, 1.25fr) minmax(280px, .75fr)
+}
+
+.tr-schedule-state,
+.tr-schedule-kicker {
+    color: var(--tr-muted);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .1em
+}
+
+.tr-schedule-hero h1 {
+    margin: 4px 0 5px;
+    font-size: 1.9rem
+}
+
+.tr-schedule-hero-show {
+    color: var(--tr-accent-bright);
+    font-size: 1.05rem
+}
+
+.tr-schedule-avatar {
+    display: grid;
+    width: 52px;
+    height: 52px;
+    overflow: hidden;
+    border: 1px solid var(--tr-line);
+    background: var(--tr-surface);
+    place-items: center
+}
+
+.tr-schedule-avatar-hero {
+    width: 104px;
+    height: 104px
+}
+
+.tr-schedule-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover
+}
+
+.tr-schedule-avatar span {
+    color: var(--tr-muted);
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .08em
+}
+
+.tr-schedule-avatar-hero span {
+    font-size: 1.2rem
+}
+
+.tr-schedule-live-facts {
+    display: grid;
+    gap: 7px;
+    margin: 20px 0 0
+}
+
+.tr-schedule-live-facts div {
+    display: grid;
+    grid-template-columns: 130px minmax(0, 1fr);
+    gap: 14px
+}
+
+.tr-schedule-live-facts span {
+    color: var(--tr-muted);
+    font-size: .78rem
+}
+
+.tr-schedule-live-facts strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    font-weight: 400
+}
+
+.tr-schedule-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+    margin-top: 22px
+}
+
+.tr-schedule-actions a {
+    display: inline-block
+}
+
+.tr-schedule-actions .tr-schedule-primary {
+    padding: 5px 10px;
+    border: 1px solid var(--tr-accent);
+    color: var(--tr-accent-bright)
+}
+
+.tr-schedule-actions .tr-schedule-primary:hover,
+.tr-schedule-actions .tr-schedule-primary:focus-visible {
+    background: var(--tr-surface);
+    text-decoration: none
+}
+
+.tr-schedule-next {
+    padding: 17px;
+    border-left: 2px solid var(--tr-accent);
+    background: var(--tr-surface)
+}
+
+.tr-schedule-next-person {
+    display: grid;
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 13px;
+    align-items: center;
+    margin: 12px 0
+}
+
+.tr-schedule-next-person strong,
+.tr-schedule-next-person span {
+    display: block
+}
+
+.tr-schedule-next-person span {
+    margin-top: 2px;
+    color: var(--tr-muted);
+    font-size: .8rem
+}
+
+.tr-schedule-next time,
+.tr-schedule-countdown {
+    display: block
+}
+
+.tr-schedule-next time {
+    margin-top: 8px
+}
+
+.tr-schedule-countdown {
+    margin: 2px 0 10px;
+    color: var(--tr-muted);
+    font-size: .78rem
+}
+
+.tr-schedule-after {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px 13px;
+    align-items: baseline;
+    margin-top: 25px;
+    padding-top: 14px;
+    border-top: 1px solid var(--tr-line);
+    font-size: .82rem
+}
+
+.tr-schedule-after > span:first-child {
+    color: var(--tr-muted);
+    text-transform: uppercase
+}
+
+.tr-schedule-after time {
+    color: var(--tr-muted)
+}
+
+.tr-schedule-heading-row {
+    display: flex;
+    gap: 30px;
+    align-items: end;
+    justify-content: space-between;
+    margin-bottom: 22px
+}
+
+.tr-schedule-heading-row .tr-title {
+    margin-bottom: 7px
+}
+
+.tr-schedule-heading-row h2 {
+    margin: 0;
+    font-size: 1.2rem
+}
+
+.tr-schedule-time-controls {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 5px 8px;
+    align-items: center;
+    justify-items: start;
+    font-size: .78rem
+}
+
+.tr-schedule-time-controls > span,
+.tr-schedule-time-controls small {
+    color: var(--tr-muted)
+}
+
+.tr-schedule-time-controls small {
+    grid-column: 1 / -1;
+    justify-self: end;
+    font-size: .68rem
+}
+
+.tr-schedule-time-controls button {
+    padding: 2px 7px;
+    border: 1px solid var(--tr-line);
+    background: transparent;
+    color: var(--tr-muted);
+    cursor: pointer
+}
+
+.tr-schedule-time-controls button[aria-pressed="true"] {
+    border-color: var(--tr-accent);
+    color: var(--tr-accent-bright)
+}
+
+.tr-schedule-days {
+    display: grid;
+    gap: 30px
+}
+
+.tr-schedule-day-title {
+    margin: 0 0 8px;
+    color: var(--tr-muted);
+    font-size: .75rem;
+    letter-spacing: .09em
+}
+
+.tr-schedule-day-list {
+    border-top: 1px solid var(--tr-line)
+}
+
+.tr-schedule-event {
+    display: grid;
+    grid-template-columns: 142px 52px minmax(0, 1fr) auto;
+    gap: 16px;
+    align-items: start;
+    padding: 17px 0;
+    border-bottom: 1px solid var(--tr-line)
+}
+
+.tr-schedule-event-time {
+    padding-top: 2px;
+    color: var(--tr-muted);
+    font-size: .78rem;
+    white-space: nowrap
+}
+
+.tr-schedule-event-copy {
+    min-width: 0
+}
+
+.tr-schedule-event-copy h3 {
+    margin: 0;
+    font-size: 1rem
+}
+
+.tr-schedule-show-title {
+    margin-top: 2px;
+    color: var(--tr-accent-bright)
+}
+
+.tr-schedule-tagline,
+.tr-schedule-description {
+    max-width: 68ch
+}
+
+.tr-schedule-tagline {
+    margin: 6px 0 0;
+    color: #b5bbb2
+}
+
+.tr-schedule-description {
+    margin: 6px 0 0;
+    color: var(--tr-muted);
+    font-size: .82rem
+}
+
+.tr-schedule-genres {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px 12px;
+    margin-top: 9px
+}
+
+.tr-schedule-genres span {
+    color: var(--tr-muted);
+    font-size: .7rem
+}
+
+.tr-schedule-genres span::before {
+    margin-right: 5px;
+    color: var(--tr-line);
+    content: "#"
+}
+
+.tr-schedule-profile-link {
+    align-self: center;
+    font-size: .78rem;
+    white-space: nowrap
+}
+
+.tr-calendar-section {
+    padding-top: 16px
+}
+
+.tr-calendar-panel > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 12px 0;
+    cursor: pointer;
+    list-style: none
+}
+
+.tr-calendar-panel > summary::-webkit-details-marker {
+    display: none
+}
+
+.tr-calendar-panel > summary span:first-child {
+    display: grid;
+    gap: 2px
+}
+
+.tr-calendar-panel > summary strong {
+    color: var(--tr-fg);
+    font-size: .9rem;
+    font-weight: 600
+}
+
+.tr-calendar-panel > summary small {
+    color: var(--tr-muted);
+    font-size: .72rem
+}
+
+.tr-calendar-panel[open] > summary > span:last-child {
+    transform: rotate(45deg)
+}
+
+.tr-calendar-panel .calendar-wrapper {
+    margin-top: 16px
+}
+
+.tr-calendar-panel .calendar tbody td {
+    cursor: default
+}
+
+.tr-calendar-panel .calendar tbody td.has-show {
+    background: #192019
+}
+
+.tr-calendar-panel .calendar tbody tr:nth-child(odd) td.has-show {
+    background: #1b231b
+}
+
+.tr-calendar-panel .calendar tbody td.show-start {
+    box-shadow: inset 2px 0 0 var(--tr-accent)
+}
+
+.tr-calendar-panel .show-title {
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+}
+
+.tr-calendar-panel .show-title a {
+    color: var(--tr-accent-bright)
+}
+
+.tr-calendar-zone {
+    color: var(--tr-muted);
+    font-size: .65rem
+}
+
+.tr-schedule-bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    background: var(--tr-line)
+}
+
+.tr-schedule-callout {
+    min-width: 0;
+    padding: 18px;
+    background: var(--tr-bg)
+}
+
+.tr-schedule-callout h2,
+.tr-schedule-transmissions h2 {
+    margin: 5px 0 9px;
+    font-size: 1rem
+}
+
+.tr-schedule-callout p {
+    margin: 7px 0
+}
+
+.tr-schedule-callout code {
+    display: block;
+    margin-top: 11px;
+    color: var(--tr-muted);
+    font-size: .72rem;
+    overflow-wrap: anywhere
+}
+
+.tr-schedule-transmissions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 30px;
+    align-items: center
+}
+
+.tr-schedule-transmissions p {
+    max-width: 70ch;
+    margin-bottom: 0
+}
+
+.tr-schedule-transmissions > a {
+    font-size: .82rem;
+    white-space: nowrap
+}
+
+@media (max-width: 760px) {
+    .tr-schedule-idle-grid,
+    .tr-schedule-bottom-grid,
+    .tr-schedule-transmissions {
+        grid-template-columns: 1fr
+    }
+
+    .tr-schedule-event {
+        grid-template-columns: 110px 42px minmax(0, 1fr);
+        gap: 12px
+    }
+
+    .tr-schedule-event .tr-schedule-avatar {
+        width: 42px;
+        height: 42px
+    }
+
+    .tr-schedule-profile-link {
+        grid-column: 3;
+        justify-self: start
+    }
+
+    .tr-schedule-heading-row {
+        align-items: start;
+        flex-direction: column;
+        gap: 15px
+    }
+
+    .tr-schedule-time-controls small {
+        justify-self: start
+    }
+}
+
+@media (max-width: 520px) {
+    .tr-schedule-hero-grid {
+        grid-template-columns: 70px minmax(0, 1fr);
+        gap: 16px
+    }
+
+    .tr-schedule-avatar-hero {
+        width: 70px;
+        height: 70px
+    }
+
+    .tr-schedule-hero h1 {
+        font-size: 1.5rem
+    }
+
+    .tr-schedule-live-facts div {
+        grid-template-columns: 1fr;
+        gap: 1px
+    }
+
+    .tr-schedule-event {
+        grid-template-columns: 42px minmax(0, 1fr)
+    }
+
+    .tr-schedule-event-time {
+        grid-column: 1 / -1;
+        padding: 0
+    }
+
+    .tr-schedule-event .tr-schedule-avatar {
+        grid-column: 1
+    }
+
+    .tr-schedule-event-copy,
+    .tr-schedule-profile-link {
+        grid-column: 2
+    }
+
+    .tr-schedule-after {
+        align-items: flex-start;
+        flex-direction: column
+    }
+}
