@@ -53,7 +53,7 @@
 .tr-dj-tagline {
     max-width: 68ch;
     margin: 0;
-    color: #b5bbb2;
+    color: var(--tr-secondary);
     font-size: 1.02rem
 }
 
@@ -118,7 +118,7 @@
 
 .tr-show-tagline {
     margin: 0 0 14px;
-    color: #b5bbb2
+    color: var(--tr-secondary)
 }
 
 .tr-tags {

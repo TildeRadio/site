@@ -9,6 +9,9 @@ $community = require dirname(__DIR__) . '/data/community.php';
 $stationIds = tr_community_audio_items();
 $events = is_array($community['events'] ?? null) ? $community['events'] : [];
 $submissions = is_array($community['submissions'] ?? null) ? $community['submissions'] : [];
+$irc = isset($submissions['irc']) && is_string($submissions['irc'])
+    ? $submissions['irc']
+    : 'https://tilde.chat/kiwi/#tilderadio';
 
 usort($events, static function (array $a, array $b): int {
     return strtotime((string) ($a['start'] ?? '')) <=> strtotime((string) ($b['start'] ?? ''));
@@ -21,10 +24,16 @@ include dirname(__DIR__) . '/header.php';
     <div class="tr-title"><span class="tr-badge">COMMUNITY</span></div>
     <h1>make the station weirder</h1>
     <p class="tr-lede">TildeRadio works best when the station sounds like the people around it. Short IDs, jingles, one-off shows, takeovers, and other experiments all belong here.</p>
-    <p>
-        <a href="<?= htmlspecialchars(asset('community/contribute/'), ENT_QUOTES, 'UTF-8') ?>">how to contribute &rarr;</a>
+    <nav class="tr-community-actions" aria-label="ways to take part">
+        <a href="<?= htmlspecialchars(asset('community/contribute/#audio'), ENT_QUOTES, 'UTF-8') ?>">make a station ID / jingle</a>
+        <a href="<?= htmlspecialchars(asset('djinfo/'), ENT_QUOTES, 'UTF-8') ?>">play a show</a>
+        <a href="<?= htmlspecialchars(asset('community/contribute/#events'), ENT_QUOTES, 'UTF-8') ?>">plan something odd</a>
+        <a href="<?= htmlspecialchars($irc, ENT_QUOTES, 'UTF-8') ?>" rel="noopener">join #tilderadio</a>
+    </nav>
+    <p class="tr-community-tools">
+        <a href="<?= htmlspecialchars(asset('community/contribute/'), ENT_QUOTES, 'UTF-8') ?>">contribution guide</a>
         &nbsp;&middot;&nbsp;
-        <a href="<?= htmlspecialchars(asset('community/carrier/'), ENT_QUOTES, 'UTF-8') ?>">Carrier IRC bot guide &rarr;</a>
+        <a href="<?= htmlspecialchars(asset('community/carrier/'), ENT_QUOTES, 'UTF-8') ?>">Carrier IRC bot guide</a>
     </p>
 </section>
 
@@ -66,13 +75,9 @@ include dirname(__DIR__) . '/header.php';
         Include the license you want attached to your audio.
     </p>
     <p>
-        Each submission has its own JSON file under <code>data/community/audio/</code>.
-        See <code>example.json.sample</code> in that directory for the format.
-    </p>
-    <p>
         <a href="<?= htmlspecialchars(asset('community/contribute/'), ENT_QUOTES, 'UTF-8') ?>">submission guide</a>
         &nbsp;&middot;&nbsp;
-        <a href="<?= htmlspecialchars((string) ($submissions['irc'] ?? 'https://tilde.chat/kiwi/#tilderadio'), ENT_QUOTES, 'UTF-8') ?>">bring it to #tilderadio</a>
+        <a href="<?= htmlspecialchars($irc, ENT_QUOTES, 'UTF-8') ?>" rel="noopener">bring it to #tilderadio</a>
     </p>
 </section>
 

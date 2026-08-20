@@ -173,6 +173,7 @@ include dirname(__DIR__, 2) . '/header.php';
 !show prompt what song did you find by accident?
 !show note requests later
 !show link https://example.com/
+!show mastodon tonight is mostly weird synths
 !show clear mood</code></pre>
             <p>These values belong to the current set and disappear when it ends.</p>
         </div>
@@ -199,6 +200,40 @@ include dirname(__DIR__, 2) . '/header.php';
 !goal clear</code></pre>
             <p>Carrier announces the goal once the live listener count reaches it.</p>
         </div>
+    </div>
+</section>
+
+<section class="tr-section" id="mastodon">
+    <div class="tr-title"><span class="tr-badge">MASTODON</span></div>
+    <h2>selected station activity can leave IRC</h2>
+    <p>
+        When Mastodon posting is enabled, Carrier can publish a few station events outside IRC. It does not post every
+        command, reaction, track change, or listener change.
+    </p>
+
+    <div class="tr-carrier-two">
+        <div>
+            <h3>Automatic posts</h3>
+            <p>
+                Live starts and DJ handoffs are the main notices. Optional posts can include the configured listener
+                milestones (20 and 50 by default), selected station milestones, new station records, and noteworthy set summaries.
+            </p>
+        </div>
+        <div>
+            <h3>DJ transmission</h3>
+            <pre><code>!show mastodon tonight is mostly weird synths</code></pre>
+            <p>The current DJ can send one short Mastodon transmission during a live set.</p>
+        </div>
+    </div>
+
+    <p>
+        By default, a completed set is noteworthy if it runs for at least 90 minutes, peaks at 20 listeners, reaches
+        8 couch check-ins, 20 props, 5 requests, 5 represented tildes, or sets a new station record.
+    </p>
+
+    <div class="tr-carrier-note">
+        <strong>kept quiet:</strong> optional posts share a 15-minute cooldown, published events are remembered across
+        restarts, and Mastodon/API failures are logged without interrupting IRC or station tracking.
     </div>
 </section>
 

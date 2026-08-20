@@ -90,7 +90,10 @@ include dirname(__DIR__) . '/header.php';
         or other details, add one JSON file named after your schedule/DJ slug.
     </p>
 
-    <pre><code>cp data/djs/example.json.sample data/djs/your-nick.json
+    <pre><code>git clone https://github.com/TildeRadio/site.git
+cd site
+
+cp data/djs/example.json.sample data/djs/your-nick.json
 $EDITOR data/djs/your-nick.json
 php bin/validate-djs.php</code></pre>
 
