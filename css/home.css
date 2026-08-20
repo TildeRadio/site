@@ -78,7 +78,7 @@
 }
 
 .tr-now-byline {
-    color: #b5bbb2
+    color: var(--tr-secondary)
 }
 
 .tr-now-context {
@@ -121,6 +121,11 @@
 .tr-home-details summary:hover,
 .tr-home-details summary:focus-visible {
     color: var(--tr-accent-bright)
+}
+
+.tr-home-details summary:focus-visible {
+    outline: 1px solid var(--tr-accent-bright);
+    outline-offset: 3px
 }
 
 .tr-recent-details .tr-history,

@@ -23,9 +23,12 @@ want to publish.
 
 ## Editing a profile
 
-From the repository root:
+Clone the site repository, then work from its root:
 
 ```sh
+git clone https://github.com/TildeRadio/site.git
+cd site
+
 cp data/djs/example.json.sample data/djs/your-nick.json
 $EDITOR data/djs/your-nick.json
 php bin/validate-djs.php

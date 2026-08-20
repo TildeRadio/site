@@ -39,6 +39,17 @@ if (!isset($__WEB_BASE)) {
         return ($__WEB_BASE === '' ? '' : $__WEB_BASE) . '/' . ltrim($path, '/');
     }
 }
+
+$request_path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+$request_path = is_string($request_path) ? $request_path : '/';
+if ($__WEB_BASE !== '' && ($request_path === $__WEB_BASE || str_starts_with($request_path, $__WEB_BASE . '/'))) {
+    $request_path = substr($request_path, strlen($__WEB_BASE));
+}
+$nav_section = trim($request_path, '/');
+$nav_section = $nav_section === '' || $nav_section === 'index.php'
+    ? 'home'
+    : explode('/', $nav_section, 2)[0];
+$nav_current = static fn (string $section): string => $nav_section === $section ? ' aria-current="page"' : '';
 ?>
 
 <!DOCTYPE html>
@@ -68,11 +79,11 @@ if (!isset($__WEB_BASE)) {
                     <span>tilderadio.org</span>
                 </a>
                 <nav class="site-nav" aria-label="primary">
-                    <a href="<?= htmlspecialchars(asset('/'), ENT_QUOTES, 'UTF-8') ?>">home</a>
-                    <a href="<?= htmlspecialchars(asset('schedule/'), ENT_QUOTES, 'UTF-8') ?>">schedule</a>
-                    <a href="<?= htmlspecialchars(asset('djs/'), ENT_QUOTES, 'UTF-8') ?>">djs</a>
-                    <a href="<?= htmlspecialchars(asset('community/'), ENT_QUOTES, 'UTF-8') ?>">community</a>
-                    <a href="<?= htmlspecialchars(asset('listen/'), ENT_QUOTES, 'UTF-8') ?>">listen</a>
+                    <a href="<?= htmlspecialchars(asset('/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('home') ?>>home</a>
+                    <a href="<?= htmlspecialchars(asset('schedule/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('schedule') ?>>schedule</a>
+                    <a href="<?= htmlspecialchars(asset('djs/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('djs') ?>>djs</a>
+                    <a href="<?= htmlspecialchars(asset('community/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('community') ?>>community</a>
+                    <a href="<?= htmlspecialchars(asset('listen/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('listen') ?>>listen</a>
                 </nav>
             </header>
             <main>

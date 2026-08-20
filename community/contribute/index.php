@@ -76,7 +76,12 @@ include dirname(__DIR__, 2) . '/header.php';
 <section class="tr-section" id="repository">
     <div class="tr-title"><span class="tr-badge">REPOSITORY WORKFLOW</span></div>
     <h2>one audio file + one JSON file</h2>
-    <p>If you already work with Git, community audio submissions are deliberately boring:</p>
+    <p>If you already work with Git, clone the site repository first:</p>
+
+    <pre><code>git clone https://github.com/TildeRadio/site.git
+cd site</code></pre>
+
+    <p>From the repository root, add your audio and metadata:</p>
 
     <pre><code>community/audio/your-nick-tilderadio-id.ogg
 data/community/audio/your-nick-tilderadio-id.json</code></pre>
