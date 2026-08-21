@@ -31,8 +31,10 @@ $eventAt = static function (int $slotStart) use ($calendarEvents): ?array {
             <tr>
                 <th scope="col"><span class="tr-calendar-zone">UTC</span></th>
                 <?php foreach ($calendarDays as $dayTs): ?>
-                    <th scope="col">
-                        <span class="day"><?= tr_schedule_h(gmdate('d', $dayTs)) ?></span>
+                    <th scope="col" data-calendar-day-ts="<?= $dayTs ?>">
+                        <span class="day<?= $dayTs === $calendarStart ? ' active' : '' ?>">
+                            <?= tr_schedule_h(gmdate('d', $dayTs)) ?>
+                        </span>
                         <span class="long"><?= tr_schedule_h(gmdate('l', $dayTs)) ?></span>
                         <span class="short"><?= tr_schedule_h(gmdate('D', $dayTs)) ?></span>
                     </th>
@@ -93,8 +95,8 @@ $eventAt = static function (int $slotStart) use ($calendarEvents): ?array {
                                 </div>
                             <?php endif; ?>
                             <?php if ($active): ?>
-                                <?php $top = (int) round((($calendarNow - $slotTs) / 1800) * 31); ?>
-                                <div id="pointer" style="top: <?= max(0, min(31, $top)) ?>px"></div>
+                                <?php $progress = max(0.0, min(1.0, ($calendarNow - $slotTs) / 1800)); ?>
+                                <div id="pointer" style="top: <?= number_format($progress * 100, 4, '.', '') ?>%"></div>
                             <?php endif; ?>
                         </td>
                     <?php endforeach; ?>

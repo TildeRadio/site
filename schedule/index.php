@@ -121,6 +121,107 @@ function tr_schedule_render_avatar(?array $profile, string $name, string $extraC
     <?php
 }
 
+function tr_schedule_render_player(): void
+{
+    ?>
+    <div class="tr-player tr-schedule-player" id="tr-schedule-player" aria-label="tilderadio player" role="group">
+        <div class="row top">
+            <div class="controls">
+                <button id="tr-schedule-play" type="button">▶ play</button>
+                <button id="tr-schedule-mute" type="button">🔈 mute</button>
+                <label class="srconly" for="tr-schedule-vol">vol</label>
+                <input id="tr-schedule-vol" type="range" min="0" max="1" step="0.01" value="1" aria-label="volume">
+                <span class="tr-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+            </div>
+            <div class="source">
+                <label class="srconly" for="tr-schedule-src">stream</label>
+                <select id="tr-schedule-src" aria-label="stream">
+                    <option value="https://tilderadio.org/listen/ogg/192k" data-type="audio/ogg">ogg 192k</option>
+                    <option value="https://tilderadio.org/listen/ogg/320k" data-type="audio/ogg">ogg 320k</option>
+                    <option value="https://tilderadio.org/listen/mp3/192k" data-type="audio/mpeg">mp3 192k</option>
+                    <option value="https://tilderadio.org/listen/mp3/320k" data-type="audio/mpeg">mp3 320k</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <audio id="tr-schedule-audio" class="tr-hidden" preload="none">
+        <source src="https://tilderadio.org/listen/ogg/192k" type="audio/ogg">
+        <source src="https://tilderadio.org/listen/mp3/192k" type="audio/mpeg">
+    </audio>
+
+    <noscript>
+        <p class="tr-schedule-player-noscript"><a href="https://tilderadio.org/listen">listen directly</a></p>
+    </noscript>
+
+    <script>
+    (function () {
+        var audio = document.getElementById('tr-schedule-audio');
+        var player = document.getElementById('tr-schedule-player');
+        var play = document.getElementById('tr-schedule-play');
+        var mute = document.getElementById('tr-schedule-mute');
+        var volume = document.getElementById('tr-schedule-vol');
+        var source = document.getElementById('tr-schedule-src');
+
+        if (!audio || !player || !play || !mute || !volume || !source) return;
+
+        function syncPlaying() {
+            player.classList.toggle('is-playing', !audio.paused);
+            play.textContent = audio.paused ? '▶ play' : '⏸ pause';
+        }
+
+        function syncMute() {
+            mute.textContent = audio.muted ? '🔇 unmute' : '🔈 mute';
+        }
+
+        play.addEventListener('click', function () {
+            if (audio.paused) {
+                audio.play().catch(function () {
+                    syncPlaying();
+                });
+            } else {
+                audio.pause();
+            }
+        });
+
+        mute.addEventListener('click', function () {
+            audio.muted = !audio.muted;
+            syncMute();
+        });
+
+        volume.addEventListener('input', function () {
+            audio.volume = Number(volume.value);
+            if (audio.volume > 0 && audio.muted) {
+                audio.muted = false;
+            }
+            syncMute();
+        });
+
+        source.addEventListener('change', function () {
+            var wasPlaying = !audio.paused;
+            audio.pause();
+            audio.src = source.value;
+            audio.load();
+
+            if (wasPlaying) {
+                audio.play().catch(function () {
+                    syncPlaying();
+                });
+            }
+        });
+
+        audio.addEventListener('play', syncPlaying);
+        audio.addEventListener('pause', syncPlaying);
+        audio.addEventListener('ended', syncPlaying);
+        audio.addEventListener('volumechange', syncMute);
+
+        syncPlaying();
+        syncMute();
+    })();
+    </script>
+    <?php
+}
+
 function tr_schedule_day_label_utc(int $timestamp, int $now): string
 {
     $today = gmdate('Y-m-d', $now);
@@ -317,8 +418,9 @@ include dirname(__DIR__) . '/header.php';
                     <?php endif; ?>
                 </div>
 
+                <?php tr_schedule_render_player(); ?>
+
                 <div class="tr-schedule-actions">
-                    <a class="tr-schedule-primary" href="<?= tr_schedule_h(asset('listen/')) ?>">listen now</a>
                     <?php if ($liveSlug !== ''): ?>
                         <a href="<?= tr_schedule_h(asset('djs/?dj=' . rawurlencode($liveSlug))) ?>">DJ profile</a>
                     <?php endif; ?>
@@ -337,9 +439,7 @@ include dirname(__DIR__) . '/header.php';
                 <?php else: ?>
                     <p class="tr-lede">AutoDJ is holding the stream until the next human takes over.</p>
                 <?php endif; ?>
-                <div class="tr-schedule-actions">
-                    <a class="tr-schedule-primary" href="<?= tr_schedule_h(asset('listen/')) ?>">listen now</a>
-                </div>
+                <?php tr_schedule_render_player(); ?>
             </div>
 
             <?php if (is_array($nextEvent)): ?>
@@ -639,6 +739,14 @@ include dirname(__DIR__) . '/header.php';
         const cells = Array.from(document.querySelectorAll('.calendar td[data-slot-ts]'));
         if (!cells.length) return;
         const now = Date.now();
+
+        document.querySelectorAll('.calendar thead th[data-calendar-day-ts]').forEach((heading) => {
+            const start = Number(heading.dataset.calendarDayTs || 0) * 1000;
+            const day = heading.querySelector('.day');
+            if (!start || !day) return;
+            day.classList.toggle('active', start <= now && now < start + 86400000);
+        });
+
         const current = cells.find((cell) => {
             const start = Number(cell.dataset.slotTs || 0) * 1000;
             return start <= now && now < start + 1800000;
@@ -658,7 +766,7 @@ include dirname(__DIR__) . '/header.php';
         current.append(pointer);
         const start = Number(current.dataset.slotTs || 0) * 1000;
         const progress = Math.max(0, Math.min(1, (now - start) / 1800000));
-        pointer.style.top = Math.round(progress * Math.max(0, current.offsetHeight - 1)) + 'px';
+        pointer.style.top = (progress * 100).toFixed(4) + '%';
     }
 
     function applyMode(nextMode) {
