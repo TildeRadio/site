@@ -11,11 +11,13 @@ include dirname(__DIR__, 2) . '/header.php';
     <div class="tr-title"><span class="tr-badge">CARRIER</span></div>
     <h1>TildeRadio in IRC</h1>
     <p class="tr-lede">
-        Carrier follows the station, answers TildeRadio commands in IRC, and adds a few things for live shows.
-        It keeps track of live sets, listener activity, questions, requests, polls, handoffs, and station history.
+        Carrier is the bridge between the live TildeRadio stream, the schedule, DJ profiles, IRC, and the website.
+        It watches what the station is already doing, then turns each live broadcast into a numbered set with useful
+        show context, listener interaction, a track log, and a permanent transmission entry on the site.
     </p>
     <p>
-        You can use Carrier in <code>#tilderadio</code>, or invite it to another channel on a network where it is connected.
+        DJs do not start or stop Carrier manually. Go live normally and Carrier notices the stream transition.
+        You can use it in <code>#tilderadio</code>, or invite it to another channel on a network where it is connected.
     </p>
 </section>
 
@@ -48,6 +50,29 @@ include dirname(__DIR__, 2) . '/header.php';
 !carrier status
 !carrier announce on</code></pre>
         </article>
+    </div>
+</section>
+
+<section class="tr-section" id="how-it-works">
+    <div class="tr-title"><span class="tr-badge">HOW IT FITS TOGETHER</span></div>
+    <h2>Carrier does not replace the stream or the website</h2>
+    <p>
+        Each part of TildeRadio has a different job. Carrier joins those pieces together instead of becoming another
+        place where the same information has to be maintained by hand.
+    </p>
+
+    <ol class="tr-carrier-steps">
+        <li><strong>AzuraCast says what is live.</strong><span>Carrier watches the live DJ, current track, listener count, and track changes.</span></li>
+        <li><strong>The schedule says who is next.</strong><span>That lets the next scheduled DJ prepare their show metadata before taking the stream.</span></li>
+        <li><strong>The DJ profile says what the show is.</strong><span>The website profile supplies the recurring show title, timezone, and optional weekday-specific formats.</span></li>
+        <li><strong>IRC adds what is unique tonight.</strong><span><code>!show</code> can add an episode title, topic, mood, prompt, note, or link for this one set.</span></li>
+        <li><strong>Carrier records what actually happened.</strong><span>Tracks and live-set activity are collected automatically while the DJ is on air.</span></li>
+        <li><strong>The website gets the finished transmission.</strong><span>The same set appears in the transmission archive and on the DJ's profile without a second playlist or post-show form.</span></li>
+    </ol>
+
+    <div class="tr-carrier-note">
+        <strong>short version:</strong> AzuraCast says <em>when</em>, the DJ profile says <em>what show</em>, IRC says
+        <em>what is special about this episode</em>, and Carrier ties it together.
     </div>
 </section>
 
@@ -158,24 +183,78 @@ include dirname(__DIR__, 2) . '/header.php';
 
 <section class="tr-section" id="dj">
     <div class="tr-title"><span class="tr-badge">DJ CONTROLS</span></div>
-    <h2>tools for the person currently on air</h2>
+    <h2>your recurring show lives on the site; tonight's details live in Carrier</h2>
     <p>
-        DJ-only commands are tied to the current live DJ. Carrier normally uses the DJ's IRC account/profile information
-        to decide who can control the set.
+        Carrier uses the DJ identity from the schedule, IRC account mappings, and the DJ profile's <code>irc</code> value
+        to decide who may control a set. The recurring parts of a show belong in the website profile so they do not need
+        to be typed into IRC every week.
+    </p>
+
+    <h3>Recurring show and format information</h3>
+    <p>
+        A DJ profile may define one overall show plus different recurring formats for different weekdays.
+        Carrier resolves the format when the set actually begins, using <code>show.timezone</code>. If no timezone is
+        supplied, it uses UTC.
+    </p>
+    <pre><code>"show": {
+  "title": "~/deepend",
+  "timezone": "America/Edmonton",
+  "formats": [
+    {
+      "id": "pull",
+      "days": ["tuesday"],
+      "title": "~/pull",
+      "tagline": "Interesting things that escaped the algorithm."
+    },
+    {
+      "id": "dig",
+      "days": ["saturday"],
+      "title": "~/dig",
+      "tagline": "One musical rabbit hole at a time."
+    }
+  ]
+}</code></pre>
+    <p>
+        The website can display those formats on the DJ profile, and Carrier stores the resolved show and format with
+        the transmission. A local Tuesday show therefore stays Tuesday even if UTC has already crossed midnight.
+    </p>
+
+    <h3>Before you go live</h3>
+    <p>
+        If nobody is live and you are the <strong>next scheduled DJ</strong>, <code>!show</code> works as a staging area.
+        This is useful for naming the episode and setting tonight's context before you connect to the stream.
+    </p>
+    <pre><code>!show episode songs I found through IRC
+!show topic accidental discoveries
+!show mood late-night
+!show prompt what track did the internet lead you to?
+!show note requests after the first half hour
+!show link https://example.com/notes
+!show
+!show clear mood</code></pre>
+    <p>
+        These queued values are attached automatically when your live set starts, then the queue is cleared. You do not
+        need a separate <code>!start</code> command.
+    </p>
+
+    <h3>While you are live</h3>
+    <p>
+        <code>!show</code> displays the resolved recurring show/format and the metadata for the current set. The same
+        fields can be changed while live. <code>episode</code> is the best place for the title of this particular broadcast.
     </p>
 
     <div class="tr-carrier-two">
         <div>
             <h3>Show context</h3>
             <pre><code>!show
-!show topic weird covers tonight
+!show episode songs I found through IRC
+!show topic accidental discoveries
 !show mood questionable
 !show prompt what song did you find by accident?
 !show note requests later
 !show link https://example.com/
-!show mastodon tonight is mostly weird synths
 !show clear mood</code></pre>
-            <p>These values belong to the current set and disappear when it ends.</p>
+            <p>Episode metadata becomes part of the archived transmission and is updated on the website export while the set is live.</p>
         </div>
         <div>
             <h3>Question queue</h3>
@@ -191,7 +270,7 @@ include dirname(__DIR__, 2) . '/header.php';
 !played 23
 !reject 24
 !requests off</code></pre>
-            <p>The queue is private to the DJ. Marking a request played can produce a public announcement.</p>
+            <p>The queue is private to the DJ. Every set begins with requests closed; open them only if they fit the show.</p>
         </div>
         <div>
             <h3>Listener goal</h3>
@@ -200,6 +279,58 @@ include dirname(__DIR__, 2) . '/header.php';
 !goal clear</code></pre>
             <p>Carrier announces the goal once the live listener count reaches it.</p>
         </div>
+    </div>
+
+    <h3>Mastodon from the booth</h3>
+    <pre><code>!show mastodon tonight is mostly weird synths</code></pre>
+    <p>
+        This is intentionally separate from the archived episode fields. It sends one short station transmission to
+        Mastodon during the live set rather than becoming permanent show metadata.
+    </p>
+</section>
+
+<section class="tr-section" id="website">
+    <div class="tr-title"><span class="tr-badge">WEBSITE INTEGRATION</span></div>
+    <h2>the archive builds itself while you broadcast</h2>
+    <p>
+        Carrier records track changes from AzuraCast during the live set and exports a public episode archive for the
+        website. The DJ does not need to re-enter a playlist after the show.
+    </p>
+
+    <div class="tr-carrier-two">
+        <div>
+            <h3>On the DJ profile</h3>
+            <p>
+                Recurring show formats are displayed with their days, and recent Carrier transmissions are linked directly
+                from the DJ's profile.
+            </p>
+            <pre><code>https://tilderadio.org/djs/?dj=deepend</code></pre>
+        </div>
+        <div>
+            <h3>Transmission archive</h3>
+            <p>
+                Each set can include its episode title, resolved show/format, start time, duration, track log, and the
+                station activity Carrier observed.
+            </p>
+            <pre><code>https://tilderadio.org/episodes/</code></pre>
+        </div>
+        <div>
+            <h3>Public API</h3>
+            <p>The same archive is available as read-only JSON for small tools, bots, and other tilde projects.</p>
+            <pre><code>https://tilderadio.org/api/episodes/</code></pre>
+        </div>
+        <div>
+            <h3>Automatic track log</h3>
+            <p>
+                Carrier watches the now-playing metadata while the set is live, deduplicates repeated polls, and records
+                each track it actually sees. Good stream metadata therefore produces a better archive automatically.
+            </p>
+        </div>
+    </div>
+
+    <div class="tr-carrier-note">
+        <strong>no duplicate paperwork:</strong> edit the recurring show/profile in the website repository; use IRC for
+        tonight's episode details; let Carrier collect the live history.
     </div>
 </section>
 
@@ -215,8 +346,9 @@ include dirname(__DIR__, 2) . '/header.php';
         <div>
             <h3>Automatic posts</h3>
             <p>
-                Live starts and DJ handoffs are the main notices. Optional posts can include the configured listener
-                milestones (20 and 50 by default), selected station milestones, new station records, and noteworthy set summaries.
+                Live starts and DJ handoffs are the main notices. Carrier can use the resolved show/format and current
+                episode context when it announces a live set. Optional posts can also include configured listener
+                milestones, selected station milestones, new station records, and noteworthy set summaries.
             </p>
         </div>
         <div>
@@ -320,8 +452,9 @@ include dirname(__DIR__, 2) . '/header.php';
 !achievements
 !randomdj</code></pre>
     <p>
-        Set records include things Carrier actually observed, such as duration, peak listeners, couch activity, props,
-        questions, requests, reactions, handoffs, and other station activity.
+        Set records include things Carrier actually observed, such as duration, track count, peak listeners, couch activity,
+        props, questions, requests, reactions, handoffs, and other station activity. The richer public version, including
+        the track log and resolved show/format, is available in the website transmission archive.
     </p>
 </section>
 
@@ -357,15 +490,55 @@ include dirname(__DIR__, 2) . '/header.php';
 </section>
 
 <section class="tr-section" id="flow">
-    <div class="tr-title"><span class="tr-badge">A NORMAL LIVE SET</span></div>
-    <h2>how the pieces fit together</h2>
+    <div class="tr-title"><span class="tr-badge">A DJ'S SHOW, START TO FINISH</span></div>
+    <h2>what you actually do during a normal broadcast</h2>
     <ol class="tr-carrier-steps">
-        <li><strong>The DJ goes live.</strong><span>Carrier starts a new numbered set and announces the live signal.</span></li>
-        <li><strong>Listeners check in.</strong><span><code>!tunein</code>, props, questions, reactions, polls, and other room activity are attached to that set.</span></li>
-        <li><strong>The DJ controls the extras.</strong><span>Requests, goals, show notes, challenges, and temporary commands can be enabled only when useful.</span></li>
-        <li><strong>The stream changes hands.</strong><span>A planned <code>!handoff</code> lets Carrier follow the relay through a short AutoDJ gap.</span></li>
-        <li><strong>The set closes.</strong><span>Carrier saves the summary and updates station history, records, and achievements.</span></li>
+        <li>
+            <strong>Before the show: check that Carrier knows you are next.</strong>
+            <span>Use <code>!next</code> or <code>!schedule</code>. If you want an episode title or prompt, stage it now with <code>!show episode ...</code> and the other <code>!show</code> fields.</span>
+        </li>
+        <li>
+            <strong>Connect to the stream normally.</strong>
+            <span>Carrier notices AzuraCast switch from AutoDJ to your live streamer. It starts a numbered set, loads your DJ profile, resolves the weekday show format, applies anything you staged, and begins the track log.</span>
+        </li>
+        <li>
+            <strong>Run <code>!show</code> once if you want to verify the context.</strong>
+            <span>You will see the recurring show/format plus the current episode details. Change any per-set field if tonight took a different direction.</span>
+        </li>
+        <li>
+            <strong>Open only the interaction you want.</strong>
+            <span>Requests start closed. Open them with <code>!requests on</code> if appropriate; questions, props, reactions, polls, goals, and temporary commands are there when useful, not requirements for running a show.</span>
+        </li>
+        <li>
+            <strong>During the music, Carrier mostly gets out of the way.</strong>
+            <span>It watches track metadata and listener changes automatically. Use <code>!questions</code> or <code>!requests list</code> when you have a moment rather than babysitting the bot.</span>
+        </li>
+        <li>
+            <strong>If another DJ is taking over, arm the relay.</strong>
+            <span><code>!handoff nextdj</code> tells Carrier who to expect. A short AutoDJ gap will not make the handoff look like unrelated station activity.</span>
+        </li>
+        <li>
+            <strong>When your live stream ends, Carrier closes the set.</strong>
+            <span>The final stats and track list are exported automatically. The transmission appears under <code>/episodes/</code> and among the recent transmissions on your DJ profile.</span>
+        </li>
     </ol>
+
+    <div class="tr-carrier-flow">
+        <strong>minimal DJ workflow</strong>
+        <pre><code>&lt;deepend&gt; !show episode songs I found through IRC
+&lt;carrier&gt; episode saved for deepend's next set
+
+... connect the live stream ...
+
+&lt;carrier&gt; SIGNAL ACQUIRED | deepend | ~/pull
+&lt;deepend&gt; !show
+&lt;deepend&gt; !requests on
+
+... do the radio show; Carrier logs tracks automatically ...
+
+&lt;deepend&gt; !handoff ffog
+... or simply end the live stream when nobody follows ...</code></pre>
+    </div>
 </section>
 
 <section class="tr-section">
