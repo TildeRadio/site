@@ -211,6 +211,281 @@ function tr_slug(string $value): string
     return trim($slug, '-');
 }
 
+function tr_show_formats(array $profile): array
+{
+    $show = is_array($profile['show'] ?? null) ? $profile['show'] : [];
+    $formats = is_array($show['formats'] ?? null) && array_is_list($show['formats'])
+        ? $show['formats']
+        : [];
+
+    $result = [];
+    foreach ($formats as $format) {
+        if (!is_array($format) || array_is_list($format)) {
+            continue;
+        }
+
+        $daysRaw = $format['days'] ?? ($format['weekday'] ?? []);
+        $daysRaw = is_string($daysRaw) ? [$daysRaw] : $daysRaw;
+        $days = [];
+        if (is_array($daysRaw)) {
+            foreach ($daysRaw as $day) {
+                if (!is_string($day) || trim($day) === '') {
+                    continue;
+                }
+                $normalized = strtolower(trim($day));
+                if (in_array($normalized, [
+                    'monday', 'tuesday', 'wednesday', 'thursday',
+                    'friday', 'saturday', 'sunday',
+                ], true)) {
+                    $days[] = $normalized;
+                }
+            }
+        }
+
+        $genres = [];
+        if (is_array($format['genres'] ?? null)) {
+            foreach ($format['genres'] as $genre) {
+                if (is_string($genre) && trim($genre) !== '') {
+                    $genres[] = trim($genre);
+                }
+            }
+        }
+
+        $result[] = [
+            'id' => tr_slug((string) ($format['id'] ?? '')),
+            'title' => is_string($format['title'] ?? null) && trim($format['title']) !== ''
+                ? trim($format['title'])
+                : null,
+            'tagline' => is_string($format['tagline'] ?? null) && trim($format['tagline']) !== ''
+                ? trim($format['tagline'])
+                : null,
+            'description' => is_string($format['description'] ?? null) && trim($format['description']) !== ''
+                ? trim($format['description'])
+                : null,
+            'days' => array_values(array_unique($days)),
+            'genres' => array_values(array_unique($genres)),
+        ];
+    }
+
+    return $result;
+}
+
+/**
+ * Resolve static show metadata plus an optional weekday-specific format.
+ *
+ * The weekday is evaluated in show.timezone so a local Tuesday evening show
+ * does not become a Wednesday format merely because UTC has crossed midnight.
+ *
+ * @return array<string, mixed>
+ */
+function tr_show_context(?array $profile, ?int $timestamp = null): array
+{
+    if ($profile === null) {
+        return [
+            'title' => null,
+            'display_title' => null,
+            'tagline' => null,
+            'description' => null,
+            'genres' => [],
+            'timezone' => 'UTC',
+            'format' => null,
+        ];
+    }
+
+    $show = is_array($profile['show'] ?? null) ? $profile['show'] : [];
+    $clean = static fn (mixed $value): ?string =>
+        is_string($value) && trim($value) !== '' ? trim($value) : null;
+
+    $title = $clean($show['title'] ?? null);
+    $tagline = $clean($show['tagline'] ?? null) ?? $clean($profile['tagline'] ?? null);
+    $description = $clean($show['description'] ?? null);
+
+    if ($description === null && $tagline === null) {
+        $description = $clean($profile['description'] ?? null);
+        if ($description === null) {
+            $bio = $profile['bio'] ?? null;
+            if (is_string($bio)) {
+                $description = $clean($bio);
+            } elseif (is_array($bio) && isset($bio[0])) {
+                $description = $clean($bio[0]);
+            }
+        }
+    }
+
+    $genres = [];
+    if (is_array($show['genres'] ?? null)) {
+        foreach ($show['genres'] as $genre) {
+            if (is_string($genre) && trim($genre) !== '') {
+                $genres[] = trim($genre);
+            }
+        }
+    }
+
+    $timezoneName = $clean($show['timezone'] ?? null) ?? 'UTC';
+    try {
+        $timezone = new DateTimeZone($timezoneName);
+    } catch (Exception) {
+        $timezoneName = 'UTC';
+        $timezone = new DateTimeZone('UTC');
+    }
+
+    $selected = null;
+    if ($timestamp !== null) {
+        $date = (new DateTimeImmutable('@' . $timestamp))->setTimezone($timezone);
+        $weekday = strtolower($date->format('l'));
+
+        foreach (tr_show_formats($profile) as $format) {
+            if (in_array($weekday, $format['days'], true)) {
+                $selected = $format;
+                break;
+            }
+        }
+    }
+
+    if (is_array($selected)) {
+        $tagline = $selected['tagline'] ?? $tagline;
+        $description = $selected['description'] ?? $description;
+        if (!empty($selected['genres'])) {
+            $genres = $selected['genres'];
+        }
+    }
+
+    $formatTitle = is_array($selected) ? ($selected['title'] ?? null) : null;
+    $displayTitle = $title;
+    if (is_string($formatTitle) && $formatTitle !== '') {
+        $displayTitle = $title !== null && strcasecmp($title, $formatTitle) !== 0
+            ? $title . ' · ' . $formatTitle
+            : $formatTitle;
+    }
+
+    return [
+        'title' => $title,
+        'display_title' => $displayTitle,
+        'tagline' => $tagline,
+        'description' => $description,
+        'genres' => array_values(array_unique($genres)),
+        'timezone' => $timezoneName,
+        'format' => $selected,
+    ];
+}
+
+function tr_episode_archive_path(): string
+{
+    $configured = getenv('TILDERADIO_EPISODES_FILE');
+    if (is_string($configured) && trim($configured) !== '') {
+        return trim($configured);
+    }
+
+    return '/var/lib/tilderadio-bot/episodes.json';
+}
+
+/**
+ * Load Carrier's atomically exported public episode archive.
+ *
+ * @return array{version:int,generated_at:?int,episodes:array<int,array<string,mixed>>}
+ */
+function tr_episode_archive(): array
+{
+    $empty = ['version' => 1, 'generated_at' => null, 'episodes' => []];
+    $path = tr_episode_archive_path();
+
+    if (!is_file($path) || !is_readable($path)) {
+        return $empty;
+    }
+
+    $size = filesize($path);
+    if ($size === false || $size < 2 || $size > 10 * 1024 * 1024) {
+        return $empty;
+    }
+
+    $json = file_get_contents($path);
+    if (!is_string($json)) {
+        return $empty;
+    }
+
+    try {
+        $decoded = json_decode($json, true, 64, JSON_THROW_ON_ERROR);
+    } catch (JsonException) {
+        return $empty;
+    }
+
+    if (!is_array($decoded) || !is_array($decoded['episodes'] ?? null)) {
+        return $empty;
+    }
+
+    $episodes = array_values(array_filter(
+        $decoded['episodes'],
+        static fn (mixed $episode): bool =>
+            is_array($episode)
+            && is_int($episode['id'] ?? null)
+            && is_string($episode['dj_slug'] ?? null)
+            && is_int($episode['started_at'] ?? null)
+    ));
+
+    return [
+        'version' => is_int($decoded['version'] ?? null) ? $decoded['version'] : 1,
+        'generated_at' => is_int($decoded['generated_at'] ?? null) ? $decoded['generated_at'] : null,
+        'episodes' => $episodes,
+    ];
+}
+
+/**
+ * @return array<int,array<string,mixed>>
+ */
+function tr_episodes_for_dj(string $slug, int $limit = 10): array
+{
+    $slug = tr_slug($slug);
+    $limit = max(1, min(50, $limit));
+    $episodes = [];
+
+    foreach (tr_episode_archive()['episodes'] as $episode) {
+        if (tr_slug((string) ($episode['dj_slug'] ?? '')) !== $slug) {
+            continue;
+        }
+        $episodes[] = $episode;
+        if (count($episodes) >= $limit) {
+            break;
+        }
+    }
+
+    return $episodes;
+}
+
+function tr_episode_by_id(int $id): ?array
+{
+    if ($id < 1) {
+        return null;
+    }
+
+    foreach (tr_episode_archive()['episodes'] as $episode) {
+        if (($episode['id'] ?? null) === $id) {
+            return $episode;
+        }
+    }
+
+    return null;
+}
+
+function tr_episode_title(array $episode): string
+{
+    $show = is_array($episode['show'] ?? null) ? $episode['show'] : [];
+    foreach (['episode', 'topic'] as $key) {
+        if (is_string($show[$key] ?? null) && trim($show[$key]) !== '') {
+            return trim($show[$key]);
+        }
+    }
+
+    $format = is_array($show['format'] ?? null) ? $show['format'] : [];
+    if (is_string($format['title'] ?? null) && trim($format['title']) !== '') {
+        return trim($format['title']);
+    }
+    if (is_string($show['title'] ?? null) && trim($show['title']) !== '') {
+        return trim($show['title']);
+    }
+
+    return 'Set #' . (int) ($episode['id'] ?? 0);
+}
+
 /**
  * Load optional hand-authored DJ/show metadata.
  */

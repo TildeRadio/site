@@ -106,7 +106,14 @@ php bin/validate-djs.php</code></pre>
     </ul>
 
     <p>
-        The full field reference lives in <code>data/djs/README.md</code>. If Git is not your thing, ask in
+        The full field reference lives in <code>data/djs/README.md</code>. If your recurring show has different
+        weekday formats, the profile can define them once and the schedule and Carrier will resolve the right one
+        automatically. Episode titles remain optional and can be set live with
+        <code>!show episode &lt;title&gt;</code>.
+    </p>
+
+    <p>
+        If Git is not your thing, ask in
         <a href="https://tilde.chat/kiwi/#tilderadio" rel="noopener">#tilderadio</a> and somebody can help get the
         profile into place.
     </p>

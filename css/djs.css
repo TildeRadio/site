@@ -287,6 +287,53 @@
     color: var(--tr-live)
 }
 
+.tr-show-formats,
+.tr-episode-list {
+    display: grid;
+    gap: 1px;
+    margin-top: 18px;
+    background: var(--tr-line)
+}
+
+.tr-show-format,
+.tr-episode-card {
+    padding: 14px 16px;
+    background: var(--tr-bg)
+}
+
+.tr-show-format h3,
+.tr-episode-card h3 {
+    margin: 3px 0 0;
+    font-size: 1rem
+}
+
+.tr-show-format p {
+    margin: 6px 0 0
+}
+
+.tr-show-format-days,
+.tr-episode-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    color: var(--tr-muted);
+    font-size: .74rem;
+    text-transform: lowercase
+}
+
+.tr-episode-card {
+    display: flex;
+    justify-content: space-between;
+    gap: 18px;
+    align-items: center
+}
+
+.tr-episode-card > span {
+    color: var(--tr-muted);
+    font-size: .75rem;
+    white-space: nowrap
+}
+
 @media (max-width: 700px) {
     .tr-dj-card-grid,
     .tr-favorites {

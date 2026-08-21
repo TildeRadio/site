@@ -3,7 +3,7 @@
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: local("IBM Plex Mono"), url(https://tilde.team/fonts/plex/IBMPlexMono-Regular.woff2) format("woff2")
+    src: local("IBM Plex Mono"), url(https://github.com/IBM/plex/raw/refs/heads/master/packages/plex-mono/fonts/complete/woff2/IBMPlexMono-Regular.woff2) format("woff2")
 }
 
 @font-face {
@@ -11,7 +11,7 @@
     font-style: normal;
     font-weight: 600;
     font-display: swap;
-    src: local("IBM Plex Mono Medium"), url(https://tilde.team/fonts/plex/IBMPlexMono-Medium.woff2) format("woff2")
+    src: local("IBM Plex Mono Medium"), url(https://github.com/IBM/plex/raw/refs/heads/master/packages/plex-mono/fonts/complete/woff2/IBMPlexMono-Medium.woff2) format("woff2")
 }
 
 :root {

@@ -5,7 +5,7 @@
   "bio": [
     "deepend is a longtime tilde and IRC dweller who spends an unreasonable amount of time running servers, writing code, breaking things, fixing them again, and generally living somewhere between a terminal and an IRC window.",
     "Musically, genre boundaries are mostly treated as suggestions. Expect bass-heavy electronic music, trap, dubstep, hip-hop and freestyle, industrial and metal, remixes, mashups, covers, and the occasional song that makes absolutely no sense beside anything that came before it.",
-    "There is no formal show yet. For now, the plan is simple: play interesting things, dig up tracks people may not have heard, revisit old favourites, and never worry too much about whether the playlist belongs in one neat category."
+    "~/deepend runs twice a week with two recurring formats: ~/pull for discoveries and ~/dig for themed musical rabbit holes."
   ],
   "pronouns": "he/him",
   "location": "Calgary, Alberta, Canada",
@@ -21,6 +21,27 @@
       "url": "https://tilde.zone/@deepend"
     }
   ],
+
+  "show": {
+    "title": "~/deepend",
+    "tagline": "One hour down the rabbit hole.",
+    "description": "Human-curated music without genre boundaries. Every track should give you a reason to play the next one.",
+    "timezone": "America/Edmonton",
+    "formats": [
+      {
+        "id": "pull",
+        "days": ["wednesday"],
+        "title": "~/pull",
+        "tagline": "Interesting things that escaped the algorithm."
+      },
+      {
+        "id": "dig",
+        "days": ["saturday"],
+        "title": "~/dig",
+        "tagline": "One musical rabbit hole at a time."
+      }
+    ]
+  },
 
   "favorites": {
     "artists": [
@@ -46,7 +67,7 @@
   },
 
   "notes": [
-    "No fixed show format yet.",
+    "~/pull and ~/dig are the two recurring ~/deepend formats.",
     "Remixes and covers are fair game.",
     "Genre consistency is not guaranteed."
   ]

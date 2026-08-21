@@ -26,11 +26,20 @@
     "title": "/dev/random",
     "tagline": "Music selected with questionable scientific rigor.",
     "description": "Electronic, industrial, ambient, synthwave, and whatever else fell out of the music directory.",
+    "timezone": "UTC",
     "genres": [
       "electronic",
       "industrial",
       "ambient",
       "synthwave"
+    ],
+    "formats": [
+      {
+        "id": "midweek",
+        "days": ["wednesday"],
+        "title": "/dev/random: midweek",
+        "tagline": "Optional weekday-specific show format."
+      }
     ]
   },
   "favorites": {

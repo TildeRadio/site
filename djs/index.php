@@ -260,6 +260,8 @@ if ($requestedSlug !== '') {
     $notes = tr_djs_text_list($profile['notes'] ?? null);
     $favorites = is_array($profile['favorites'] ?? null) ? $profile['favorites'] : [];
     $genres = tr_djs_text_list($show['genres'] ?? null);
+    $showFormats = tr_show_formats($profile);
+    $recentEpisodes = tr_episodes_for_dj($requestedSlug, 6);
     $isLive = $requestedSlug === $liveSlug;
     $nextEvent = isset($upcoming[0]) && is_array($upcoming[0]) ? $upcoming[0] : null;
 
@@ -347,6 +349,24 @@ if ($requestedSlug !== '') {
                     <?php endforeach; ?>
                 </ul>
             <?php endif; ?>
+
+            <?php if ($showFormats): ?>
+                <div class="tr-show-formats">
+                    <?php foreach ($showFormats as $format): ?>
+                        <article class="tr-show-format">
+                            <div class="tr-show-format-days">
+                                <?= tr_djs_h(implode(' / ', array_map('ucfirst', $format['days']))) ?>
+                            </div>
+                            <?php if (!empty($format['title'])): ?>
+                                <h3><?= tr_djs_h((string) $format['title']) ?></h3>
+                            <?php endif; ?>
+                            <?php if (!empty($format['tagline'])): ?>
+                                <p><?= tr_djs_h((string) $format['tagline']) ?></p>
+                            <?php endif; ?>
+                        </article>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </section>
     <?php endif; ?>
 
@@ -385,6 +405,42 @@ if ($requestedSlug !== '') {
             <p><a href="<?= tr_djs_h(asset('schedule/')) ?>">full schedule</a></p>
         <?php endif; ?>
     </section>
+
+    <?php if ($recentEpisodes): ?>
+        <section class="tr-section">
+            <div class="tr-title"><span class="tr-badge">RECENT TRANSMISSIONS</span></div>
+            <div class="tr-episode-list">
+                <?php foreach ($recentEpisodes as $episode): ?>
+                    <?php
+                    $episodeId = (int) ($episode['id'] ?? 0);
+                    $episodeShow = is_array($episode['show'] ?? null) ? $episode['show'] : [];
+                    $episodeFormat = is_array($episodeShow['format'] ?? null) ? $episodeShow['format'] : [];
+                    ?>
+                    <article class="tr-episode-card">
+                        <div>
+                            <div class="tr-episode-meta">
+                                <time
+                                    datetime="<?= tr_djs_h(gmdate(DATE_ATOM, (int) $episode['started_at'])) ?>"
+                                    data-local-time="<?= (int) $episode['started_at'] ?>"
+                                ><?= tr_djs_h(gmdate('D M d H:i', (int) $episode['started_at']) . ' UTC') ?></time>
+                                <?php if (!empty($episode['is_live'])): ?><span>LIVE</span><?php endif; ?>
+                                <?php if (!empty($episodeFormat['title'])): ?>
+                                    <span><?= tr_djs_h((string) $episodeFormat['title']) ?></span>
+                                <?php endif; ?>
+                            </div>
+                            <h3>
+                                <a href="<?= tr_djs_h(asset('episodes/?id=' . $episodeId)) ?>">
+                                    <?= tr_djs_h(tr_episode_title($episode)) ?>
+                                </a>
+                            </h3>
+                        </div>
+                        <span><?= (int) ($episode['track_count'] ?? 0) ?> tracks</span>
+                    </article>
+                <?php endforeach; ?>
+            </div>
+            <p><a href="<?= tr_djs_h(asset('episodes/?dj=' . rawurlencode($requestedSlug))) ?>">all transmissions &rarr;</a></p>
+        </section>
+    <?php endif; ?>
 
     <?php if ($bio): ?>
         <section class="tr-section">

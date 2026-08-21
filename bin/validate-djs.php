@@ -104,6 +104,77 @@ function djv_validate_links(mixed $value, array &$errors): void
     }
 }
 
+function djv_validate_show_formats(mixed $value, array &$errors): void
+{
+    if (!is_array($value) || !array_is_list($value)) {
+        $errors[] = 'show.formats must be an array of objects';
+        return;
+    }
+
+    $validDays = [
+        'monday', 'tuesday', 'wednesday', 'thursday',
+        'friday', 'saturday', 'sunday',
+    ];
+    $ids = [];
+
+    foreach ($value as $index => $format) {
+        if (!djv_is_object($format)) {
+            $errors[] = "show.formats[$index] must be an object";
+            continue;
+        }
+
+        $id = $format['id'] ?? null;
+        if (!is_string($id) || !preg_match('/^[a-z0-9][a-z0-9-]*$/', trim($id))) {
+            $errors[] = "show.formats[$index].id must be a lowercase slug";
+        } elseif (isset($ids[trim($id)])) {
+            $errors[] = "show.formats[$index].id duplicates an earlier format";
+        } else {
+            $ids[trim($id)] = true;
+        }
+
+        foreach (['title', 'tagline', 'description'] as $field) {
+            djv_validate_string_field(
+                $format,
+                $field,
+                $errors,
+                $field === 'description' ? 8192 : 2048
+            );
+        }
+
+        $days = $format['days'] ?? ($format['weekday'] ?? null);
+        if (is_string($days)) {
+            $days = [$days];
+        }
+        if (!is_array($days) || !$days) {
+            $errors[] = "show.formats[$index].days must contain at least one weekday";
+        } else {
+            foreach ($days as $dayIndex => $day) {
+                if (!is_string($day) || !in_array(strtolower(trim($day)), $validDays, true)) {
+                    $errors[] = "show.formats[$index].days[$dayIndex] must be a weekday name";
+                }
+            }
+        }
+
+        if (array_key_exists('genres', $format)) {
+            if (!is_array($format['genres']) || !array_is_list($format['genres'])) {
+                $errors[] = "show.formats[$index].genres must be an array of strings";
+            } else {
+                foreach ($format['genres'] as $genreIndex => $genre) {
+                    if (!is_string($genre) || trim($genre) === '') {
+                        $errors[] = "show.formats[$index].genres[$genreIndex] must be a non-empty string";
+                    }
+                }
+            }
+        }
+
+        foreach (array_keys($format) as $key) {
+            if (!in_array($key, ['id', 'title', 'tagline', 'description', 'days', 'weekday', 'genres'], true)) {
+                $errors[] = "show.formats[$index] has unknown field: $key";
+            }
+        }
+    }
+}
+
 function djv_validate_profile(string $file, string $root, int $maxBytes): array
 {
     $errors = [];
@@ -192,8 +263,18 @@ function djv_validate_profile(string $file, string $root, int $maxBytes): array
             $errors[] = 'show must be an object';
         } else {
             $show = $profile['show'];
-            foreach (['title', 'tagline', 'description'] as $field) {
+            foreach (['title', 'tagline', 'description', 'timezone'] as $field) {
                 djv_validate_string_field($show, $field, $errors, $field === 'description' ? 8192 : 2048);
+            }
+            if (isset($show['timezone']) && is_string($show['timezone']) && trim($show['timezone']) !== '') {
+                try {
+                    new DateTimeZone(trim($show['timezone']));
+                } catch (Exception) {
+                    $errors[] = 'show.timezone must be a valid IANA timezone such as America/Edmonton';
+                }
+            }
+            if (array_key_exists('formats', $show)) {
+                djv_validate_show_formats($show['formats'], $errors);
             }
             if (array_key_exists('genres', $show)) {
                 if (!is_array($show['genres']) || !array_is_list($show['genres'])) {
@@ -207,7 +288,7 @@ function djv_validate_profile(string $file, string $root, int $maxBytes): array
                 }
             }
             foreach (array_keys($show) as $key) {
-                if (!in_array($key, ['title', 'tagline', 'description', 'genres'], true)) {
+                if (!in_array($key, ['title', 'tagline', 'description', 'genres', 'timezone', 'formats'], true)) {
                     $warnings[] = "unknown show field: $key";
                 }
             }

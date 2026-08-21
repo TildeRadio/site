@@ -53,51 +53,27 @@ function tr_schedule_profile_for_event(array $event, array $catalog): ?array
 }
 
 /**
- * Return the small amount of show metadata useful on a schedule card.
+ * Return the small amount of resolved show metadata useful on a schedule card.
  *
  * @return array{title:?string,tagline:?string,description:?string,genres:array<int,string>}
  */
-function tr_schedule_show_info(?array $profile): array
+function tr_schedule_show_info(?array $profile, ?int $timestamp = null): array
 {
-    if ($profile === null) {
-        return ['title' => null, 'tagline' => null, 'description' => null, 'genres' => []];
-    }
-
-    $show = is_array($profile['show'] ?? null) ? $profile['show'] : [];
-    $clean = static function (mixed $value): ?string {
-        return is_string($value) && trim($value) !== '' ? trim($value) : null;
-    };
-
-    $title = $clean($show['title'] ?? null);
-    $tagline = $clean($show['tagline'] ?? null) ?? $clean($profile['tagline'] ?? null);
-    $description = $clean($show['description'] ?? null);
-
-    if ($description === null && $tagline === null) {
-        $description = $clean($profile['description'] ?? null);
-        if ($description === null) {
-            $bio = $profile['bio'] ?? null;
-            if (is_string($bio)) {
-                $description = $clean($bio);
-            } elseif (is_array($bio) && isset($bio[0])) {
-                $description = $clean($bio[0]);
-            }
-        }
-    }
-
-    $genres = [];
-    if (is_array($show['genres'] ?? null)) {
-        foreach ($show['genres'] as $genre) {
-            if (is_string($genre) && trim($genre) !== '') {
-                $genres[] = trim($genre);
-            }
-        }
-    }
+    $context = tr_show_context($profile, $timestamp);
 
     return [
-        'title' => $title,
-        'tagline' => $tagline,
-        'description' => $description,
-        'genres' => $genres,
+        'title' => is_string($context['display_title'] ?? null)
+            ? $context['display_title']
+            : null,
+        'tagline' => is_string($context['tagline'] ?? null)
+            ? $context['tagline']
+            : null,
+        'description' => is_string($context['description'] ?? null)
+            ? $context['description']
+            : null,
+        'genres' => is_array($context['genres'] ?? null)
+            ? $context['genres']
+            : [],
     ];
 }
 
@@ -180,9 +156,9 @@ function tr_schedule_render_event(array $event, array $catalog): void
         ? trim($profile['name'])
         : $eventName;
     $slug = trim((string) ($event['_profile_slug'] ?? $event['slug'] ?? ''));
-    $info = tr_schedule_show_info($profile);
     $start = (int) $event['start_ts'];
     $end = is_int($event['end_ts'] ?? null) ? (int) $event['end_ts'] : 0;
+    $info = tr_schedule_show_info($profile, $start);
     ?>
     <article
         class="tr-schedule-event"
@@ -239,7 +215,7 @@ $liveSlug = $liveDj !== '' ? tr_slug($liveDj) : '';
 $liveProfile = $liveSlug !== '' && isset($catalog[$liveSlug]) && is_array($catalog[$liveSlug])
     ? $catalog[$liveSlug]
     : null;
-$liveInfo = tr_schedule_show_info($liveProfile);
+$liveInfo = tr_schedule_show_info($liveProfile, $nowTs);
 
 $futureEvents = array_values(array_filter(
     $events,
@@ -247,7 +223,12 @@ $futureEvents = array_values(array_filter(
 ));
 $nextEvent = $futureEvents[0] ?? null;
 $nextProfile = is_array($nextEvent) ? tr_schedule_profile_for_event($nextEvent, $catalog) : null;
-$nextInfo = tr_schedule_show_info($nextProfile);
+$nextInfo = tr_schedule_show_info(
+    $nextProfile,
+    is_array($nextEvent) && is_int($nextEvent['start_ts'] ?? null)
+        ? $nextEvent['start_ts']
+        : null
+);
 
 $mastodonUrl = trim((string) (getenv('TILDERADIO_MASTODON_URL') ?: 'https://tilde.zone/@tilderadio'));
 $mastodonHandle = trim((string) (getenv('TILDERADIO_MASTODON_HANDLE') ?: '@tilderadio@tilde.zone'));
@@ -277,7 +258,10 @@ if (tr_terminal_request()) {
     $shown = 0;
     foreach (array_slice($futureEvents, 0, 50) as $event) {
         $profile = tr_schedule_profile_for_event($event, $catalog);
-        $info = tr_schedule_show_info($profile);
+        $info = tr_schedule_show_info(
+            $profile,
+            is_int($event['start_ts'] ?? null) ? $event['start_ts'] : null
+        );
         $name = is_array($profile) && !empty($profile['name'])
             ? trim((string) $profile['name'])
             : trim((string) ($event['name'] ?? 'unknown'));

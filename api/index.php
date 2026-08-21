@@ -12,11 +12,13 @@ $directory = [
         'history' => '/api/history/',
         'schedule' => '/api/schedule/',
         'djs' => '/api/djs/',
+        'episodes' => '/api/episodes/',
     ],
     'terminal' => [
         'now' => '/now/',
         'schedule' => '/schedule/',
         'djs' => '/djs/',
+        'episodes' => '/episodes/',
     ],
 ];
 
@@ -33,7 +35,7 @@ include dirname(__DIR__) . '/header.php';
     <div class="tr-title"><span class="tr-badge">PUBLIC API</span></div>
     <h1>tilderadio, but machine-readable</h1>
     <p class="tr-lede">
-        Small JSON endpoints for now playing, recent tracks, the schedule, and DJ profiles.
+        Small JSON endpoints for now playing, recent tracks, the schedule, DJ profiles, and completed live episodes.
         No API key is required for these public read-only endpoints.
     </p>
 </section>
@@ -61,6 +63,11 @@ include dirname(__DIR__) . '/header.php';
             <p>DJ profiles merged with upcoming schedule information.</p>
             <p class="tr-muted">cache: about 60 seconds</p>
         </article>
+        <article class="tr-api-card">
+            <h2><a href="<?= htmlspecialchars(asset('api/episodes/'), ENT_QUOTES, 'UTF-8') ?>">/api/episodes/</a></h2>
+            <p>Live and completed sets with resolved show/format metadata, stats, and automatic track logs.</p>
+            <p class="tr-muted">cache: about 30 seconds</p>
+        </article>
     </div>
 </section>
 
@@ -85,6 +92,7 @@ include dirname(__DIR__) . '/header.php';
         <pre><code>curl https://tilderadio.org/now/</code></pre>
         <pre><code>curl https://tilderadio.org/schedule/</code></pre>
         <pre><code>curl https://tilderadio.org/djs/</code></pre>
+        <pre><code>curl https://tilderadio.org/episodes/</code></pre>
         <pre><code>curl https://tilderadio.org/api/now/</code></pre>
     </div>
     <p class="tr-muted">

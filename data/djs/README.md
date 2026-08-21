@@ -62,8 +62,37 @@ adding. Never put DJ/streaming credentials or other secrets in profile JSON.
 - `show.tagline`: short show summary.
 - `show.description`: longer show description.
 - `show.genres`: array of genre/style tags.
+- `show.timezone`: IANA timezone used to choose weekday-specific formats, for
+  example `America/Edmonton`. Defaults to `UTC`.
+- `show.formats`: optional array of recurring sub-formats. Each format uses a
+  lowercase `id`, one or more weekday names in `days`, and may override
+  `title`, `tagline`, `description`, or `genres`.
 - `favorites.artists`, `favorites.albums`, `favorites.tracks`: arrays of text.
 - `notes`: one string or an array of short notes for listeners.
+
+For a show with different recurring formats:
+
+```json
+"show": {
+  "title": "~/deepend",
+  "timezone": "America/Edmonton",
+  "formats": [
+    {
+      "id": "pull",
+      "days": ["tuesday"],
+      "title": "~/pull"
+    },
+    {
+      "id": "dig",
+      "days": ["thursday"],
+      "title": "~/dig"
+    }
+  ]
+}
+```
+
+Carrier resolves the format automatically when the DJ goes live. During a live
+set, `!show episode <title>` adds an optional episode title to the archive.
 
 The filename is authoritative for the profile slug. Keep it lowercase and use
 letters, numbers, and hyphens only.

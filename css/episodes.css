@@ -1,0 +1,122 @@
+.tr-episodes-back {
+    margin: 0 0 20px;
+    font-size: .8rem
+}
+
+.tr-episode-hero h1 {
+    margin-bottom: 8px
+}
+
+.tr-episode-byline,
+.tr-transmission-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 14px;
+    color: var(--tr-muted);
+    font-size: .78rem
+}
+
+.tr-episode-show {
+    margin: 14px 0 0;
+    font-size: 1.05rem
+}
+
+.tr-episode-show span {
+    color: var(--tr-muted)
+}
+
+.tr-episode-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1px;
+    background: var(--tr-line)
+}
+
+.tr-episode-stats div {
+    padding: 14px;
+    background: var(--tr-bg)
+}
+
+.tr-episode-stats span,
+.tr-episode-stats strong {
+    display: block
+}
+
+.tr-episode-stats span {
+    margin-bottom: 4px;
+    color: var(--tr-muted);
+    font-size: .72rem;
+    text-transform: uppercase
+}
+
+.tr-track-log {
+    display: grid;
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    background: var(--tr-line);
+    counter-reset: tracks;
+    list-style: none
+}
+
+.tr-track-log li {
+    display: grid;
+    grid-template-columns: 36px minmax(0, 1fr) auto;
+    gap: 12px;
+    padding: 11px 14px;
+    background: var(--tr-bg);
+    counter-increment: tracks
+}
+
+.tr-track-log li::before {
+    color: var(--tr-muted);
+    content: counter(tracks, decimal-leading-zero)
+}
+
+.tr-track-log time {
+    color: var(--tr-muted);
+    font-size: .75rem
+}
+
+.tr-transmission-list {
+    display: grid;
+    gap: 1px;
+    background: var(--tr-line)
+}
+
+.tr-transmission {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 20px;
+    align-items: center;
+    padding: 15px 16px;
+    background: var(--tr-bg)
+}
+
+.tr-transmission h2 {
+    margin: 4px 0 0;
+    font-size: 1rem
+}
+
+.tr-transmission-side {
+    display: grid;
+    gap: 3px;
+    color: var(--tr-muted);
+    font-size: .75rem;
+    text-align: right
+}
+
+@media (max-width: 620px) {
+    .tr-transmission,
+    .tr-track-log li {
+        grid-template-columns: 1fr
+    }
+
+    .tr-track-log li::before {
+        display: none
+    }
+
+    .tr-transmission-side {
+        text-align: left
+    }
+}
