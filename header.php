@@ -64,11 +64,12 @@ $nav_current = static fn (string $section): string => $nav_section === $section 
         <link rel="stylesheet" href="<?= htmlspecialchars(asset('css/hacker.css'), ENT_QUOTES, 'UTF-8') ?>">
         <?php foreach (($page_stylesheets ?? []) as $stylesheet): ?>
             <?php if (is_string($stylesheet) && trim($stylesheet) !== ''): ?>
-                <link rel="stylesheet" href="<?= htmlspecialchars(asset($stylesheet), ENT_QUOTES, 'UTF-8') ?>">
+                <link rel="stylesheet" data-tr-page-style href="<?= htmlspecialchars(asset($stylesheet), ENT_QUOTES, 'UTF-8') ?>">
             <?php endif; ?>
         <?php endforeach; ?>
         <link rel="icon" type="image/png" href="<?= htmlspecialchars(asset('logos/tilderadio.png'), ENT_QUOTES, 'UTF-8') ?>">
         <?=isset($additional_head) ? PHP_EOL . "        " . $additional_head . PHP_EOL : ""?>
+        <script defer src="<?= htmlspecialchars(asset('js/site-player.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
     </head>
 
     <body>
@@ -87,4 +88,33 @@ $nav_current = static fn (string $section): string => $nav_section === $section 
                     <a href="<?= htmlspecialchars(asset('listen/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('listen') ?>>listen</a>
                 </nav>
             </header>
+
+            <audio
+                id="tr-audio"
+                class="tr-hidden"
+                preload="none"
+                src="https://tilderadio.org/listen/ogg/192k"
+            ></audio>
+
+            <div class="tr-player tr-global-player" id="tr-global-player" aria-label="tilderadio player" role="group" hidden>
+                <div class="row top">
+                    <div class="controls">
+                        <button id="tr-global-play" type="button">▶ play</button>
+                        <button id="tr-global-mute" type="button">🔈 mute</button>
+                        <label class="srconly" for="tr-global-vol">vol</label>
+                        <input id="tr-global-vol" type="range" min="0" max="1" step="0.01" value="1" aria-label="volume">
+                        <span class="tr-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+                    </div>
+                    <div class="source">
+                        <label class="srconly" for="tr-global-src">stream</label>
+                        <select id="tr-global-src" aria-label="stream">
+                            <option value="https://tilderadio.org/listen/ogg/192k">ogg 192k</option>
+                            <option value="https://tilderadio.org/listen/ogg/320k">ogg 320k</option>
+                            <option value="https://tilderadio.org/listen/mp3/192k">mp3 192k</option>
+                            <option value="https://tilderadio.org/listen/mp3/320k">mp3 320k</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <main>

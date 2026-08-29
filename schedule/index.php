@@ -145,18 +145,14 @@ function tr_schedule_render_player(): void
         </div>
     </div>
 
-    <audio id="tr-schedule-audio" class="tr-hidden" preload="none">
-        <source src="https://tilderadio.org/listen/ogg/192k" type="audio/ogg">
-        <source src="https://tilderadio.org/listen/mp3/192k" type="audio/mpeg">
-    </audio>
-
     <noscript>
         <p class="tr-schedule-player-noscript"><a href="https://tilderadio.org/listen">listen directly</a></p>
     </noscript>
 
     <script>
     (function () {
-        var audio = document.getElementById('tr-schedule-audio');
+        var audio = document.getElementById('tr-audio');
+        var audioController = new AbortController();
         var player = document.getElementById('tr-schedule-player');
         var play = document.getElementById('tr-schedule-play');
         var mute = document.getElementById('tr-schedule-mute');
@@ -164,6 +160,11 @@ function tr_schedule_render_player(): void
         var source = document.getElementById('tr-schedule-src');
 
         if (!audio || !player || !play || !mute || !volume || !source) return;
+
+        volume.value = String(audio.volume);
+        if (audio.src && Array.from(source.options).some(function (option) { return option.value === audio.src; })) {
+            source.value = audio.src;
+        }
 
         function syncPlaying() {
             player.classList.toggle('is-playing', !audio.paused);
@@ -210,13 +211,17 @@ function tr_schedule_render_player(): void
             }
         });
 
-        audio.addEventListener('play', syncPlaying);
-        audio.addEventListener('pause', syncPlaying);
-        audio.addEventListener('ended', syncPlaying);
-        audio.addEventListener('volumechange', syncMute);
+        audio.addEventListener('play', syncPlaying, {signal: audioController.signal});
+        audio.addEventListener('pause', syncPlaying, {signal: audioController.signal});
+        audio.addEventListener('ended', syncPlaying, {signal: audioController.signal});
+        audio.addEventListener('volumechange', syncMute, {signal: audioController.signal});
 
         syncPlaying();
         syncMute();
+
+        window.addEventListener('tilderadio:before-navigate', function () {
+            audioController.abort();
+        }, {once: true});
     })();
     </script>
     <?php
@@ -798,8 +803,13 @@ include dirname(__DIR__) . '/header.php';
     applyMode(mode);
     updateCountdowns();
     updatePointer();
-    window.setInterval(updateCountdowns, 60000);
-    window.setInterval(updatePointer, 30000);
+    const countdownTimer = window.setInterval(updateCountdowns, 60000);
+    const pointerTimer = window.setInterval(updatePointer, 30000);
+
+    window.addEventListener('tilderadio:before-navigate', function () {
+        window.clearInterval(countdownTimer);
+        window.clearInterval(pointerTimer);
+    }, {once: true});
 })();
 </script>
 

@@ -493,16 +493,10 @@ $page_stylesheets = ['css/home.css'];
 
 </div>
 
-<div style="width: 100%; border: 0; height:0; overflow:hidden">
-  <audio id="tr-audio" controls preload="none" style="width:100%">
-    <source src="https://tilderadio.org/listen/ogg/192k" type="audio/ogg">
-    <source src="https://tilderadio.org/listen/mp3/192k" type="audio/mpeg">
-  </audio>
-</div>
-
 <script>
 (function () {
   var audio       = document.getElementById('tr-audio');
+  var audioController = new AbortController();
   var ui          = document.getElementById('tr-player');
   var nowCard     = document.getElementById('tr-now-card');
   var play        = document.getElementById('tr-play');
@@ -520,6 +514,10 @@ $page_stylesheets = ['css/home.css'];
 
   if (!audio || !ui) return;
   audio.classList.add('tr-hidden');
+  vol.value = String(audio.volume);
+  if (audio.src && Array.from(src.options).some(function (option) { return option.value === audio.src; })) {
+    src.value = audio.src;
+  }
 
   function syncPlayingClass() {
     ui.classList.toggle('is-playing', !audio.paused);
@@ -603,8 +601,8 @@ $page_stylesheets = ['css/home.css'];
     syncPlayingClass();
   });
 
-  audio.addEventListener('play', function () { setPlayLabel(); syncPlayingClass(); });
-  audio.addEventListener('pause', function () { setPlayLabel(); syncPlayingClass(); });
+  audio.addEventListener('play', function () { setPlayLabel(); syncPlayingClass(); }, {signal: audioController.signal});
+  audio.addEventListener('pause', function () { setPlayLabel(); syncPlayingClass(); }, {signal: audioController.signal});
 
   mute.addEventListener('click', function () {
     audio.muted = !audio.muted;
@@ -738,8 +736,14 @@ $page_stylesheets = ['css/home.css'];
   localizeSchedule();
   updateCountdowns();
   updateNP();
-  setInterval(updateNP, 15000);
-  setInterval(updateCountdowns, 30000);
+  var npTimer = setInterval(updateNP, 15000);
+  var countdownTimer = setInterval(updateCountdowns, 30000);
+
+  window.addEventListener('tilderadio:before-navigate', function () {
+    clearInterval(npTimer);
+    clearInterval(countdownTimer);
+    audioController.abort();
+  }, {once: true});
 })();
 </script>
 

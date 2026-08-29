@@ -269,6 +269,10 @@ code {
     background: var(--tr-surface)
 }
 
+.tr-global-player {
+    margin-top: 18px
+}
+
 .tr-player .row.top {
     display: grid;
     grid-template-columns: 1fr auto auto;
