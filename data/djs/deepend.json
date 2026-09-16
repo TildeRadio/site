@@ -30,13 +30,13 @@
     "formats": [
       {
         "id": "pull",
-        "days": ["wednesday"],
+        "days": ["saturday"],
         "title": "~/pull",
         "tagline": "Interesting things that escaped the algorithm."
       },
       {
         "id": "dig",
-        "days": ["saturday"],
+        "days": ["wednesday"],
         "title": "~/dig",
         "tagline": "One musical rabbit hole at a time."
       }
