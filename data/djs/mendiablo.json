@@ -1,0 +1,65 @@
+{
+  "name": "mendiablo",
+  "published": true,
+  "tagline": "EDM Dance Mixes",
+  "bio": [
+    "Uptime: 18y",
+    "Live: 1400UTC Saturdays"
+  ],
+  "avatar": "/logos/djs/mendiablo.png",
+  "pronouns": "he/him",
+  "location": "Kerala, India",
+  "tilde": "hashnix.club",
+  "irc": "mendiablo",
+  "since": "2026",
+  "links": [
+    {
+      "label": "Home",
+      "url": "https://tilde.club/~mendiablo"
+    },
+    {
+      "label": "Codeberg",
+      "url": "https://codeberg.org/mendiablo"
+    }
+  ],
+  "show": {
+    "title": "DanceMixxx",
+    "tagline": "Saturday late nigh EDM Mix",
+    "description": "Electronic, industrial, ambient, synthwave, and whatever else fell out of the music directory.",
+    "timezone": "UTC",
+    "genres": [
+      "electronic",
+      "industrial",
+      "ambient",
+      "synthwave",
+      "EDM",
+      "dance"
+    ],
+    "formats": [
+      {
+        "id": "weekend",
+        "days": ["saturday"],
+        "title": "DanceMixxx: weekend",
+        "tagline": "Saturday late night dance mix"
+      }
+    ]
+  },
+  "favorites": {
+    "artists": [
+      "Alok",
+      "Martin Garrix",
+      "MOTi",
+      "Skeletron"
+    ],
+    "albums": [
+      "Dang I forgot"
+    ],
+    "tracks": [
+      "Martin Garrix - Reboot"
+    ]
+  },
+  "notes": [
+    "Requests are welcome when the show is live.",
+    "Usually found in #tilderadio before and after the show."
+  ]
+}
