@@ -143,6 +143,7 @@ def fixture(schedule=False):
                         response = {"id": 1, "timezone": "America/Edmonton"}
                     elif parsed.path in ["/api/station/1/streamers", "/api/station/2/streamers"]:
                         records = data["directory" if parsed.path.startswith("/api/station/1/") else "directory2"]
+                        records = [row | {"schedule_items": row.get("schedule_items", data["items"] if row["id"] == 4 else [])} for row in records]
                         page = int(parse_qs(parsed.query).get("page", ["1"])[0])
                         # Default small pages exercise traversal; size tests honor the requested size.
                         requested = int(parse_qs(parsed.query).get("per_page", ["25"])[0])
@@ -169,13 +170,17 @@ def fixture(schedule=False):
                             payload = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
                             assert set(payload) == {"schedule_items"}, "Only schedules may be written."
                             data["writes"].append(payload)
-                            data["items"] = payload["schedule_items"]
-                            for i, row in enumerate(data["items"]):
+                            items = payload["schedule_items"]
+                            for i, row in enumerate(items):
                                 row.setdefault("id", 100 + i)
+                            if streamer == 4:
+                                data["items"] = items
+                            else:
+                                record["schedule_items"] = items
                             path.write_text(json.dumps(data))
                             response = {"success": True}
                         else:
-                            response = record | {"enforce_schedule": True, "schedule_items": data["items"]}
+                            response = record | {"enforce_schedule": True, "schedule_items": record.get("schedule_items", data["items"] if streamer == 4 else [])}
                     else:
                         status = 404
                     raw = json.dumps(response).encode()

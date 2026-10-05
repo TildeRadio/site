@@ -48,13 +48,13 @@ final readonly class ScheduleService
             || $this->store->requireAccount($view['source_station'], $view['source_streamer'])['version'] !== $view['account_version']) {
             throw new Problem('This DJ’s station assignment changed. Reload the schedule.', 409);
         }
-        $lock = fopen($this->directory . '/schedule-' . $view['station_id'] . '-' . $view['streamer_id'] . '.lock', 'c');
+        $lock = fopen($this->directory . '/schedule-station-' . $view['station_id'] . '.lock', 'c');
         if ($lock === false) {
             throw new Problem('Schedule editing is temporarily unavailable.', 503);
         }
         try {
             if (!flock($lock, LOCK_EX | LOCK_NB)) {
-                throw new Problem('Another request is updating this DJ’s schedule. Reload it shortly.', 409);
+                throw new Problem('Another request is updating this station’s schedule. Reload it shortly.', 409);
             }
             $current = $this->api->streamer($target['station_id'], $target['streamer_id']);
             if (!hash_equals($view['hash'], self::hash($current['schedule_items'])) || $current['username'] !== $view['username']
@@ -86,6 +86,40 @@ final readonly class ScheduleService
                 $items = array_values($items);
             } else {
                 throw new Problem('Choose a valid schedule action.');
+            }
+            if ($action !== 'delete') {
+                $candidate = $items[$action === 'add' ? array_key_last($items) : $index];
+                // Read every upstream DJ, including DJs not registered on the website.
+                $station = $this->api->stationSchedules($target['station_id']);
+                $checker = new ScheduleConflicts($view['timezone']);
+                $found = false;
+                foreach ($station as $other) {
+                    if ($other['id'] === $target['streamer_id']) {
+                        $found = true;
+                        if ($other['username'] !== $current['username'] || self::hash($other['schedule_items']) !== self::hash($current['schedule_items'])) {
+                            throw new Problem('The AzuraCast schedule changed during the conflict check. Reload before saving.', 409);
+                        }
+                    }
+                    foreach ($other['schedule_items'] as $row) {
+                        if ($other['id'] === $target['streamer_id'] && ($row['id'] ?? null) === $id) {
+                            continue;
+                        }
+                        $overlap = $checker->overlap($candidate, $row);
+                        if ($overlap !== null) {
+                            throw new Problem('This timeslot overlaps ' . $other['username'] . ' (entry ' . $row['id'] . ') on '
+                                . $overlap->format('l H:i') . ' ' . $view['timezone'] . '. Choose another slot.', 409);
+                        }
+                    }
+                }
+                if (!$found) {
+                    throw new Problem('The station DJ list changed. Reload before saving.', 409);
+                }
+            }
+            // Recheck the edited upstream row and timezone after the station scan.
+            $latest = $this->api->streamer($target['station_id'], $target['streamer_id']);
+            if ($latest['username'] !== $current['username'] || self::hash($latest['schedule_items']) !== self::hash($current['schedule_items'])
+                || $this->api->timezone($target['station_id']) !== $view['timezone']) {
+                throw new Problem('The AzuraCast schedule or station timezone changed. Reload before saving.', 409);
             }
             // Recheck current website authorization immediately before the external write.
             $lastTarget = $this->store->scheduleTarget($actor, $view['source_station'], $view['source_streamer'], $view['station_id']);

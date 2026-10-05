@@ -140,8 +140,9 @@ Every write requires CSRF, a fresh authentication bridge check, current website
 access and ownership checks. The database rechecks permissions inside its write
 transaction. Broadcast forms have session-bound tokens, expire after 15 minutes,
 and reject duplicate submissions, changed record versions and changed Carrier
-snapshots. Schedule writes retain the existing per-streamer lock, assignment,
-timezone and source-schedule checks. User text is escaped; links are validated.
+snapshots. Schedule writes use a station-wide lock and check all DJ bookings
+for conflicts, plus current assignment, timezone and source-schedule checks.
+See [schedule conflict rules](dj-schedule-conflicts.md). User text is escaped; links are validated.
 Changes are recorded in the existing audit table and structured JSON log.
 
 Development checks:

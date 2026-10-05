@@ -74,6 +74,7 @@ tr_admin_begin('AzuraCast schedule', 'accounts', $error);
     <?php else : ?>
         <p>Streaming DJ <strong><?= tr_dj_h($view['username']) ?></strong> · station <?= $view['station_id'] ?> · streamer <?= $view['streamer_id'] ?>. Times use AzuraCast’s <strong><?= tr_dj_h($view['timezone']) ?></strong> timezone.</p>
     <?php endif; ?>
+    <p>Overlapping DJ bookings are rejected, including your own other entries. A show may start exactly when another ends.</p>
     <p>A save updates the live AzuraCast schedule. Avoid editing this DJ simultaneously in AzuraCast. Streaming credentials and other account settings stay intact.</p>
     <div class="dj-admin-table-wrap"><table class="dj-admin-table"><thead><tr><th>Entry</th><th>Days</th><th>Time</th><th>Date limits</th><th>Action</th></tr></thead><tbody>
     <?php

@@ -190,6 +190,10 @@ final class AdministrationTest extends TestCase
             {
                 return ['id' => $streamer, 'username' => 'cat', 'schedule_items' => $this->items];
             }
+            public function stationSchedules(int $station): array
+            {
+                return [$this->streamer($station, 4)];
+            }
             public function save(int $station, int $streamer, array $items): void
             {
                 $this->writes++;

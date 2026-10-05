@@ -85,6 +85,22 @@ final readonly class ScheduleApi implements ScheduleTransport
     /** @return list<DirectoryEntry> */
     public function streamers(int $station, int $timeout = 15): array
     {
+        return array_map(static fn (array $row): array => [
+            'id' => $row['id'], 'username' => $row['username'],
+            'display_name' => $row['display_name'], 'active' => $row['active'],
+        ], $this->directory($station, $timeout, false));
+    }
+
+    public function stationSchedules(int $station): array
+    {
+        return array_map(static fn (array $row): array => [
+            'id' => $row['id'], 'username' => $row['username'], 'schedule_items' => $row['schedule_items'],
+        ], $this->directory($station, 15, true));
+    }
+
+    /** @return list<array{id:int,username:string,display_name:string,active:bool,schedule_items:list<array<string,mixed>>}> */
+    private function directory(int $station, int $timeout, bool $schedules): array
+    {
         $this->allowed($station);
         $deadline = microtime(true) + max(1, min(15, $timeout));
         $entries = [];
@@ -137,8 +153,8 @@ final readonly class ScheduleApi implements ScheduleTransport
                 if (isset($entries[$entry['id']]) || count($entries) >= 5000) {
                     throw new Problem('The DJ directory is too large or changed while loading. Reload it.', 502);
                 }
-                // Only these safe fields leave the API client; credentials and schedules are discarded.
-                $entries[$entry['id']] = $entry;
+                // Never retain passwords, internal links or other account settings.
+                $entries[$entry['id']] = $entry + ['schedule_items' => $schedules ? self::scheduleItems($row['schedule_items'] ?? null) : []];
             }
         }
         if ($total !== null && count($entries) !== $total) {
@@ -199,23 +215,37 @@ final readonly class ScheduleApi implements ScheduleTransport
             || count($data['schedule_items']) > 100) {
             throw new Problem('AzuraCast returned an unsupported DJ schedule. Check its installed API documentation.', 502);
         }
+        return ['id' => $streamer, 'username' => $data['streamer_username'], 'schedule_items' => self::scheduleItems($data['schedule_items'])];
+    }
+
+    /** @return list<array<string,mixed>> */
+    private static function scheduleItems(mixed $data): array
+    {
+        if (!is_array($data) || !array_is_list($data) || count($data) > 100) {
+            throw new Problem('AzuraCast returned an unsupported DJ schedule. The station could not be checked for conflicts.', 502);
+        }
         $items = [];
-        foreach ($data['schedule_items'] as $item) {
-            if (!is_array($item) || !is_int($item['id'] ?? null) || $item['id'] < 1) {
+        $ids = [];
+        foreach ($data as $item) {
+            if (!is_array($item) || !is_int($item['id'] ?? null) || $item['id'] < 1 || isset($ids[$item['id']])) {
                 throw new Problem('AzuraCast returned an unsupported schedule entry.', 502);
             }
-            // Preserve all schedule settings supported by the current AzuraCast schedule repository.
+            $ids[$item['id']] = true;
             $row = [];
             foreach (['id', 'start_time', 'end_time', 'start_date', 'end_date', 'days', 'loop_once', 'prevent_requests', 'reset_queue_at_start', 'reset_queue_recursive'] as $key) {
                 if (array_key_exists($key, $item)) {
                     $row[$key] = $item[$key];
                 }
             }
-            ScheduleRules::validateStored($row);
+            try {
+                ScheduleRules::validateStored($row);
+            } catch (Problem) {
+                throw new Problem('AzuraCast returned an unsupported schedule entry. The station could not be checked for conflicts.', 502);
+            }
             $items[] = $row;
         }
 
-        return ['id' => $streamer, 'username' => $data['streamer_username'], 'schedule_items' => $items];
+        return $items;
     }
 
     public function save(int $station, int $streamer, array $items): void

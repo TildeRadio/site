@@ -97,6 +97,10 @@ def run(origin, state, *_):
     html = page(cat, "/dj/broadcasts.php")
     assert "Missing title" in html and "Other DJ" not in html
     assert "Other DJ" in page(root, "/dj/broadcasts.php")
+    forged_list = page(cat, "/dj/broadcasts.php?owner_slug=deepend&all=1&admin=1&deleted=1")
+    assert "Other DJ" not in forged_list and "Missing title" in forged_list
+    assert "Owning DJ profile" not in page(cat, "/dj/broadcast.php?id=1")
+    assert "Owning DJ profile" in page(root, "/dj/broadcast.php?id=2")
 
     def broadcast_post(browser, path="/dj/broadcast.php?id=1", **overrides):
         html = page(browser, path)
@@ -117,6 +121,11 @@ def run(origin, state, *_):
     assert cat.request("/dj/broadcast.php?id=1", post | {"csrf": "bad"})[0] == 403
     assert cat.request("/dj/broadcast.php?id=1", post, origin="https://attacker.invalid")[0] == 403
     assert cat.request("/dj/broadcast.php?id=2", post)[0] == 403
+    assert cat.request("/dj/broadcast.php?id=2&admin=1", post | {
+        "action": "delete", "confirm": "DELETE", "owner_slug": "cat",
+    })[0] == 403
+    assert db.execute("select count(*) from broadcast_edits where id=2").fetchone()[0] == 0
+    assert source[1] == json.loads(export.read_text())["episodes"][1]
     assert cat.request("/dj/broadcast.php?id=1", post | {"show_link": "javascript:alert(1)"})[0] == 422
     assert cat.request("/dj/broadcast.php?id=1", post | {"edit_tracks": "1", "tracks_json": '[{"text":"x","password":"secret"}]'})[0] == 422
     assert cat.request("/dj/broadcast.php?id=1", post | {"owner_slug": "deepend"})[0] == 303
@@ -166,15 +175,31 @@ def run(origin, state, *_):
     assert public.request("/episodes/?id=1")[0] == 200
 
     # Manually recovered sets have stable IDs and work without a Carrier export.
-    post = broadcast_post(cat, "/dj/broadcast.php", **dates, show_episode="Recovered set", show_title="")
+    post = broadcast_post(cat, "/dj/broadcast.php", **dates, show_episode="Recovered set", show_title="", owner_slug="deepend")
     assert cat.request("/dj/broadcast.php", post)[0] == 303
     manual_id = db.execute("select id from broadcast_edits where manual=1").fetchone()[0]
     assert manual_id >= 1000000000
+    assert db.execute("select owner_slug from broadcast_edits where id=?", (manual_id,)).fetchone()[0] == "cat"
     assert cat.request("/dj/broadcast.php", post)[0] == 409
     assert public.request("/episodes/?id=" + str(manual_id))[0] == 200
     manual = next(row for row in json.loads(public.request("/api/episodes/")[1])["episodes"] if row["id"] == manual_id)
     for key in ["peak_listeners", "max_couch", "props", "questions", "requests", "reactions", "tildes"]:
         assert isinstance(manual[key], int), "Recovered listings retain the existing API statistics shape."
+    manual_path = "/dj/broadcast.php?id=" + str(manual_id)
+    manual_post = broadcast_post(cat, manual_path, **dates, show_episode="Recovered and edited", show_title="")
+    assert cat.request(manual_path, manual_post)[0] == 303
+    html = page(cat, manual_path)
+    assert cat.request(manual_path, {
+        "csrf": field(html, "csrf"), "broadcast_token": field(html, "broadcast_token"),
+        "action": "delete", "confirm": "DELETE",
+    })[0] == 303
+    assert public.request("/episodes/?id=" + str(manual_id))[0] == 404
+    assert cat.request(manual_path)[0] == 403
+    html = page(root, manual_path)
+    assert root.request(manual_path, {
+        "csrf": field(html, "csrf"), "broadcast_token": field(html, "broadcast_token"),
+        "action": "restore", "confirm": "RESTORE",
+    })[0] == 303
     export.write_text(json.dumps({"version": 1, "generated_at": 4, "episodes": []}))
     assert public.request("/episodes/?id=1")[0] == 200, "Corrected source snapshots survive export rotation."
     assert public.request("/episodes/?id=" + str(manual_id))[0] == 200

@@ -171,11 +171,13 @@ def schedule_checks(root, state):
     changed = json.loads((state.parent / "schedule.json").read_text())
     assert changed["items"] == [original["items"][1]]
     html, csrf = form(root, path)
-    assert root.request(path, {
+    add = {
         "csrf": csrf, "schedule_token": field(html, "schedule_token"),
         "action": "add", "start_time": "23:00", "end_time": "01:00",
         "start_date": "", "end_date": "", "days[]": "6",
-    })[0] == 303
+    }
+    assert root.request(path, add)[0] == 409, "A duplicate Saturday overnight slot is rejected."
+    assert root.request(path, add | {"days[]": "5"})[0] == 303
     changed = json.loads((state.parent / "schedule.json").read_text())
     assert len(changed["items"]) == 2 and changed["items"][1]["start_time"] == 2300
     changed["mode"] = "denied"
