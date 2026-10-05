@@ -26,8 +26,8 @@ tr_admin_begin('Station administration', 'overview');
 </div>
 <div class="dj-auth-panel">
     <h2>Schedule editing</h2>
-    <p><?= $djConfig->scheduleApi() === null ? 'Schedule editing is ready to connect. Configure the private station API key to enable it.' : 'Use a DJ’s Schedule link to add, edit or remove their AzuraCast schedule entries.' ?></p>
-    <p>DJ self-service editing will be added later. These controls currently require an administrator.</p>
+    <p><?= $djConfig->scheduleApi() === null ? 'Schedule editing is ready to connect. Configure the private station API key to enable it.' : 'Manage each DJ’s AzuraCast entries through the Schedule link on their account. DJs can also manage their own assigned schedules from the DJ booth.' ?></p>
+    <p>DJ self-service is available for assigned profiles, schedules and set / broadcast listings. Administrators manage website access, assignments and all broadcast listings.</p>
 </div>
 <div class="dj-admin-toolbar"><a href="<?= tr_dj_h(tr_admin_url('audit.php')) ?>">View administrator activity</a><a href="<?= tr_dj_h(tr_admin_url('export.php')) ?>" download>Download website records</a></div>
 <?php tr_admin_end(); ?>

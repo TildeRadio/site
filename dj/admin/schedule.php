@@ -101,7 +101,7 @@ tr_admin_begin('AzuraCast schedule', 'accounts', $error);
             <?php tr_admin_field('start_time', 'Start time', $value('start_time', ScheduleRules::display($item['start_time'] ?? 1200)), 'time', true); ?>
             <?php tr_admin_field('end_time', 'End time', $value('end_time', ScheduleRules::display($item['end_time'] ?? 1300)), 'time', true); ?>
             <p>An earlier end time continues into the next day. Start and end must differ.</p>
-            <fieldset><legend>Days (leave all unchecked for every day)</legend>
+            <fieldset class="dj-admin-days"><legend>Days (leave all unchecked for every day)</legend>
                 <?php foreach ($dayNames as $number => $name) : ?><label class="dj-admin-check"><input type="checkbox" name="days[]" value="<?= $number ?>"<?= in_array((string) $number, $days, true) ? ' checked' : '' ?>><?= tr_dj_h($name) ?></label><?php endforeach; ?>
             </fieldset>
             <?php tr_admin_field('start_date', 'First date (optional)', $value('start_date', $item['start_date'] ?? ''), 'date'); ?>

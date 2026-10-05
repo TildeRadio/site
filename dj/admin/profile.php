@@ -53,8 +53,8 @@ tr_admin_begin($editing ? 'Edit DJ profile' : 'Create a DJ profile', 'profiles',
     <fieldset><legend>Profile identity</legend>
         <?php if ($editing) : ?><p>Permanent URL slug: <strong><?= tr_dj_h($slug) ?></strong>. It stays fixed so existing profile and archive links continue working.</p><?php else : tr_admin_field('slug', 'Permanent profile slug', $value('slug'), 'text', true); ?><p>Use the DJ’s existing schedule/archive slug where possible, such as cat or deepend.</p><?php endif; ?>
         <?php tr_admin_field('name', 'Public display name', $value('name', $data['name'] ?? ''), 'text', true); ?>
-        <label class="dj-admin-check"><input type="checkbox" name="published" value="1"<?= $published ? ' checked' : '' ?>>Publish this DJ profile</label>
-        <?php tr_admin_field('tagline', 'Tagline', $value('tagline', $data['tagline'] ?? '')); ?>
+        <label class="dj-admin-check dj-admin-check-inline"><input type="checkbox" name="published" value="1"<?= $published ? ' checked' : '' ?>>Publish this DJ profile</label>
+        <div class="dj-admin-control-wide"><?php tr_admin_field('tagline', 'Tagline', $value('tagline', $data['tagline'] ?? '')); ?></div>
         <?php tr_admin_area('bio', 'Biography (blank lines between paragraphs)', $value('bio', $data['bio'] ?? '', "\n\n"), 7); ?>
         <?php tr_admin_area('description', 'Profile description', $value('description', $data['description'] ?? '')); ?>
         <?php foreach (['avatar' => 'Avatar URL or site-relative image path', 'pronouns' => 'Pronouns', 'location' => 'General location', 'tilde' => 'Tilde / community', 'irc' => 'IRC nickname', 'since' => 'Broadcasting since'] as $key => $label) : tr_admin_field($key, $label, $value($key, $data[$key] ?? '')); endforeach; ?>
@@ -72,8 +72,10 @@ tr_admin_begin($editing ? 'Edit DJ profile' : 'Create a DJ profile', 'profiles',
     <fieldset><legend>Links</legend><p>Leave both boxes empty to remove a link. Up to 30 links are supported.</p>
         <?php for ($index = 0, $count = min(30, count($links) + 3); $index < $count; ++$index) : ?>
             <?php $link = is_array($links[$index] ?? null) ? $links[$index] : []; ?>
-            <label for="link-label-<?= $index ?>">Link <?= $index + 1 ?> label</label><input id="link-label-<?= $index ?>" name="links[<?= $index ?>][label]" value="<?= tr_dj_h(ProfileForm::text($link['label'] ?? '')) ?>" maxlength="100">
-            <label for="link-url-<?= $index ?>">Link <?= $index + 1 ?> URL</label><input id="link-url-<?= $index ?>" name="links[<?= $index ?>][url]" type="url" value="<?= tr_dj_h(ProfileForm::text($link['url'] ?? '')) ?>" maxlength="2048">
+            <div class="dj-admin-link-row">
+                <div class="dj-admin-control"><label for="link-label-<?= $index ?>">Link <?= $index + 1 ?> label</label><input id="link-label-<?= $index ?>" name="links[<?= $index ?>][label]" value="<?= tr_dj_h(ProfileForm::text($link['label'] ?? '')) ?>" maxlength="100"></div>
+                <div class="dj-admin-control"><label for="link-url-<?= $index ?>">Link <?= $index + 1 ?> URL</label><input id="link-url-<?= $index ?>" name="links[<?= $index ?>][url]" type="url" value="<?= tr_dj_h(ProfileForm::text($link['url'] ?? '')) ?>" maxlength="2048"></div>
+            </div>
         <?php endfor; ?>
     </fieldset>
     <fieldset><legend>Favorites and listener notes</legend>

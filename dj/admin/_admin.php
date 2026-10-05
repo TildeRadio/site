@@ -81,13 +81,13 @@ function tr_admin_begin(string $heading, string $section, ?string $error = null)
     $title = $self ? 'DJ booth' : 'Administration';
     $page_stylesheets = ['css/dj-auth.css', 'css/dj-admin.css'];
     require dirname(__DIR__, 2) . '/header.php';
-    echo '<section class="tr-section dj-admin"><div class="dj-admin-heading"><div><span class="tr-badge">' . ($self ? 'DJ booth' : 'Administration') . '</span><h1>' . tr_dj_h($heading) . '</h1></div><a href="' . tr_dj_h(tr_admin_url('../')) . '">Back to DJ booth</a></div>';
+    echo '<section class="tr-section dj-admin' . ($self ? ' dj-editor' : '') . '"><div class="dj-admin-heading"><div><span class="tr-badge">' . ($self ? 'DJ booth' : 'Administration') . '</span><h1>' . tr_dj_h($heading) . '</h1></div><a href="' . tr_dj_h(tr_admin_url('../')) . '">Back to DJ booth</a></div>';
     echo '<nav class="dj-admin-nav" aria-label="' . ($self ? 'DJ controls' : 'Administration') . '">';
     $navigation = $self
-        ? ['overview' => ['Booth', ''], 'profiles' => ['My profile', 'profile.php'], 'broadcasts' => ['Sets / broadcasts', 'broadcasts.php']]
+        ? ['overview' => ['Booth', ''], 'profiles' => ['My profile', 'profile.php'], 'broadcasts' => ['Sets / broadcasts', 'broadcasts.php'], 'accounts' => ['My schedules', '#dj-booth-schedules']]
         : ['overview' => ['Overview', ''], 'accounts' => ['DJs', 'accounts.php'], 'profiles' => ['Profiles', 'profiles.php'], 'stations' => ['Stations', 'stations.php'], 'broadcasts' => ['Sets / broadcasts', '../broadcasts.php'], 'audit' => ['Activity', 'audit.php']];
     foreach ($navigation as $key => [$label, $path]) {
-        echo '<a href="' . tr_dj_h(tr_admin_url($path)) . '"' . ($section === $key ? ' aria-current="page"' : '') . '>' . tr_dj_h($label) . '</a>';
+        echo '<a href="' . tr_dj_h($self && str_starts_with($path, '#') ? tr_admin_url('') . $path : tr_admin_url($path)) . '"' . ($section === $key ? ' aria-current="page"' : '') . '>' . tr_dj_h($label) . '</a>';
     }
     echo '</nav>';
     $flash = $_SESSION['admin_flash'] ?? null;
@@ -125,10 +125,10 @@ function tr_admin_version(int $current): int
 function tr_admin_field(string $name, string $label, string $value = '', string $type = 'text', bool $required = false, string $idSuffix = ''): void
 {
     $id = 'admin-' . $name . $idSuffix;
-    echo '<label for="' . tr_dj_h($id) . '">' . tr_dj_h($label) . '</label><input id="' . tr_dj_h($id) . '" name="' . tr_dj_h($name) . '" type="' . tr_dj_h($type) . '" value="' . tr_dj_h($value) . '"' . ($required ? ' required' : '') . '>';
+    echo '<div class="dj-admin-control"><label for="' . tr_dj_h($id) . '">' . tr_dj_h($label) . '</label><input id="' . tr_dj_h($id) . '" name="' . tr_dj_h($name) . '" type="' . tr_dj_h($type) . '" value="' . tr_dj_h($value) . '"' . ($required ? ' required' : '') . '></div>';
 }
 
 function tr_admin_area(string $name, string $label, string $value = '', int $rows = 5): void
 {
-    echo '<label for="admin-' . tr_dj_h($name) . '">' . tr_dj_h($label) . '</label><textarea id="admin-' . tr_dj_h($name) . '" name="' . tr_dj_h($name) . '" rows="' . $rows . '">' . tr_dj_h($value) . '</textarea>';
+    echo '<div class="dj-admin-control dj-admin-control-wide"><label for="admin-' . tr_dj_h($name) . '">' . tr_dj_h($label) . '</label><textarea id="admin-' . tr_dj_h($name) . '" name="' . tr_dj_h($name) . '" rows="' . $rows . '">' . tr_dj_h($value) . '</textarea></div>';
 }
