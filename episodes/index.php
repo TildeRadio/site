@@ -127,7 +127,7 @@ include dirname(__DIR__) . '/header.php';
 
     <section class="tr-section tr-episode-hero">
         <div class="tr-title">
-            <span class="tr-badge"><?= !empty($episode['is_live']) ? 'LIVE TRANSMISSION' : 'SIGNAL LOGGED' ?></span>
+            <span class="tr-badge"><?= ($episode['status'] ?? '') === 'planned' ? 'UPCOMING TRANSMISSION' : (!empty($episode['is_live']) ? 'LIVE TRANSMISSION' : 'SIGNAL LOGGED') ?></span>
         </div>
         <h1><?= tr_episodes_h(tr_episode_title($episode)) ?></h1>
         <div class="tr-episode-byline">
@@ -155,6 +155,11 @@ include dirname(__DIR__) . '/header.php';
         <?php if (!empty($show['prompt'])): ?>
             <p class="tr-lede"><?= tr_episodes_h((string) $show['prompt']) ?></p>
         <?php endif; ?>
+        <?php foreach (['description' => 'Description', 'topic' => 'Topic', 'mood' => 'Mood', 'note' => 'Set notes'] as $key => $label): ?>
+            <?php if (!empty($show[$key])): ?><h2><?= tr_episodes_h($label) ?></h2><p><?= nl2br(tr_episodes_h((string) $show[$key])) ?></p><?php endif; ?>
+        <?php endforeach; ?>
+        <?php if (!empty($show['link']) && filter_var($show['link'], FILTER_VALIDATE_URL) && in_array(strtolower((string) parse_url($show['link'], PHP_URL_SCHEME)), ['https', 'http'], true)): ?><p><a href="<?= tr_episodes_h((string) $show['link']) ?>" rel="nofollow noopener noreferrer">Show link</a></p><?php endif; ?>
+        <?php if (!empty($episode['recording_url']) && filter_var($episode['recording_url'], FILTER_VALIDATE_URL) && in_array(strtolower((string) parse_url($episode['recording_url'], PHP_URL_SCHEME)), ['https', 'http'], true)): ?><p><a href="<?= tr_episodes_h((string) $episode['recording_url']) ?>" rel="nofollow noopener noreferrer">Listen to the recording</a></p><?php endif; ?>
     </section>
 
     <section class="tr-section">

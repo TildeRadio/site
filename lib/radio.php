@@ -384,7 +384,7 @@ function tr_episode_archive_path(): string
  *
  * @return array{version:int,generated_at:?int,episodes:array<int,array<string,mixed>>}
  */
-function tr_episode_archive(): array
+function tr_episode_source_archive(): array
 {
     $empty = ['version' => 1, 'generated_at' => null, 'episodes' => []];
     $path = tr_episode_archive_path();
@@ -427,6 +427,15 @@ function tr_episode_archive(): array
         'generated_at' => is_int($decoded['generated_at'] ?? null) ? $decoded['generated_at'] : null,
         'episodes' => $episodes,
     ];
+}
+
+/** @return array{version:int,generated_at:?int,episodes:array<int,array<string,mixed>>} */
+function tr_episode_archive(): array
+{
+    $archive = tr_episode_source_archive();
+    require_once __DIR__ . '/Admin/PublicBroadcasts.php';
+    $archive['episodes'] = \TildeRadio\Site\Admin\PublicBroadcasts::apply($archive['episodes']);
+    return $archive;
 }
 
 /**

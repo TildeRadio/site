@@ -220,7 +220,7 @@ final class AdministrationTest extends TestCase
         $api = $this->api();
         $service = new ScheduleService($this->store, $api, $this->directory);
         $view = $service->view($this->admin, 1, 4, 1);
-        $this->rejects(fn () => $service->save($this->cat, $view, ['action' => 'add']), 403);
+        $this->rejects(fn () => $service->save(['station_id' => 1, 'streamer_id' => 99], $view, ['action' => 'add']), 403);
         $account = $this->store->requireAccount(1, 4);
         $this->store->saveAccount($this->admin, $this->cat, '', null, true, 'dj', [1 => 99], $account['version']);
         $this->rejects(fn () => $service->save($this->admin, $view, ['action' => 'add']), 409);

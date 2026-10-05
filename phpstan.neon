@@ -7,3 +7,4 @@ parameters:
         - tests/stubs/azuracast-client.stub
     scanFiles:
         - tests/fixtures/client.php
+        - lib/radio.php

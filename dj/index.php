@@ -30,6 +30,14 @@ require dirname(__DIR__) . '/header.php';
     <?php if ($isAdministrator) : ?>
         <div class="dj-auth-notice"><p>Your station administrator account is recognized.</p><a href="<?= tr_dj_h($djConfig->path('admin/')) ?>">Open administration &rarr;</a></div>
     <?php endif; ?>
+    <div class="dj-booth-links"><a href="<?= tr_dj_h($djConfig->path('broadcasts.php')) ?>">Manage sets / broadcasts</a><?php if ($slug !== null) : ?><a href="<?= tr_dj_h($djConfig->path('profile.php')) ?>">Edit your profile and show</a><?php endif; ?></div>
+    <h2>Your assigned schedules</h2>
+    <ul class="dj-booth-episodes">
+        <?php foreach ($djAccount['assignments'] as $stationId => $streamerId) : ?>
+            <?php $stationRecord = $djStore->station($stationId); if ($stationRecord === null || !$stationRecord['enabled'] || $stationRecord['deleted']) { continue; } ?>
+            <li><a href="<?= tr_dj_h($djConfig->path('schedule.php?source_station=' . $identity['station_id'] . '&source_streamer=' . $identity['streamer_id'] . '&station=' . $stationId)) ?>">Edit <?= tr_dj_h($stationRecord['name']) ?> schedule</a></li>
+        <?php endforeach; ?>
+    </ul>
     <?php if ($slug === null) : ?>
         <div class="dj-auth-panel"><h2>Your show profile</h2><p>Your login is ready. Ask the station administrator to link your account to your show profile.</p></div>
     <?php else : ?>
@@ -40,7 +48,7 @@ require dirname(__DIR__) . '/header.php';
         <?php else : ?>
             <ul class="dj-booth-episodes">
                 <?php foreach ($episodes as $episode) : ?>
-                    <li><a href="<?= tr_dj_h(asset('episodes/?id=' . rawurlencode((string) ($episode['id'] ?? '')))) ?>"><?= tr_dj_h(tr_episode_title($episode)) ?></a></li>
+                    <li><a href="<?= tr_dj_h(asset('episodes/?id=' . rawurlencode((string) ($episode['id'] ?? '')))) ?>"><?= tr_dj_h(tr_episode_title($episode)) ?></a> · <a href="<?= tr_dj_h($djConfig->path('broadcast.php?id=' . (int) $episode['id'])) ?>">Edit listing</a></li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>

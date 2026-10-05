@@ -13,6 +13,9 @@ try {
     $sourceStation = Input::integer($_GET['source_station'] ?? null, 'authentication station ID');
     $sourceStreamer = Input::integer($_GET['source_streamer'] ?? null, 'authentication streamer ID');
     $station = Input::integer($_GET['station'] ?? null, 'assigned station ID');
+    if ($selfService && ($sourceStation !== $adminIdentity['station_id'] || $sourceStreamer !== $adminIdentity['streamer_id'])) {
+        throw new Problem('You can only edit your assigned schedules.', 403);
+    }
     $djStore->scheduleTarget($adminIdentity, $sourceStation, $sourceStreamer, $station);
 } catch (Problem $problem) {
     tr_dj_error($problem->status, $problem->getMessage());
@@ -66,7 +69,11 @@ tr_admin_begin('AzuraCast schedule', 'accounts', $error);
 ?>
 <p><a href="<?= tr_dj_h($url) ?>">Reload current schedule</a> · <a href="<?= tr_dj_h(tr_admin_url('account.php?station=' . $sourceStation . '&streamer=' . $sourceStreamer)) ?>">Back to website DJ</a></p>
 <?php if ($view !== null) : ?>
-    <p>Streaming DJ <strong><?= tr_dj_h($view['username']) ?></strong> · station <?= $view['station_id'] ?> · streamer <?= $view['streamer_id'] ?>. Times use AzuraCast’s <strong><?= tr_dj_h($view['timezone']) ?></strong> timezone.</p>
+    <?php if ($selfService) : ?>
+        <p>Your <strong><?= tr_dj_h($djStore->station($station)['name'] ?? 'station') ?></strong> schedule. Times use <strong><?= tr_dj_h($view['timezone']) ?></strong>.</p>
+    <?php else : ?>
+        <p>Streaming DJ <strong><?= tr_dj_h($view['username']) ?></strong> · station <?= $view['station_id'] ?> · streamer <?= $view['streamer_id'] ?>. Times use AzuraCast’s <strong><?= tr_dj_h($view['timezone']) ?></strong> timezone.</p>
+    <?php endif; ?>
     <p>A save updates the live AzuraCast schedule. Avoid editing this DJ simultaneously in AzuraCast. Streaming credentials and other account settings stay intact.</p>
     <div class="dj-admin-table-wrap"><table class="dj-admin-table"><thead><tr><th>Entry</th><th>Days</th><th>Time</th><th>Date limits</th><th>Action</th></tr></thead><tbody>
     <?php

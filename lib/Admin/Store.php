@@ -54,6 +54,11 @@ final class Store
                 id INTEGER PRIMARY KEY AUTOINCREMENT, actor_station_id INTEGER NOT NULL, actor_streamer_id INTEGER NOT NULL,
                 action TEXT NOT NULL, target TEXT NOT NULL, created_at INTEGER NOT NULL
             )");
+        $this->db->exec("CREATE TABLE IF NOT EXISTS broadcast_edits (
+            id INTEGER PRIMARY KEY, owner_slug TEXT NOT NULL, json TEXT NOT NULL,
+            source_json TEXT, manual INTEGER NOT NULL DEFAULT 0, deleted INTEGER NOT NULL DEFAULT 0,
+            version INTEGER NOT NULL DEFAULT 1, updated_at INTEGER NOT NULL
+        )");
         $this->bootstrap($root);
     }
 
@@ -324,12 +329,13 @@ final class Store
         Input::slug($slug);
         ProfileValidator::validate($data);
         $json = json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);
-        $this->mutate($actor, 'profile.save', $slug, function () use ($slug, $data, $json, $version): void {
+        $this->mutate($actor, 'profile.save', $slug, function () use ($actor, $slug, $data, $json, $version): void {
+            $this->requireProfileAccess($actor, $slug);
             $this->version($this->profile($slug)['version'] ?? 0, $version);
             $this->execute('INSERT INTO profiles(slug,json,published,updated_at) VALUES(?,?,?,?) ON CONFLICT(slug) DO UPDATE SET
                 json=excluded.json,published=excluded.published,deleted=0,updated_at=excluded.updated_at,version=profiles.version+1',
                 [$slug, $json, (int) ($data['published'] ?? true), time()]);
-        });
+        }, true);
     }
 
     /** @param Actor $actor */
@@ -374,9 +380,11 @@ final class Store
      */
     public function scheduleTarget(array $actor, int $sourceStation, int $sourceStreamer, int $targetStation): array
     {
-        if (!$this->isAdministrator($actor)) {
-            throw new Problem('Administrator access is required.', 403);
+        if (!$this->isAdministrator($actor)
+            && ($actor['station_id'] !== $sourceStation || $actor['streamer_id'] !== $sourceStreamer)) {
+            throw new Problem('You can only edit your assigned schedules.', 403);
         }
+        $this->requireEditor($actor);
         $account = $this->requireAccount($sourceStation, $sourceStreamer);
         $station = $this->station($targetStation);
         $streamer = $account['assignments'][$targetStation] ?? null;
@@ -421,13 +429,14 @@ final class Store
      * @param Actor $actor
      * @param callable():void $change
      */
-    private function mutate(array $actor, string $action, string $target, callable $change): void
+    private function mutate(array $actor, string $action, string $target, callable $change, bool $selfService = false): void
     {
         $this->db->exec('BEGIN IMMEDIATE');
         try {
-            if (!$this->isAdministrator($actor)) {
+            if (!$selfService && !$this->isAdministrator($actor)) {
                 throw new Problem('Administrator access is required.', 403);
             }
+            $this->requireEditor($actor);
             $change();
             $this->execute('INSERT INTO admin_audit(actor_station_id,actor_streamer_id,action,target,created_at) VALUES(?,?,?,?,?)',
                 [$actor['station_id'], $actor['streamer_id'], $action, $target, time()]);
@@ -442,6 +451,149 @@ final class Store
             // The transaction's audit row is authoritative if a log filesystem is unavailable.
             error_log('{"channel":"dj-admin","level":"error","message":"Administrator JSON log unavailable"}');
         }
+    }
+
+    /** @param Actor $actor */
+    public function requireEditor(array $actor): void
+    {
+        if ($this->config->isAdministrator($actor['station_id'], $actor['streamer_id'])) {
+            return;
+        }
+        $account = $this->requireAccount($actor['station_id'], $actor['streamer_id']);
+        if (!$account['enabled'] || $account['deleted']) {
+            throw new Problem('Your website editing access is disabled.', 403);
+        }
+    }
+
+    /** @param Actor $actor */
+    public function requireProfileAccess(array $actor, string $slug): void
+    {
+        $this->requireEditor($actor);
+        if ($this->isAdministrator($actor)) {
+            return;
+        }
+        $account = $this->requireAccount($actor['station_id'], $actor['streamer_id']);
+        if ($account['profile_slug'] !== $slug || ($this->profile($slug)['deleted'] ?? false)) {
+            throw new Problem('This profile or broadcast is not assigned to your account.', 403);
+        }
+    }
+
+    /** @return array<string,mixed>|null */
+    public function broadcastEdit(int $id): ?array
+    {
+        $row = $this->one('SELECT * FROM broadcast_edits WHERE id=?', [$id]);
+        if ($row === null) {
+            return null;
+        }
+        return [
+            'id' => (int) $row['id'], 'owner_slug' => (string) $row['owner_slug'],
+            'patch' => json_decode((string) $row['json'], true, 32, JSON_THROW_ON_ERROR),
+            'source' => $row['source_json'] === null ? null : json_decode((string) $row['source_json'], true, 64, JSON_THROW_ON_ERROR),
+            'manual' => (bool) $row['manual'], 'deleted' => (bool) $row['deleted'],
+            'version' => (int) $row['version'], 'updated_at' => (int) $row['updated_at'],
+        ];
+    }
+
+    /** @return list<array<string,mixed>> */
+    public function broadcastEdits(): array
+    {
+        $records = [];
+        foreach ($this->all('SELECT id FROM broadcast_edits ORDER BY id') as $row) {
+            $records[] = $this->broadcastEdit((int) $row['id']) ?? throw new \RuntimeException('Broadcast disappeared.');
+        }
+        return $records;
+    }
+
+    /** @return array<string,mixed>|null */
+    public function broadcastSource(int $id): ?array
+    {
+        require_once dirname(__DIR__) . '/radio.php';
+        foreach (\tr_episode_source_archive()['episodes'] as $episode) {
+            if ($episode['id'] === $id) {
+                return $episode;
+            }
+        }
+        $stored = $this->broadcastEdit($id);
+        return is_array($stored['source'] ?? null) ? $stored['source'] : null;
+    }
+
+    /**
+     * @param Actor $actor
+     * @param array<string,mixed> $changes
+     */
+    public function saveBroadcast(array $actor, ?int $id, string $slug, array $changes, int $version, string $sourceHash): int
+    {
+        Input::slug($slug);
+        $saved = $id;
+        $this->mutate($actor, 'broadcast.save', $id === null ? 'new:' . $slug : (string) $id, function () use ($actor, $id, $slug, $changes, $version, $sourceHash, &$saved): void {
+            $this->requireProfileAccess($actor, $slug);
+            $stored = $id === null ? null : $this->broadcastEdit($id);
+            $source = $id === null ? null : $this->broadcastSource($id);
+            if ($id !== null && $stored === null && $source === null) {
+                throw new Problem('Broadcast not found.', 404);
+            }
+            $owner = $stored['owner_slug'] ?? $source['dj_slug'] ?? $slug;
+            $this->requireProfileAccess($actor, PublicBroadcasts::slug((string) $owner));
+            $this->version((int) ($stored['version'] ?? 0), $version);
+            if (!hash_equals(BroadcastForm::hash($source), $sourceHash)) {
+                throw new Problem('Carrier updated this broadcast. Reload before saving.', 409);
+            }
+            if (($stored['deleted'] ?? false) && !$this->isAdministrator($actor)) {
+                throw new Problem('Ask an administrator to restore this deleted listing.', 403);
+            }
+            if ($id === null) {
+                $saved = max(1000000000, (int) ($this->one('SELECT MAX(id) AS last_id FROM broadcast_edits')['last_id'] ?? 0) + 1);
+                while ($this->broadcastSource($saved) !== null) {
+                    ++$saved;
+                }
+                Input::integer($saved, 'broadcast ID');
+            }
+            $patch = PublicBroadcasts::combine(is_array($stored['patch'] ?? null) ? $stored['patch'] : [], $changes);
+            $manual = $stored['manual'] ?? ($id === null);
+            if ($manual) {
+                $patch = array_replace([
+                    'dj' => $slug, 'started_at' => time(), 'ended_at' => null, 'is_live' => false,
+                    'show' => [], 'tracks' => [], 'track_count' => 0, 'peak_listeners' => 0,
+                    'max_couch' => 0, 'props' => 0, 'questions' => 0, 'requests' => 0, 'reactions' => 0, 'tildes' => 0,
+                ], $patch);
+            }
+            if (strlen(json_encode($patch, JSON_THROW_ON_ERROR)) > 65536) {
+                throw new Problem('Broadcast corrections must fit within 64 KiB.');
+            }
+            $this->execute('INSERT INTO broadcast_edits(id,owner_slug,json,source_json,manual,updated_at) VALUES(?,?,?,?,?,?)
+                ON CONFLICT(id) DO UPDATE SET owner_slug=excluded.owner_slug,json=excluded.json,source_json=excluded.source_json,
+                deleted=0,version=broadcast_edits.version+1,updated_at=excluded.updated_at',
+                [$saved, $slug, json_encode($patch, JSON_THROW_ON_ERROR), $source === null ? null : json_encode($source, JSON_THROW_ON_ERROR), (int) $manual, time()]);
+        }, true);
+        return $saved ?? throw new \RuntimeException('Broadcast was not saved.');
+    }
+
+    /** @param Actor $actor */
+    public function setBroadcastDeleted(array $actor, int $id, bool $deleted, int $version, string $sourceHash, string $confirmation): void
+    {
+        $this->mutate($actor, $deleted ? 'broadcast.delete' : 'broadcast.restore', (string) $id, function () use ($actor, $id, $deleted, $version, $sourceHash, $confirmation): void {
+            $stored = $this->broadcastEdit($id);
+            $source = $this->broadcastSource($id);
+            if ($stored === null && $source === null) {
+                throw new Problem('Broadcast not found.', 404);
+            }
+            $slug = PublicBroadcasts::slug((string) ($stored['owner_slug'] ?? $source['dj_slug'] ?? ''));
+            $this->requireProfileAccess($actor, $slug);
+            if (!$deleted && !$this->isAdministrator($actor)) {
+                throw new Problem('Only an administrator can restore a deleted broadcast.', 403);
+            }
+            $this->version((int) ($stored['version'] ?? 0), $version);
+            if (!hash_equals(BroadcastForm::hash($source), $sourceHash)) {
+                throw new Problem('Carrier updated this broadcast. Reload before changing its visibility.', 409);
+            }
+            if ($confirmation !== ($deleted ? 'DELETE' : 'RESTORE')) {
+                throw new Problem('Type ' . ($deleted ? 'DELETE' : 'RESTORE') . ' to confirm.');
+            }
+            $this->execute('INSERT INTO broadcast_edits(id,owner_slug,json,source_json,deleted,updated_at) VALUES(?,?,?,?,?,?)
+                ON CONFLICT(id) DO UPDATE SET deleted=excluded.deleted,source_json=excluded.source_json,
+                version=broadcast_edits.version+1,updated_at=excluded.updated_at',
+                [$id, $slug, json_encode($stored['patch'] ?? [], JSON_THROW_ON_ERROR), $source === null ? null : json_encode($source, JSON_THROW_ON_ERROR), (int) $deleted, time()]);
+        }, true);
     }
 
     /** @param list<int|string|null> $params */

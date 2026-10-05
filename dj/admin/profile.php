@@ -8,9 +8,10 @@ use TildeRadio\Site\Admin\ProfileForm;
 use TildeRadio\Site\Admin\ProfileValidator;
 
 require __DIR__ . '/_admin.php';
-$editing = isset($_GET['slug']);
+$editing = $selfService || isset($_GET['slug']);
 try {
-    $slug = $editing ? Input::slug($_GET['slug']) : '';
+    $slug = $selfService ? ($djAccount['profile_slug'] ?? throw new Problem('Ask an administrator to link your profile first.', 403)) : ($editing ? Input::slug($_GET['slug']) : '');
+    $djStore->requireProfileAccess($adminIdentity, $slug);
     $profile = $editing ? ($djStore->profile($slug) ?? throw new Problem('Profile not found.', 404)) : null;
 } catch (Problem $problem) {
     tr_dj_error($problem->status, $problem->getMessage());
@@ -18,11 +19,11 @@ try {
 $error = null;
 $data = $profile['data'] ?? ['name' => '', 'published' => true];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $error = tr_admin_attempt(function () use ($editing, $slug, $profile, $djStore, $adminIdentity, &$data): void {
+    $error = tr_admin_attempt(function () use ($editing, $slug, $profile, $djStore, $adminIdentity, $selfService, &$data): void {
         $action = Input::text($_POST['action'] ?? '', 'action', 30, true);
         $target = $editing ? $slug : Input::slug($_POST['slug'] ?? null);
         $version = Input::integer($_POST['version'] ?? '0', 'record version', true);
-        if ($action === 'delete' && $editing) {
+        if ($action === 'delete' && $editing && !$selfService) {
             $djStore->deleteProfile($adminIdentity, $target, $version, Input::text($_POST['confirm'] ?? '', 'confirmation', 80, true));
             tr_admin_finish('profiles.php', 'Public profile deleted. Its archive and streaming schedule remain intact.');
         }
@@ -89,7 +90,7 @@ tr_admin_begin($editing ? 'Edit DJ profile' : 'Create a DJ profile', 'profiles',
         <button type="submit" class="dj-auth-button">Save profile JSON</button>
     </form>
 </details>
-<?php if ($editing && !$profile['deleted']) : ?>
+<?php if ($editing && !$profile['deleted'] && !$selfService) : ?>
     <div class="dj-admin-danger"><h2>Delete public profile</h2><p>This hides its public page and prevents the live schedule or a deployed JSON file from recreating it. Streaming accounts, scheduled broadcasts and archives are retained.</p>
         <form method="post" action="<?= tr_dj_h(tr_admin_url('profile.php' . $query)) ?>" class="dj-admin-form" data-tr-dj-auth>
             <?php tr_admin_csrf(); ?><input type="hidden" name="action" value="delete"><input type="hidden" name="version" value="<?= tr_admin_version($profile['version']) ?>"><?php tr_admin_field('confirm', 'Type ' . $slug . ' to confirm', '', 'text', true); ?><button type="submit" class="dj-auth-button">Delete public profile</button>

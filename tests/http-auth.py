@@ -88,7 +88,9 @@ def fixture(schedule=False):
         if os.getenv("PHP_INI"):
             args += ["-c", os.environ["PHP_INI"]]
         args += ["-S", f"127.0.0.1:{backend_port}", "-t", str(ROOT)]
-        environment = dict(os.environ, TILDERADIO_DJ_SITE_CONFIG=str(config))
+        episodes = private / "episodes.json"
+        episodes.write_text(json.dumps({"version": 1, "generated_at": 1, "episodes": []}))
+        environment = dict(os.environ, TILDERADIO_DJ_SITE_CONFIG=str(config), TILDERADIO_EPISODES_FILE=str(episodes))
         with (private / "server.log").open("wb") as log:
             process = subprocess.Popen(args, env=environment, stdout=log, stderr=log)
 
@@ -103,7 +105,7 @@ def fixture(schedule=False):
                     self.forward()
 
                 def forward(self):
-                    if schedule and self.path.startswith("/api/"):
+                    if schedule and self.path.startswith("/api/station/"):
                         self.schedule_api()
                         return
                     connection = http.client.HTTPConnection("127.0.0.1", backend_port, timeout=10)

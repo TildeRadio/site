@@ -25,3 +25,4 @@ jobs:
       - run: python3 tests/http-auth.py
       - run: python3 tests/http-admin.py
       - run: python3 tests/http-dj-picker.py
+      - run: python3 tests/http-dj-self-service.py

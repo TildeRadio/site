@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__);
-$files = [$root . '/header.php', $root . '/lib/radio.php', $root . '/schedule/index.php', $root . '/bin/backup-dj-admin.php', __FILE__];
+$files = [$root . '/header.php', $root . '/lib/radio.php', $root . '/episodes/index.php', $root . '/schedule/index.php', $root . '/bin/backup-dj-admin.php', __FILE__];
 foreach (['dj', 'lib/DjAuth', 'lib/Admin', 'tests/DjAuth', 'tests/Admin', 'tests/fixtures'] as $directory) {
     foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root . '/' . $directory)) as $file) {
         if ($file->isFile() && $file->getExtension() === 'php') {

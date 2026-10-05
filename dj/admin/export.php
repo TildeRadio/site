@@ -14,4 +14,5 @@ echo json_encode([
     'stations' => array_merge($djStore->stations(), $djStore->stations(true)),
     'accounts' => array_merge($djStore->accounts(), $djStore->accounts(true)),
     'profiles' => array_merge($djStore->profiles(), $djStore->profiles(true)),
+    'broadcast_edits' => $djStore->broadcastEdits(),
 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR);

@@ -11,7 +11,8 @@ $adminIdentity = tr_dj_identity($djService);
 if ($adminIdentity === null) {
     tr_dj_redirect($djConfig, 'login.php');
 }
-if (!$djStore->isAdministrator($adminIdentity)) {
+$selfService = defined('TR_DJ_SELF_SERVICE') && TR_DJ_SELF_SERVICE;
+if (!$selfService && !$djStore->isAdministrator($adminIdentity)) {
     tr_dj_error(403, 'Administrator access is required.');
 }
 header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
@@ -26,17 +27,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Retry-After: 300');
         tr_dj_error(429, 'Too many changes. Please wait five minutes before continuing.');
     }
-    // Every administrator write needs a fresh bridge check and current website role.
+    // Every editor write needs a fresh bridge check; administrator routes also require the current role.
     $adminIdentity = tr_dj_identity($djService, true);
-    if ($adminIdentity === null || !$djStore->isAdministrator($adminIdentity)) {
-        tr_dj_error(403, 'Administrator access is no longer available. Sign in again.');
+    if ($adminIdentity === null || (!$selfService && !$djStore->isAdministrator($adminIdentity))) {
+        tr_dj_error(403, 'Editing access is no longer available. Sign in again.');
     }
 }
 
 function tr_admin_url(string $suffix = ''): string
 {
     global $djConfig;
-
+    if (defined('TR_DJ_SELF_SERVICE') && TR_DJ_SELF_SERVICE) {
+        return $djConfig->path($suffix === '../' || str_starts_with($suffix, 'account.php') || str_starts_with($suffix, 'profiles.php') ? '' : $suffix);
+    }
     return $djConfig->path('admin/' . $suffix);
 }
 
@@ -44,7 +47,7 @@ function tr_admin_finish(string $suffix, string $message): never
 {
     global $djConfig;
     $_SESSION['admin_flash'] = $message;
-    tr_dj_redirect($djConfig, 'admin/' . $suffix);
+    tr_dj_redirect($djConfig, (defined('TR_DJ_SELF_SERVICE') && TR_DJ_SELF_SERVICE ? '' : 'admin/') . $suffix);
 }
 
 /** @param callable():void $action */
@@ -74,12 +77,16 @@ function tr_admin_attempt(callable $action): ?string
 
 function tr_admin_begin(string $heading, string $section, ?string $error = null): void
 {
-    $title = 'Administration';
+    $self = defined('TR_DJ_SELF_SERVICE') && TR_DJ_SELF_SERVICE;
+    $title = $self ? 'DJ booth' : 'Administration';
     $page_stylesheets = ['css/dj-auth.css', 'css/dj-admin.css'];
     require dirname(__DIR__, 2) . '/header.php';
-    echo '<section class="tr-section dj-admin"><div class="dj-admin-heading"><div><span class="tr-badge">Administration</span><h1>' . tr_dj_h($heading) . '</h1></div><a href="' . tr_dj_h(tr_admin_url('../')) . '">Back to DJ booth</a></div>';
-    echo '<nav class="dj-admin-nav" aria-label="Administration">';
-    foreach (['overview' => ['Overview', ''], 'accounts' => ['DJs', 'accounts.php'], 'profiles' => ['Profiles', 'profiles.php'], 'stations' => ['Stations', 'stations.php'], 'audit' => ['Activity', 'audit.php']] as $key => [$label, $path]) {
+    echo '<section class="tr-section dj-admin"><div class="dj-admin-heading"><div><span class="tr-badge">' . ($self ? 'DJ booth' : 'Administration') . '</span><h1>' . tr_dj_h($heading) . '</h1></div><a href="' . tr_dj_h(tr_admin_url('../')) . '">Back to DJ booth</a></div>';
+    echo '<nav class="dj-admin-nav" aria-label="' . ($self ? 'DJ controls' : 'Administration') . '">';
+    $navigation = $self
+        ? ['overview' => ['Booth', ''], 'profiles' => ['My profile', 'profile.php'], 'broadcasts' => ['Sets / broadcasts', 'broadcasts.php']]
+        : ['overview' => ['Overview', ''], 'accounts' => ['DJs', 'accounts.php'], 'profiles' => ['Profiles', 'profiles.php'], 'stations' => ['Stations', 'stations.php'], 'broadcasts' => ['Sets / broadcasts', '../broadcasts.php'], 'audit' => ['Activity', 'audit.php']];
+    foreach ($navigation as $key => [$label, $path]) {
         echo '<a href="' . tr_dj_h(tr_admin_url($path)) . '"' . ($section === $key ? ' aria-current="page"' : '') . '>' . tr_dj_h($label) . '</a>';
     }
     echo '</nav>';
