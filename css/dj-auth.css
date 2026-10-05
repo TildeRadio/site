@@ -1,0 +1,51 @@
+.dj-auth {
+    max-width: 30rem;
+    margin: clamp(1.5rem, 5vw, 4rem) auto;
+}
+.dj-auth-heading .tr-badge, .dj-booth-top .tr-badge { margin-bottom: 1rem; }
+.dj-auth-intro { color: var(--tr-secondary); line-height: 1.6; }
+.dj-auth-form { display: grid; gap: .75rem; margin-top: 2rem; }
+.dj-auth-form label { font-weight: 700; }
+.dj-auth-form input {
+    width: 100%;
+    box-sizing: border-box;
+    min-height: 3rem;
+    border: 1px solid var(--tr-line);
+    border-radius: .35rem;
+    background: var(--tr-bg);
+    color: var(--tr-fg);
+    padding: .75rem;
+    font: inherit;
+    margin-bottom: .5rem;
+}
+.dj-auth-button {
+    cursor: pointer;
+    min-height: 3rem;
+    border: 1px solid var(--tr-accent);
+    border-radius: .35rem;
+    background: var(--tr-accent);
+    color: #0b0d0b;
+    padding: .75rem 1.25rem;
+    font: inherit;
+    font-weight: 700;
+}
+.dj-auth-button:hover { background: var(--tr-accent-bright); }
+.dj-auth-button-secondary { background: transparent; color: var(--tr-accent-bright); }
+.dj-auth-button-secondary:hover { background: var(--tr-surface); }
+.dj-auth-form input:focus-visible, .dj-auth-button:focus-visible, .dj-booth a:focus-visible {
+    outline: 2px solid var(--tr-accent-bright);
+    outline-offset: 4px;
+}
+.dj-auth-help { margin-top: 1.5rem; color: var(--tr-muted); font-size: .9rem; line-height: 1.6; }
+.dj-auth-error { border-left: 3px solid #f1a9a1; color: #f1c9c4; padding: .75rem 1rem; background: #241714; }
+.dj-booth { max-width: 64rem; margin: 2rem auto; }
+.dj-booth-top { display: flex; gap: 2rem; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.dj-auth-notice, .dj-auth-panel { margin-top: 2rem; padding: 1.25rem; border: 1px solid var(--tr-line); border-radius: .35rem; background: var(--tr-surface); }
+.dj-auth-panel h2 { margin-top: 0; }
+.dj-booth-links { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 2rem 0; }
+.dj-booth-episodes { padding: 0; list-style: none; }
+.dj-booth-episodes li { padding: 1rem 0; border-bottom: 1px solid var(--tr-line); }
+@media (max-width: 480px) {
+    .dj-auth, .dj-booth { margin-top: 1rem; }
+    .dj-booth-top { gap: 1rem; }
+}

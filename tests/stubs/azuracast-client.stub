@@ -1,0 +1,17 @@
+<?php
+
+namespace TildeRadio\DjAuth;
+
+class AuthException extends \RuntimeException
+{
+    public readonly string $reason;
+}
+
+class DjAuthClient
+{
+    public static function fromFile(string $path): self {}
+    /** @return array{station_id:int,streamer_id:int,username:string,display_name:string,verified_at:int} */
+    public function verify(string $username, string $password, string $ip): array {}
+    /** @return array{station_id:int,streamer_id:int,username:string,display_name:string,verified_at:int} */
+    public function check(int $streamerId): array {}
+}

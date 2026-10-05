@@ -85,6 +85,7 @@ $nav_current = static fn (string $section): string => $nav_section === $section 
                     <a href="<?= htmlspecialchars(asset('djs/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('djs') ?>>djs</a>
                     <a href="<?= htmlspecialchars(asset('episodes/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('episodes') ?>>archive</a>
                     <a href="<?= htmlspecialchars(asset('community/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('community') ?>>community</a>
+                    <a href="<?= htmlspecialchars(asset('dj/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('dj') ?>>dj booth</a>
                     <a href="<?= htmlspecialchars(asset('listen/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('listen') ?>>listen</a>
                 </nav>
             </header>

@@ -1,0 +1,10 @@
+/vendor/
+/.phpunit.cache/
+/.phpstan.cache/
+/.php-cs-fixer.cache
+/.env
+/schedule/apikey.php
+/node_modules/
+__pycache__/
+*.pyc
+*.patch

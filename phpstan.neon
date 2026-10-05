@@ -1,0 +1,9 @@
+parameters:
+    level: 6
+    paths:
+        - lib/DjAuth
+        - lib/Admin
+    stubFiles:
+        - tests/stubs/azuracast-client.stub
+    scanFiles:
+        - tests/fixtures/client.php

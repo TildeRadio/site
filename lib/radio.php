@@ -491,13 +491,9 @@ function tr_episode_title(array $episode): string
  */
 function tr_dj_metadata(): array
 {
-    $file = dirname(__DIR__) . '/data/djs.php';
-    if (!is_file($file)) {
-        return [];
-    }
+    require_once __DIR__ . '/Admin/PublicProfiles.php';
 
-    $data = require $file;
-    return is_array($data) ? $data : [];
+    return \TildeRadio\Site\Admin\PublicProfiles::metadata(dirname(__DIR__));
 }
 
 /**
@@ -559,13 +555,25 @@ function tr_schedule(int $days = 14): array
  * Build a DJ catalog from the live schedule, then layer configured metadata on
  * top. This means a newly scheduled DJ automatically gets a basic profile.
  */
-function tr_dj_catalog(): array
+function tr_dj_catalog(bool $includeHiddenSchedule = false): array
+{
+    return tr_dj_catalog_from_records(tr_schedule(), tr_dj_metadata(), $includeHiddenSchedule);
+}
+
+/** Build the catalog from already fetched records; visibility must not erase scheduled broadcasts. */
+function tr_dj_catalog_from_records(array $schedule, array $metadata, bool $includeHiddenSchedule = false): array
 {
     $catalog = [];
+    $hidden = [];
+    foreach ($metadata as $key => $meta) {
+        if (is_array($meta) && ($meta['published'] ?? true) === false) {
+            $hidden[tr_slug((string) ($meta['slug'] ?? $key))] = true;
+        }
+    }
 
-    foreach (tr_schedule() as $event) {
+    foreach ($schedule as $event) {
         $slug = $event['slug'];
-        if ($slug === '') {
+        if ($slug === '' || (isset($hidden[$slug]) && !$includeHiddenSchedule)) {
             continue;
         }
 
@@ -580,13 +588,16 @@ function tr_dj_catalog(): array
                 'show' => null,
                 'upcoming' => [],
             ];
+            if (isset($hidden[$slug])) {
+                $catalog[$slug]['_profile_hidden'] = true;
+            }
         }
 
         $catalog[$slug]['upcoming'][] = $event;
     }
 
-    foreach (tr_dj_metadata() as $key => $meta) {
-        if (!is_array($meta)) {
+    foreach ($metadata as $key => $meta) {
+        if (!is_array($meta) || ($meta['published'] ?? true) === false) {
             continue;
         }
 

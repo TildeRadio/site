@@ -47,7 +47,7 @@ function tr_schedule_catalog_events(array $catalog): array
 function tr_schedule_profile_for_event(array $event, array $catalog): ?array
 {
     $slug = trim((string) ($event['_profile_slug'] ?? $event['slug'] ?? ''));
-    return $slug !== '' && isset($catalog[$slug]) && is_array($catalog[$slug])
+    return $slug !== '' && isset($catalog[$slug]) && is_array($catalog[$slug]) && empty($catalog[$slug]['_profile_hidden'])
         ? $catalog[$slug]
         : null;
 }
@@ -303,14 +303,14 @@ function tr_schedule_render_event(array $event, array $catalog): void
             <?php endif; ?>
         </div>
 
-        <?php if ($slug !== ''): ?>
+        <?php if ($slug !== '' && $profile !== null): ?>
             <a class="tr-schedule-profile-link" href="<?= tr_schedule_h(asset('djs/?dj=' . rawurlencode($slug))) ?>">DJ profile &rarr;</a>
         <?php endif; ?>
     </article>
     <?php
 }
 
-$catalog = tr_dj_catalog();
+$catalog = tr_dj_catalog(true);
 $events = tr_schedule_catalog_events($catalog);
 $nowTs = time();
 $nowPlaying = tr_now_playing();
@@ -318,7 +318,7 @@ $liveDj = !empty($nowPlaying['is_live']) && is_string($nowPlaying['dj'] ?? null)
     ? trim((string) $nowPlaying['dj'])
     : '';
 $liveSlug = $liveDj !== '' ? tr_slug($liveDj) : '';
-$liveProfile = $liveSlug !== '' && isset($catalog[$liveSlug]) && is_array($catalog[$liveSlug])
+$liveProfile = $liveSlug !== '' && isset($catalog[$liveSlug]) && is_array($catalog[$liveSlug]) && empty($catalog[$liveSlug]['_profile_hidden'])
     ? $catalog[$liveSlug]
     : null;
 $liveInfo = tr_schedule_show_info($liveProfile, $nowTs);
@@ -426,7 +426,7 @@ include dirname(__DIR__) . '/header.php';
                 <?php tr_schedule_render_player(); ?>
 
                 <div class="tr-schedule-actions">
-                    <?php if ($liveSlug !== ''): ?>
+                    <?php if ($liveSlug !== '' && $liveProfile !== null): ?>
                         <a href="<?= tr_schedule_h(asset('djs/?dj=' . rawurlencode($liveSlug))) ?>">DJ profile</a>
                     <?php endif; ?>
                     <a href="<?= tr_schedule_h($ircUrl) ?>" rel="noopener">join #tilderadio</a>
@@ -475,7 +475,7 @@ include dirname(__DIR__) . '/header.php';
                         data-end-ts="<?= is_int($nextEvent['end_ts'] ?? null) ? (int) $nextEvent['end_ts'] : 0 ?>"
                     ><?= tr_schedule_h(tr_schedule_utc_range($nextEvent, true)) ?></time>
                     <span class="tr-schedule-countdown" data-countdown-ts="<?= (int) $nextEvent['start_ts'] ?>"></span>
-                    <?php if ($nextSlug !== ''): ?>
+                    <?php if ($nextSlug !== '' && $nextProfile !== null): ?>
                         <a href="<?= tr_schedule_h(asset('djs/?dj=' . rawurlencode($nextSlug))) ?>">show details &rarr;</a>
                     <?php endif; ?>
                 </aside>

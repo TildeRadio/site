@@ -1,0 +1,27 @@
+name: DJ authentication
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.4', '8.5']
+    steps:
+      - uses: actions/checkout@v7
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: curl, pdo_sqlite
+          coverage: none
+          tools: composer:v2
+      - run: composer install --no-interaction --prefer-dist
+      - run: composer validate --strict
+      - run: composer lint:auth
+      - run: composer format:check
+      - run: composer analyse
+      - run: composer test
+      - run: python3 tests/http-auth.py
+      - run: python3 tests/http-admin.py
+      - run: python3 tests/http-dj-picker.py
