@@ -46,6 +46,11 @@ require dirname(__DIR__) . '/header.php';
             <div class="dj-booth-card dj-booth-card-pending"><span class="tr-badge">Your profile</span><strong>Link your show profile</strong><span>Your login is ready. Ask the station administrator to link your account to your show profile.</span><span class="dj-status">Assignment needed</span></div>
         <?php endif; ?>
         <a class="dj-booth-card" href="#dj-booth-schedules"><span class="tr-badge">Your airtime</span><strong>Plan your next show</strong><span>Add, edit or remove bookings in your assigned station schedules.</span><span class="dj-booth-card-action">View assigned schedules &rarr;</span></a>
+        <?php if ($djConfig->carrier() !== null) : ?>
+            <a class="dj-booth-card" href="<?= tr_dj_h($djConfig->path('plans.php')) ?>"><span class="tr-badge">Show preparation</span><strong>Build your playlist</strong><span>Prepare titles and song order for an upcoming broadcast.</span><span class="dj-booth-card-action">Prepare a show &rarr;</span></a>
+            <a class="dj-booth-card" href="<?= tr_dj_h($djConfig->path('carrier.php')) ?>"><span class="tr-badge">Live controls</span><strong>Your live show</strong><span>Advance songs, manage listener queues and link your IRC account.</span><span class="dj-booth-card-action">Open live controls &rarr;</span></a>
+            <a class="dj-booth-card" href="<?= tr_dj_h($djConfig->path('recordings.php')) ?>"><span class="tr-badge">Recordings</span><strong>Review your recordings</strong><span>Attach approved recordings to your broadcast listings.</span><span class="dj-booth-card-action">Review recordings &rarr;</span></a>
+        <?php endif; ?>
     </nav>
     <div class="dj-booth-columns">
         <section class="dj-booth-panel" aria-labelledby="dj-booth-recent">

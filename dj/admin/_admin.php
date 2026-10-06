@@ -47,6 +47,13 @@ function tr_admin_finish(string $suffix, string $message): never
 {
     global $djConfig;
     $_SESSION['admin_flash'] = $message;
+    try {
+        if ($djConfig->carrier() !== null) {
+            file_put_contents($djConfig->stateDir() . '/carrier-dirty', (string) time(), LOCK_EX);
+        }
+    } catch (Throwable) {
+        // A failed optional integration must not fail an existing website edit.
+    }
     tr_dj_redirect($djConfig, (defined('TR_DJ_SELF_SERVICE') && TR_DJ_SELF_SERVICE ? '' : 'admin/') . $suffix);
 }
 
@@ -86,6 +93,11 @@ function tr_admin_begin(string $heading, string $section, ?string $error = null)
     $navigation = $self
         ? ['overview' => ['Booth', ''], 'profiles' => ['My profile', 'profile.php'], 'broadcasts' => ['Sets / broadcasts', 'broadcasts.php'], 'accounts' => ['My schedules', '#dj-booth-schedules']]
         : ['overview' => ['Overview', ''], 'accounts' => ['DJs', 'accounts.php'], 'profiles' => ['Profiles', 'profiles.php'], 'stations' => ['Stations', 'stations.php'], 'broadcasts' => ['Sets / broadcasts', '../broadcasts.php'], 'audit' => ['Activity', 'audit.php']];
+    global $djConfig;
+    if ($djConfig->carrier() !== null) {
+        $navigation += $self ? ['plans' => ['Prepare a show', 'plans.php'], 'carrier' => ['Live / IRC', 'carrier.php'], 'recordings' => ['Recordings', 'recordings.php']]
+            : ['carrier' => ['Carrier integration', 'carrier.php']];
+    }
     foreach ($navigation as $key => [$label, $path]) {
         echo '<a href="' . tr_dj_h($self && str_starts_with($path, '#') ? tr_admin_url('') . $path : tr_admin_url($path)) . '"' . ($section === $key ? ' aria-current="page"' : '') . '>' . tr_dj_h($label) . '</a>';
     }

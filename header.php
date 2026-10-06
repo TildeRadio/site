@@ -69,7 +69,7 @@ $nav_current = static fn (string $section): string => $nav_section === $section 
         <?php endforeach; ?>
         <link rel="icon" type="image/png" href="<?= htmlspecialchars(asset('logos/tilderadio.png'), ENT_QUOTES, 'UTF-8') ?>">
         <?=isset($additional_head) ? PHP_EOL . "        " . $additional_head . PHP_EOL : ""?>
-        <script defer src="<?= htmlspecialchars(asset('js/site-player.js'), ENT_QUOTES, 'UTF-8') ?>"></script>
+        <script defer src="<?= htmlspecialchars(asset('js/site-player.js?v=20261005-carrier1'), ENT_QUOTES, 'UTF-8') ?>"></script>
     </head>
 
     <body>

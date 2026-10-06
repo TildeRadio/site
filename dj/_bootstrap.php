@@ -75,7 +75,7 @@ try {
         header('Allow: GET, POST');
         tr_dj_error(405, 'This request method is not supported.');
     }
-    $bodyLimit = defined('TR_DJ_ADMIN_REQUEST') ? 262144 : 4096;
+    $bodyLimit = defined('TR_DJ_PLAN_REQUEST') ? 1048576 : (defined('TR_DJ_ADMIN_REQUEST') ? 262144 : 4096);
     if ((int) ($_SERVER['CONTENT_LENGTH'] ?? 0) > $bodyLimit) {
         tr_dj_error(413, 'This form is too large.');
     }

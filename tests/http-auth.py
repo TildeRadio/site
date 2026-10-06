@@ -87,6 +87,8 @@ def fixture(schedule=False):
         args = [os.getenv("PHP_BINARY", "php")]
         if os.getenv("PHP_INI"):
             args += ["-c", os.environ["PHP_INI"]]
+        if os.getenv("TILDERADIO_HTTP_PREPEND"):
+            args += ["-d", "auto_prepend_file=" + os.environ["TILDERADIO_HTTP_PREPEND"]]
         args += ["-S", f"127.0.0.1:{backend_port}", "-t", str(ROOT)]
         episodes = private / "episodes.json"
         episodes.write_text(json.dumps({"version": 1, "generated_at": 1, "episodes": []}))
@@ -141,6 +143,20 @@ def fixture(schedule=False):
                         status = 403 if data["mode"] == "denied" else 500
                     elif self.path == "/api/station/1" and self.command == "GET":
                         response = {"id": 1, "timezone": "America/Edmonton"}
+                    elif parsed.path == "/api/station/1/streamer/4/broadcast/900/download":
+                        payload = bytes.fromhex(data.get("recording_hex", ""))
+                        self.send_response(data.get("recording_status", 200))
+                        self.send_header("Content-Type", data.get("recording_type", "audio/wav"))
+                        self.send_header("Content-Length", str(len(payload)))
+                        self.send_header("Location", "https://attacker.invalid/must-not-follow")
+                        self.end_headers()
+                        self.wfile.write(payload)
+                        return
+                    elif parsed.path == "/api/station/1/streamers/broadcasts":
+                        records = data.get("broadcasts", [])
+                        per_page = int(parse_qs(parsed.query).get("rowCount", ["25"])[0])
+                        page = int(parse_qs(parsed.query).get("current", ["1"])[0])
+                        response = {"current": page, "rowCount": per_page, "total": len(records), "rows": records[(page - 1) * per_page:page * per_page]}
                     elif parsed.path in ["/api/station/1/streamers", "/api/station/2/streamers"]:
                         records = data["directory" if parsed.path.startswith("/api/station/1/") else "directory2"]
                         records = [row | {"schedule_items": row.get("schedule_items", data["items"] if row["id"] == 4 else [])} for row in records]

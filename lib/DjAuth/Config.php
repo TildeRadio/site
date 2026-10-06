@@ -116,6 +116,11 @@ final readonly class Config
         return ($this->data['base_path'] ?? '') . '/dj/' . $suffix;
     }
 
+    public function publicPath(string $path): string
+    {
+        return ($this->data['base_path'] ?? '') . '/' . ltrim($path, '/');
+    }
+
     public function stateDir(): string
     {
         return $this->data['state_dir'];
@@ -177,6 +182,20 @@ final readonly class Config
     }
 
     /** @return array<string, mixed>|null */
+    public function carrier(): ?array
+    {
+        $settings = $this->data['carrier'] ?? null;
+        if ($settings === null || (is_array($settings) && !($settings['enabled'] ?? false))) {
+            return null;
+        }
+        if (!is_array($settings) || ($settings['enabled'] ?? false) !== true
+            || !is_string($settings['socket_path'] ?? null) || !is_string($settings['key_file'] ?? null)) {
+            return null;
+        }
+        return $settings;
+    }
+
+    /** @return array<string,mixed>|null */
     public function scheduleApi(): ?array
     {
         $settings = $this->data['schedule_api'] ?? null;

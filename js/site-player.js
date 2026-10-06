@@ -349,12 +349,16 @@
         if (url.origin !== window.location.origin || form.method.toLowerCase() !== 'post') return;
         event.preventDefault();
         if (form.getAttribute('aria-busy') === 'true') return;
+        var submitter = event.submitter;
+        var submitterName = submitter && submitter.name;
+        var submitterValue = submitter && submitter.value;
         form.setAttribute('aria-busy', 'true');
         form.querySelectorAll('button[type="submit"]').forEach(function (button) { button.disabled = true; });
         var body = new URLSearchParams();
         new FormData(form).forEach(function (value, key) {
             if (typeof value === 'string') body.append(key, value);
         });
+        if (submitterName) body.append(submitterName, submitterValue || '');
         navigate(url, true, body);
     });
 

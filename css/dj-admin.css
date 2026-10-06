@@ -83,3 +83,12 @@
     .dj-broadcast-toolbar .dj-admin-actions { width: 100%; }
     .dj-broadcast-toolbar .dj-auth-button { width: 100%; }
 }
+
+/* New booth tools share the existing responsive editor, without changing public styles. */
+.dj-editor section { margin-block: 1.5rem; }
+.dj-editor select { max-width: 100%; min-width: 0; }
+.dj-editor .dj-admin-inline { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-block: .75rem; }
+.dj-editor code, .dj-editor dd, .dj-editor .dj-broadcast-card p { overflow-wrap: anywhere; }
+.dj-editor fieldset label { display: block; padding-block: .4rem; }
+.dj-editor button, .dj-editor input, .dj-editor select { min-height: 2.75rem; }
+.dj-editor a:focus-visible, .dj-editor button:focus-visible { outline: 3px solid #8cff9b; outline-offset: 3px; }

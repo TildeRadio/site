@@ -59,6 +59,16 @@ final class Store
             source_json TEXT, manual INTEGER NOT NULL DEFAULT 0, deleted INTEGER NOT NULL DEFAULT 0,
             version INTEGER NOT NULL DEFAULT 1, updated_at INTEGER NOT NULL
         )");
+        $this->db->exec("CREATE TABLE IF NOT EXISTS show_plans (
+            id INTEGER PRIMARY KEY AUTOINCREMENT, owner_station INTEGER NOT NULL, owner_streamer INTEGER NOT NULL,
+            station_id INTEGER NOT NULL, slug TEXT NOT NULL, json TEXT NOT NULL, enabled INTEGER NOT NULL DEFAULT 1,
+            deleted INTEGER NOT NULL DEFAULT 0, version INTEGER NOT NULL DEFAULT 1, updated_at INTEGER NOT NULL
+        )");
+        $this->db->exec("CREATE TABLE IF NOT EXISTS recording_candidates (
+            id TEXT PRIMARY KEY, broadcast_id INTEGER NOT NULL, url TEXT NOT NULL, bytes INTEGER NOT NULL DEFAULT 0,
+            status TEXT NOT NULL DEFAULT 'pending', version INTEGER NOT NULL DEFAULT 1, created_at INTEGER NOT NULL
+        )");
+        $this->db->exec("CREATE TABLE IF NOT EXISTS plan_broadcasts (plan_id INTEGER PRIMARY KEY, broadcast_id INTEGER NOT NULL)");
         $this->bootstrap($root);
     }
 
@@ -594,6 +604,257 @@ final class Store
                 version=broadcast_edits.version+1,updated_at=excluded.updated_at',
                 [$id, $slug, json_encode($stored['patch'] ?? [], JSON_THROW_ON_ERROR), $source === null ? null : json_encode($source, JSON_THROW_ON_ERROR), (int) $deleted, time()]);
         }, true);
+    }
+
+    /** @param Actor $actor
+     * @param list<array<string,mixed>> $items
+     */
+    public function importRecordings(array $actor, array $items): void
+    {
+        if (count($items) > 500) {
+            throw new Problem('Import no more than 500 recordings at a time.');
+        }
+        $this->mutate($actor, 'recordings.import', 'manifest', function () use ($items): void {
+            foreach ($items as $item) {
+                $broadcast = Input::integer($item['broadcast_id'] ?? null, 'broadcast ID');
+                $url = Input::text($item['url'] ?? '', 'recording URL', 2048, true);
+                BroadcastForm::url($url);
+                if (!str_starts_with($url, 'https://')) {
+                    throw new Problem('Imported recordings must have an HTTPS URL.');
+                }
+                $bytes = Input::integer($item['bytes'] ?? 0, 'recording size', true);
+                if ($this->broadcastSource($broadcast) === null && $this->broadcastEdit($broadcast) === null) {
+                    throw new Problem('A recording references an unknown broadcast.', 404);
+                }
+                $key = hash('sha256', $broadcast . ':' . $url);
+                $this->execute('INSERT OR IGNORE INTO recording_candidates(id,broadcast_id,url,bytes,created_at) VALUES(?,?,?,?,?)', [$key, $broadcast, $url, $bytes, time()]);
+            }
+        });
+    }
+
+    /** @param Actor $actor
+     * @return list<array<string,mixed>>
+     */
+    public function recordingCandidates(array $actor): array
+    {
+        $this->requireEditor($actor);
+        $result = [];
+        foreach ($this->all("SELECT * FROM recording_candidates WHERE status='pending' ORDER BY created_at DESC LIMIT 500") as $row) {
+            $id = (int) $row['broadcast_id'];
+            $stored = $this->broadcastEdit($id);
+            $source = $this->broadcastSource($id);
+            $owner = PublicBroadcasts::slug((string) ($stored['owner_slug'] ?? $source['dj_slug'] ?? ''));
+            if ($owner === '' || ($stored['deleted'] ?? false)) {
+                continue;
+            }
+            if (!$this->isAdministrator($actor) && $this->requireAccount($actor['station_id'], $actor['streamer_id'])['profile_slug'] !== $owner) {
+                continue;
+            }
+            $result[] = $row + ['owner_slug' => $owner, 'broadcast_version' => (int) ($stored['version'] ?? 0), 'source_hash' => BroadcastForm::hash($source)];
+        }
+        return $result;
+    }
+
+    /** @param Actor $actor */
+    public function reviewRecording(array $actor, string $id, bool $approved, int $version, int $broadcastVersion, string $sourceHash): void
+    {
+        $this->mutate($actor, $approved ? 'recording.approve' : 'recording.reject', $id, function () use ($actor, $id, $approved, $version, $broadcastVersion, $sourceHash): void {
+            $candidate = $this->one('SELECT * FROM recording_candidates WHERE id=?', [$id]) ?? throw new Problem('Recording candidate not found.', 404);
+            $this->version((int) $candidate['version'], $version);
+            if ($candidate['status'] !== 'pending') {
+                throw new Problem('This recording has already been reviewed.', 409);
+            }
+            $broadcast = (int) $candidate['broadcast_id'];
+            $stored = $this->broadcastEdit($broadcast);
+            $source = $this->broadcastSource($broadcast);
+            if ($stored === null && $source === null) {
+                throw new Problem('Broadcast listing is unavailable.', 404);
+            }
+            $owner = PublicBroadcasts::slug((string) ($stored['owner_slug'] ?? $source['dj_slug'] ?? ''));
+            $this->requireProfileAccess($actor, $owner);
+            if ($stored['deleted'] ?? false) {
+                throw new Problem('Restore this listing through broadcast administration before attaching a recording.', 409);
+            }
+            $this->version((int) ($stored['version'] ?? 0), $broadcastVersion);
+            if (!hash_equals(BroadcastForm::hash($source), $sourceHash)) {
+                throw new Problem('Carrier updated this broadcast. Reload recording review.', 409);
+            }
+            if ($approved) {
+                $patch = PublicBroadcasts::combine($stored['patch'] ?? [], ['recording_url' => $candidate['url'], 'recording_bytes' => (int) $candidate['bytes']]);
+                if (strlen(json_encode($patch, JSON_THROW_ON_ERROR)) > 65536) {
+                    throw new Problem('Broadcast corrections exceed the size limit.');
+                }
+                $snapshot = $source ?? $stored['source'] ?? null;
+                $this->execute('INSERT INTO broadcast_edits(id,owner_slug,json,source_json,manual,updated_at) VALUES(?,?,?,?,?,?)
+                    ON CONFLICT(id) DO UPDATE SET json=excluded.json,source_json=excluded.source_json,version=broadcast_edits.version+1,updated_at=excluded.updated_at',
+                    [$broadcast, $owner, json_encode($patch, JSON_THROW_ON_ERROR), $snapshot === null ? null : json_encode($snapshot, JSON_THROW_ON_ERROR), (int) ($stored['manual'] ?? false), time()]);
+            }
+            $this->execute('UPDATE recording_candidates SET status=?,version=version+1 WHERE id=?', [$approved ? 'approved' : 'rejected', $id]);
+        }, true);
+    }
+
+    /** @return array<string,mixed>|null */
+    public function plan(int $id): ?array
+    {
+        $row = $this->one('SELECT * FROM show_plans WHERE id=?', [$id]);
+        if ($row === null) {
+            return null;
+        }
+        $data = json_decode((string) $row['json'], true, 32, JSON_THROW_ON_ERROR);
+        return $data + ['broadcast_id' => $this->one('SELECT broadcast_id FROM plan_broadcasts WHERE plan_id=?', [$id])['broadcast_id'] ?? null, 'id' => (int) $row['id'], 'actor' => $row['owner_station'] . ':' . $row['owner_streamer'],
+            'owner_station' => (int) $row['owner_station'], 'owner_streamer' => (int) $row['owner_streamer'],
+            'station_id' => (int) $row['station_id'], 'slug' => (string) $row['slug'],
+            'enabled' => (bool) $row['enabled'] && !(bool) $row['deleted'], 'deleted' => (bool) $row['deleted'],
+            'version' => (int) $row['version'], 'updated_at' => (int) $row['updated_at']];
+    }
+
+    /** @param Actor $actor */
+    public function requirePlanAccess(array $actor, int $id): void
+    {
+        $this->requireEditor($actor);
+        $plan = $this->plan($id) ?? throw new Problem('Prepared show not found.', 404);
+        if (!$this->isAdministrator($actor) && ($plan['owner_station'] !== $actor['station_id'] || $plan['owner_streamer'] !== $actor['streamer_id'])) {
+            throw new Problem('This prepared show belongs to another DJ.', 403);
+        }
+    }
+
+    /** @param Actor $actor
+     * @return list<array<string,mixed>>
+     */
+    public function plans(array $actor): array
+    {
+        $this->requireEditor($actor);
+        $plans = [];
+        foreach ($this->all('SELECT id FROM show_plans WHERE deleted=0 ORDER BY id DESC') as $row) {
+            $plan = $this->plan((int) $row['id']);
+            if ($plan !== null && ($this->isAdministrator($actor) || ($plan['owner_station'] === $actor['station_id'] && $plan['owner_streamer'] === $actor['streamer_id']))) {
+                $plans[] = $plan;
+            }
+        }
+        return $plans;
+    }
+
+    /** @param Actor $actor
+     * @param Actor $owner
+     * @param array<string,mixed> $data
+     */
+    public function savePlan(array $actor, ?int $id, array $owner, int $station, array $data, int $version): int
+    {
+        $saved = 0;
+        $this->mutate($actor, 'plan.save', $id === null ? 'new' : (string) $id, function () use ($actor, $id, $owner, $station, $data, $version, &$saved): void {
+            if ($id !== null) {
+                $this->requirePlanAccess($actor, $id);
+            }
+            if (!$this->isAdministrator($actor) && $owner !== ['station_id' => $actor['station_id'], 'streamer_id' => $actor['streamer_id']]) {
+                throw new Problem('You can only prepare shows for your own account.', 403);
+            }
+            $account = $this->requireAccount($owner['station_id'], $owner['streamer_id']);
+            if (!$account['enabled'] || $account['deleted'] || $account['profile_slug'] === null) {
+                throw new Problem('Assign an enabled DJ account to a profile first.', 409);
+            }
+            $this->requireProfileAccess($actor, $account['profile_slug']);
+            $this->scheduleTarget($actor, $owner['station_id'], $owner['streamer_id'], $station);
+            $current = $id === null ? null : $this->plan($id);
+            if (($current['broadcast_id'] ?? null) !== null) {
+                throw new Problem('This preparation was already used. Edit its broadcast listing or copy it for another show.', 409);
+            }
+            if ($current !== null && ($current['owner_station'] !== $owner['station_id'] || $current['owner_streamer'] !== $owner['streamer_id'])) {
+                throw new Problem('A prepared show’s owner cannot be changed.', 409);
+            }
+            $this->version($current['version'] ?? 0, $version);
+            $json = json_encode($data, JSON_THROW_ON_ERROR);
+            if (strlen($json) > 200000) {
+                throw new Problem('This prepared playlist is too large.');
+            }
+            if ($id === null) {
+                $this->execute('INSERT INTO show_plans(owner_station,owner_streamer,station_id,slug,json,updated_at) VALUES(?,?,?,?,?,?)',
+                    [$owner['station_id'], $owner['streamer_id'], $station, $account['profile_slug'], $json, time()]);
+                $saved = (int) $this->db->lastInsertId();
+            } else {
+                $this->execute('UPDATE show_plans SET station_id=?,slug=?,json=?,enabled=1,deleted=0,version=version+1,updated_at=? WHERE id=?',
+                    [$station, $account['profile_slug'], $json, time(), $id]);
+                $saved = $id;
+            }
+        }, true);
+        return $saved;
+    }
+
+    /** @param Actor $actor */
+    public function cancelPlan(array $actor, int $id, int $version, string $confirmation): void
+    {
+        $this->mutate($actor, 'plan.cancel', (string) $id, function () use ($actor, $id, $version, $confirmation): void {
+            $this->requirePlanAccess($actor, $id);
+            $this->version($this->plan($id)['version'], $version);
+            if ($confirmation !== 'CANCEL') {
+                throw new Problem('Type CANCEL to remove this preparation.');
+            }
+            $this->execute('UPDATE show_plans SET enabled=0,deleted=1,version=version+1,updated_at=? WHERE id=?', [time(), $id]);
+        }, true);
+    }
+
+    /** @param list<array{plan_id:int,session_id:int}> $uses */
+    public function recordPlanUses(array $uses): void
+    {
+        $this->db->beginTransaction();
+        try {
+            foreach ($uses as $use) {
+                $plan = Input::integer($use['plan_id'], 'prepared show ID');
+                $broadcast = Input::integer($use['session_id'], 'broadcast ID');
+                $this->execute('INSERT OR IGNORE INTO plan_broadcasts VALUES(?,?)', [$plan, $broadcast]);
+            }
+            $this->db->commit();
+        } catch (Throwable $exception) {
+            $this->db->rollBack();
+            throw $exception;
+        }
+    }
+
+    /** A consistent, credential-free snapshot; original captured records remain on Carrier.
+     * @return list<array{kind:string,data:array<string,mixed>}>
+     */
+    public function carrierRecords(): array
+    {
+        $this->db->beginTransaction();
+        try {
+            $records = [];
+            foreach (array_merge($this->accounts(), $this->accounts(true)) as $account) {
+                $bindings = [];
+                $assignments = [];
+                foreach ($account['assignments'] as $station => $streamer) {
+                    $record = $this->station($station);
+                    if ($record !== null && $record['enabled'] && !$record['deleted']) {
+                        $assignments[$station] = $streamer;
+                    }
+                    // Other stations require verified upstream names added by the synchronization service.
+                    if ($station === $account['station_id'] && $streamer === $account['streamer_id'] && $record !== null && $record['enabled'] && !$record['deleted']) {
+                        $bindings[] = ['station_id' => $station, 'streamer_id' => $streamer, 'names' => array_values(array_unique([$account['username'], $account['display_name']]))];
+                    }
+                }
+                $records[] = ['kind' => 'account', 'data' => ['id' => $account['station_id'] . ':' . $account['streamer_id'],
+                    'enabled' => $account['enabled'], 'deleted' => $account['deleted'], 'slug' => $account['profile_slug'],
+                    'administrator' => $this->isAdministrator($account), 'bindings' => $bindings, 'assignments' => $assignments]];
+            }
+            foreach ($this->all('SELECT id FROM show_plans') as $row) {
+                $plan = $this->plan((int) $row['id']);
+                if ($plan !== null) {
+                    $owner = $this->account($plan['owner_station'], $plan['owner_streamer']);
+                    $station = $this->station($plan['station_id']);
+                    $plan['enabled'] = $plan['enabled'] && $owner !== null && $owner['enabled'] && !$owner['deleted']
+                        && $owner['profile_slug'] === $plan['slug'] && isset($owner['assignments'][$plan['station_id']])
+                        && $station !== null && $station['enabled'] && !$station['deleted'];
+                    $records[] = ['kind' => 'plan', 'data' => $plan];
+                }
+            }
+            foreach ($this->broadcastEdits() as $edit) {
+                unset($edit['source']);
+                $records[] = ['kind' => 'broadcast', 'data' => $edit];
+            }
+            $this->db->commit();
+            return $records;
+        } catch (Throwable $exception) {
+            $this->db->rollBack();
+            throw $exception;
+        }
     }
 
     /** @param list<int|string|null> $params */

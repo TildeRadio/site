@@ -181,14 +181,16 @@ function tr_now_playing(): array
     $streamerName = trim((string) ($live['streamer_name'] ?? ''));
     $isLive = !empty($live['is_live']);
 
-    return [
+    $result = [
         'available' => true,
         'station' => [
+            'id' => is_numeric($station['id'] ?? null) ? (int) $station['id'] : TR_STATION_ID,
             'name' => trim((string) ($station['name'] ?? 'tilderadio')) ?: 'tilderadio',
             'shortcode' => trim((string) ($station['shortcode'] ?? TR_STATION_SHORTCODE)) ?: TR_STATION_SHORTCODE,
             'listen_url' => trim((string) ($station['listen_url'] ?? 'https://tilderadio.org/listen')) ?: 'https://tilderadio.org/listen',
         ],
         'is_live' => $isLive,
+        'broadcast_start' => is_numeric($live['broadcast_start'] ?? null) ? (int) $live['broadcast_start'] : null,
         'dj' => $isLive && $streamerName !== '' ? $streamerName : null,
         'listeners' => $listenerCount,
         'now_playing' => [
@@ -201,6 +203,8 @@ function tr_now_playing(): array
         'history' => $history,
         'updated_at' => time(),
     ];
+    require_once __DIR__ . '/Admin/PublicCarrier.php';
+    return \TildeRadio\Site\Admin\PublicCarrier::now($result);
 }
 
 function tr_slug(string $value): string

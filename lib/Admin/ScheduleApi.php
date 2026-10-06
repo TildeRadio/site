@@ -262,6 +262,88 @@ final readonly class ScheduleApi implements ScheduleTransport
         $this->request('PUT', '/station/' . $station . '/streamer/' . $streamer, ['schedule_items' => $items]);
     }
 
+    /** @return list<array<string,mixed>> */
+    public function broadcasts(int $station, int $page = 1, int $perPage = 25): array
+    {
+        $this->allowed($station);
+        $data = $this->request('GET', '/station/' . $station . '/streamers/broadcasts?current=' . $page . '&rowCount=' . $perPage, null, 8);
+        $rows = $data['rows'] ?? $data;
+        if (!is_array($rows) || !array_is_list($rows) || count($rows) > $perPage) {
+            throw new Problem('AzuraCast returned an unsupported broadcast directory.', 502);
+        }
+        $result = [];
+        foreach ($rows as $row) {
+            if (!is_array($row) || !is_int($row['id'] ?? null) || !is_array($row['streamer'] ?? null)
+                || !is_int($row['streamer']['id'] ?? null) || !is_string($row['timestampStart'] ?? null)) {
+                throw new Problem('AzuraCast returned an invalid broadcast identity.', 502);
+            }
+            $start = strtotime($row['timestampStart']);
+            $end = isset($row['timestampEnd']) && is_string($row['timestampEnd']) ? strtotime($row['timestampEnd']) : null;
+            if ($start === false || $start < 1 || $end === false || ($end !== null && $end < $start)) {
+                throw new Problem('AzuraCast returned invalid broadcast timestamps.', 502);
+            }
+            $recording = is_array($row['recording'] ?? null) ? $row['recording'] : null;
+            $result[] = ['id' => Input::integer($row['id'], 'AzuraCast broadcast ID'),
+                'streamer_id' => Input::integer($row['streamer']['id'], 'AzuraCast streamer ID'),
+                'names' => array_values(array_unique([Input::text($row['streamer']['streamer_username'] ?? '', 'DJ username', 255), Input::text($row['streamer']['display_name'] ?? '', 'DJ display name', 255)])),
+                'starts_at' => $start, 'ends_at' => $end,
+                'recording_bytes' => $recording !== null && is_int($recording['size'] ?? null) ? max(0, $recording['size']) : null];
+        }
+        return $result;
+    }
+
+    public function downloadRecording(int $station, int $streamer, int $broadcast, string $output, int $maxBytes): int
+    {
+        $this->allowed($station);
+        foreach ([$streamer, $broadcast] as $id) {
+            Input::integer($id, 'recording identifier');
+        }
+        $file = fopen($output, 'x');
+        if ($file === false) {
+            throw new Problem('Recording staging file unavailable.', 503);
+        }
+        $curl = curl_init($this->base . '/station/' . $station . '/streamer/' . $streamer . '/broadcast/' . $broadcast . '/download');
+        if ($curl === false) {
+            fclose($file);
+            unlink($output);
+            throw new Problem('Recording download unavailable.', 503);
+        }
+        $bytes = 0;
+        try {
+            $options = [CURLOPT_FOLLOWLOCATION => false, CURLOPT_CONNECTTIMEOUT => 4, CURLOPT_TIMEOUT => 180,
+                CURLOPT_SSL_VERIFYPEER => true, CURLOPT_SSL_VERIFYHOST => 2, CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
+                CURLOPT_HTTPHEADER => ['Authorization: Bearer ' . $this->key],
+                CURLOPT_WRITEFUNCTION => static function ($handle, string $chunk) use ($file, &$bytes, $maxBytes): int {
+                    if ($bytes + strlen($chunk) > $maxBytes) {
+                        return 0;
+                    }
+                    $written = fwrite($file, $chunk);
+                    if ($written === false) {
+                        return 0;
+                    }
+                    $bytes += $written;
+                    return $written;
+                }];
+            if ($this->ca !== null) {
+                $options[CURLOPT_CAINFO] = $this->ca;
+            }
+            curl_setopt_array($curl, $options);
+            $ok = curl_exec($curl);
+            $status = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
+            $type = strtolower(explode(';', (string) curl_getinfo($curl, CURLINFO_CONTENT_TYPE))[0]);
+            if ($ok === false || $status !== 200 || $bytes === 0 || (!str_starts_with($type, 'audio/') && !in_array($type, ['application/octet-stream', 'application/ogg', 'video/ogg'], true))) {
+                throw new Problem('Recording download could not be verified. The upstream recording was preserved.', 502);
+            }
+            return $bytes;
+        } catch (\Throwable $exception) {
+            unlink($output);
+            throw $exception;
+        } finally {
+            fclose($file);
+            unset($curl);
+        }
+    }
+
     private function allowed(int $station): void
     {
         if (!$this->allows($station)) {
