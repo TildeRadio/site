@@ -61,6 +61,7 @@ require dirname(__DIR__) . '/header.php';
         <input id="dj-password" name="password" type="password" autocomplete="current-password" maxlength="1024" required>
         <button type="submit" class="dj-auth-button">Sign in</button>
     </form>
+    <p class="dj-auth-help"><a href="<?= tr_dj_h(asset('help/?topic=login')) ?>">Login help</a> &middot; <a href="<?= tr_dj_h(asset('help/?topic=start-here')) ?>">Your first show: start here</a></p>
     <p class="dj-auth-help">Need an account or a password reset? Contact the station administrator.</p>
 </section>
 <?php require dirname(__DIR__) . '/footer.php'; ?>

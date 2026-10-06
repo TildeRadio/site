@@ -272,9 +272,15 @@
                 }
 
                 return response.text().then(function (html) {
+                    var pageUrl = new URL(response.url || url.href);
+                    // Fetch omits fragments. Keep a requested section on the same
+                    // page, while allowing server redirects to choose their destination.
+                    if (!pageUrl.hash && pageUrl.pathname === url.pathname && pageUrl.search === url.search) {
+                        pageUrl.hash = url.hash;
+                    }
                     return {
                         html: html,
-                        url: new URL(response.url || url.href)
+                        url: pageUrl
                     };
                 });
             })
@@ -340,13 +346,25 @@
         navigate(new URL(window.location.href), false);
     });
 
-    // Keep the existing audio element alive through DJ login/logout. These forms
+    // Keep the existing audio element alive through help search and DJ login/logout. These forms
     // still use normal server-side POST/redirect/GET when JavaScript is unavailable.
     document.addEventListener('submit', function (event) {
         var form = event.target;
-        if (!(form instanceof HTMLFormElement) || !form.hasAttribute('data-tr-dj-auth') || audio.paused) return;
+        if (!(form instanceof HTMLFormElement) || audio.paused) return;
+        if (!form.hasAttribute('data-tr-help-search') && !form.hasAttribute('data-tr-dj-auth')) return;
         var url = new URL(form.action, window.location.href);
-        if (url.origin !== window.location.origin || form.method.toLowerCase() !== 'post') return;
+        if (url.origin !== window.location.origin) return;
+        if (form.hasAttribute('data-tr-help-search') && form.method.toLowerCase() === 'get') {
+            event.preventDefault();
+            var search = new URLSearchParams();
+            new FormData(form).forEach(function (value, key) {
+                if (typeof value === 'string') search.append(key, value);
+            });
+            url.search = search.toString();
+            navigate(url, true);
+            return;
+        }
+        if (!form.hasAttribute('data-tr-dj-auth') || form.method.toLowerCase() !== 'post') return;
         event.preventDefault();
         if (form.getAttribute('aria-busy') === 'true') return;
         var submitter = event.submitter;

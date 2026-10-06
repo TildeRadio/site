@@ -38,6 +38,7 @@ include dirname(__DIR__) . '/header.php';
         Small JSON endpoints for now playing, recent tracks, the schedule, DJ profiles, and completed live episodes.
         No API key is required for these public read-only endpoints.
     </p>
+    <p><a href="<?= htmlspecialchars(asset('help/?topic=public-api'), ENT_QUOTES, 'UTF-8') ?>">Feed overview, upcoming previews and podcast guide</a> &middot; <a href="<?= htmlspecialchars(asset('help/'), ENT_QUOTES, 'UTF-8') ?>">Search all guides</a></p>
 </section>
 
 <section class="tr-section">

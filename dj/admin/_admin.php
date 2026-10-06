@@ -102,6 +102,9 @@ function tr_admin_begin(string $heading, string $section, ?string $error = null)
         echo '<a href="' . tr_dj_h($self && str_starts_with($path, '#') ? tr_admin_url('') . $path : tr_admin_url($path)) . '"' . ($section === $key ? ' aria-current="page"' : '') . '>' . tr_dj_h($label) . '</a>';
     }
     echo '</nav>';
+    $helpTopic = $self ? (['profiles' => 'profile', 'broadcasts' => 'broadcasts', 'accounts' => 'booking', 'plans' => 'prepared-shows', 'carrier' => 'live-controls', 'recordings' => 'recordings'][$section] ?? 'website-map')
+        : ($section === 'carrier' ? 'integration-status' : 'administration');
+    echo '<p class="dj-auth-help"><a href="' . tr_dj_h(asset('help/?topic=' . $helpTopic)) . '">Help with these controls &rarr;</a> &middot; <a href="' . tr_dj_h(asset('help/')) . '">Search all guides</a></p>';
     $flash = $_SESSION['admin_flash'] ?? null;
     unset($_SESSION['admin_flash']);
     if (is_string($flash)) {

@@ -26,6 +26,8 @@ include dirname(__DIR__, 2) . '/header.php';
         Record a TildeRadio station ID, make a jingle, pitch a strange one-off broadcast, or help with an event.
         You do not need Git knowledge to take part.
     </p>
+    <p><a href="<?= htmlspecialchars(asset('help/?topic=contributions'), ENT_QUOTES, 'UTF-8') ?>">Contribution overview</a> &middot; <a href="<?= htmlspecialchars(asset('help/'), ENT_QUOTES, 'UTF-8') ?>">Search all help</a></p>
+    <nav class="tr-community-actions" aria-label="Contribution guide sections"><a href="#audio">Audio</a> <a href="#repository">Repository</a> <a href="#events">Events</a> <a href="#send">Send a contribution</a></nav>
 </section>
 
 <section class="tr-section">

@@ -1,5 +1,10 @@
 # DJ profiles
 
+DJs can normally use **DJ booth → My profile** on the website.
+See the [profile editor guide](https://tilderadio.org/help/?topic=profile) or
+[search all guides](https://tilderadio.org/help/). The JSON workflow below remains
+available for repository contributors.
+
 Each DJ may have one JSON file named after the slug used by the schedule.
 
 For example, a schedule entry named `deepend` uses:

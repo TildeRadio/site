@@ -35,6 +35,7 @@ require dirname(__DIR__) . '/header.php';
         </form>
     </div>
     <div class="dj-booth-account"><span>Signed in as <strong><?= tr_dj_h($identity['username']) ?></strong></span><span class="dj-status"><?= $isAdministrator ? 'Administrator' : 'DJ' ?></span></div>
+    <p class="dj-auth-help"><a href="<?= tr_dj_h(asset('help/?topic=website-map')) ?>">Help &amp; guides: find the right control for your next step &rarr;</a></p>
     <?php if ($isAdministrator) : ?>
         <aside class="dj-booth-admin" aria-label="Administrator access"><p>Manage DJs, profiles and station assignments.</p><a href="<?= tr_dj_h($djConfig->path('admin/')) ?>">Open administration &rarr;</a></aside>
     <?php endif; ?>

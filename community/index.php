@@ -31,6 +31,8 @@ include dirname(__DIR__) . '/header.php';
         <a href="<?= htmlspecialchars($irc, ENT_QUOTES, 'UTF-8') ?>" rel="noopener">join #tilderadio</a>
     </nav>
     <p class="tr-community-tools">
+        <a href="<?= htmlspecialchars(asset('help/'), ENT_QUOTES, 'UTF-8') ?>">searchable help &amp; guides</a>
+        &nbsp;&middot;&nbsp;
         <a href="<?= htmlspecialchars(asset('community/live.php'), ENT_QUOTES, 'UTF-8') ?>">live questions, requests and polls</a>
         &nbsp;&middot;&nbsp;
         <a href="<?= htmlspecialchars(asset('community/upcoming.php'), ENT_QUOTES, 'UTF-8') ?>">upcoming show previews</a>

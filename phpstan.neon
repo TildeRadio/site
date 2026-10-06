@@ -3,6 +3,7 @@ parameters:
     paths:
         - lib/DjAuth
         - lib/Admin
+        - lib/Help
     stubFiles:
         - tests/stubs/azuracast-client.stub
     scanFiles:

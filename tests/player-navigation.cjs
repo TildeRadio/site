@@ -26,6 +26,7 @@ async function fetchPage(url, options={}) {
   });
   if(result.headers['set-cookie']) cookie=result.headers['set-cookie'][0].split(';')[0];
   if(result.status===303) return fetchPage(result.headers.location);
+  target.hash='';
   return {url:target.href,headers:new Headers(result.headers),text:async()=>result.body};
 }
 function nextNavigation(win) {
@@ -38,6 +39,7 @@ function nextNavigation(win) {
  const initial=await fetchPage(origin+'/dj/login.php');
  const dom=new JSDOM(await initial.text(),{url:initial.url,runScripts:'outside-only',pretendToBeVisual:true});
  const win=dom.window;win.fetch=fetchPage;win.scrollTo=()=>{};
+ let scrolledTo='';win.HTMLElement.prototype.scrollIntoView=function(){scrolledTo=this.id;};
  const audio=win.document.getElementById('tr-audio');
  Object.defineProperty(audio,'paused',{get:()=>false});
  audio.play=()=>Promise.resolve();audio.pause=()=>{};audio.load=()=>{};
@@ -123,7 +125,32 @@ function nextNavigation(win) {
  deleteBroadcast.elements.confirm.value='DELETE';
  await save(deleteBroadcast);
  assert.ok(win.document.querySelector('main').textContent.includes('Listing deleted'));
+ await go('/help/');
+ assert.ok(win.document.querySelector('link[href$="/css/help.css"]'));
+ const helpForm=win.document.querySelector('[data-tr-help-search]');
+ helpForm.elements.q.value='!songs';helpForm.elements.audience.value='dj';
+ const beforeHelpPosts=posts,helpDone=nextNavigation(win);
+ assert.equal(helpForm.dispatchEvent(new win.Event('submit',{bubbles:true,cancelable:true})),false);
+ await helpDone;
+ assert.equal(posts,beforeHelpPosts);
+ assert.equal(win.document.getElementById('tr-audio'),audio);
+ assert.equal(win.location.pathname,'/help/');
+ assert.equal(new URL(win.location.href).searchParams.get('q'),'!songs');
+ assert.ok(win.document.querySelector('#help-content').textContent.includes('Turn automatic song announcements'));
+ assert.equal(win.document.querySelector('.site-nav [aria-current=page]').textContent,'help');
+ const result=win.document.querySelector('.tr-help-card h3 a');
+ assert.equal(new URL(result.href).searchParams.get('q'),'!songs');
+ await go(result.href);
+ assert.ok(win.document.querySelector('#help-content').textContent.includes('!songs on'));
+ await go('/djinfo/#testing');
+ assert.ok(win.document.getElementById('testing'));
+ assert.equal(win.location.hash,'#testing');assert.equal(scrolledTo,'testing');
+ assert.equal(win.document.querySelector('.site-nav [aria-current=page]').textContent,'help');
+ await go('/community/carrier/#station');
+ assert.ok(win.document.getElementById('station'));
+ assert.equal(win.location.hash,'#station');assert.equal(scrolledTo,'station');
  await go('/dj/');
+ assert.equal(win.document.querySelector('link[href$="/css/help.css"]'),null);
  assert.equal(win.document.querySelector('link[href$="/css/dj-admin.css"]'),null);
  const logout=win.document.querySelector('[data-tr-dj-auth]');
  const done=nextNavigation(win);
@@ -134,5 +161,5 @@ function nextNavigation(win) {
  const back=nextNavigation(win);win.dispatchEvent(new win.PopStateEvent('popstate'));await back;
  assert.equal(win.document.getElementById('tr-audio'),audio);
  dom.window.close();
- console.log('Player DOM integration passed: login, error focus, duplicate submit, administrator/profile/account/schedule edits, broadcast CRUD/public navigation, logout and history preserve the original audio element.');
+ console.log('Player DOM integration passed: login, error focus, duplicate submit, administrator/profile/account/schedule edits, broadcast CRUD/public navigation, help search/article/legacy links, logout and history preserve the original audio element.');
 })().catch(err=>{console.error(err);process.exit(1);});

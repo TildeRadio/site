@@ -17,7 +17,7 @@
     "phpunit/phpunit": "^12.0"
   },
   "autoload": {
-    "psr-4": {"TildeRadio\\Site\\DjAuth\\": "lib/DjAuth/", "TildeRadio\\Site\\Admin\\": "lib/Admin/"}
+    "psr-4": {"TildeRadio\\Site\\DjAuth\\": "lib/DjAuth/", "TildeRadio\\Site\\Admin\\": "lib/Admin/", "TildeRadio\\Site\\Help\\": "lib/Help/"}
   },
   "scripts": {
     "test": "phpunit",

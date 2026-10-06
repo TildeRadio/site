@@ -1,0 +1,3335 @@
+{
+  "version": 1,
+  "categories": [
+    {
+      "id": "start",
+      "title": "Start here",
+      "description": "Your first show, website access and troubleshooting."
+    },
+    {
+      "id": "streaming",
+      "title": "Get on air",
+      "description": "Broadcaster setup, the test station and audio routing."
+    },
+    {
+      "id": "planning",
+      "title": "Before your show",
+      "description": "Your profile, airtime bookings and preparation."
+    },
+    {
+      "id": "live",
+      "title": "During your show",
+      "description": "Live controls, song tracking, IRC linking and interaction."
+    },
+    {
+      "id": "archive",
+      "title": "After your show",
+      "description": "Correct listings and review recordings."
+    },
+    {
+      "id": "carrier",
+      "title": "Carrier & IRC",
+      "description": "Bot commands, channel settings and optional games."
+    },
+    {
+      "id": "listeners",
+      "title": "For listeners",
+      "description": "Listening, taking part, community contributions and feeds."
+    },
+    {
+      "id": "admin",
+      "title": "For administrators",
+      "description": "DJ activation, station assignments and service availability."
+    }
+  ],
+  "articles": [
+    {
+      "id": "start-here",
+      "title": "Your first TildeRadio show",
+      "summary": "Get an account, find your controls, test your stream and know what to do before, during and after a show.",
+      "category": "start",
+      "audience": [
+        "dj"
+      ],
+      "keywords": "first beginner handbook onboarding butt mixxx live broadcast",
+      "sections": [
+        {
+          "id": "become",
+          "title": "1. Get your DJ account",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Say hello in #tilderadio and ask about a regular show, occasional set or one-off broadcast. An administrator supplies your AzuraCast DJ streaming account and enables its website access."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Join #tilderadio",
+                  "href": "https://tilde.chat/kiwi/#tilderadio"
+                },
+                {
+                  "label": "Sign in to the DJ booth",
+                  "href": "dj/"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "text": "Use your personal DJ username and password. Never share them in IRC, a public profile, a screenshot or a repository."
+            }
+          ]
+        },
+        {
+          "id": "profile",
+          "title": "2. Find your website controls",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The DJ booth is your starting point. My profile edits your public identity and recurring show. Your assigned schedules book airtime. Prepare a show saves a one-show title and optional playlist. Live / IRC runs the current broadcast. Sets / broadcasts corrects the public archive."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Open the DJ booth",
+                  "href": "dj/"
+                },
+                {
+                  "label": "Understand the different kinds of show information",
+                  "href": "help/?topic=website-map"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "connection",
+          "title": "3. Connect your broadcaster",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "TildeRadio’s existing live connection settings are below. Use your own DJ credentials and confirm station-specific connection details with an administrator if your assignment differs."
+            },
+            {
+              "type": "table",
+              "headers": [
+                "Setting",
+                "Main TildeRadio stream"
+              ],
+              "rows": [
+                [
+                  "Mode",
+                  "Icecast / Icecast 2"
+                ],
+                [
+                  "Server",
+                  "azuracast.tilderadio.org"
+                ],
+                [
+                  "Port",
+                  "8005"
+                ],
+                [
+                  "Mount",
+                  "/"
+                ],
+                [
+                  "Username / password",
+                  "Your personal DJ streaming credentials"
+                ]
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Detailed broadcaster setup",
+                  "href": "help/?topic=streaming"
+                },
+                {
+                  "label": "Example BUTT configuration",
+                  "href": "butt.cfg.txt"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "testing",
+          "title": "4. Test before your airtime",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The existing test broadcaster port is 8015. Confirm that your account has test-station access before connecting. Listen to the test station from another device or headphones to check sound, levels and metadata."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Test station",
+                  "href": "https://azuracast.tilderadio.org/public/test"
+                },
+                {
+                  "label": "Testing checklist",
+                  "href": "help/?topic=test-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "going-live",
+          "title": "5. Run your show",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Book airtime in your assigned schedule. A prepared show or a planned archive listing does not reserve the slot.",
+                "Optionally prepare an episode title and an ordered song list. Link your IRC services account if you want DJ bot controls.",
+                "At your agreed airtime, connect your broadcaster. Check the public station and Live / IRC to confirm that your DJ is live.",
+                "With a prepared playlist, use Start next song or !track next when each song actually begins. Otherwise Carrier captures the stream’s metadata.",
+                "Use only the interaction you want. Automatic song announcements start off unless you opt in for this show.",
+                "Disconnect when finished. Review the captured set in Sets / broadcasts and correct missing metadata if needed."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Book airtime",
+                  "href": "help/?topic=booking"
+                },
+                {
+                  "label": "Prepare a show",
+                  "href": "help/?topic=prepared-shows"
+                },
+                {
+                  "label": "Live controls",
+                  "href": "help/?topic=live-controls"
+                },
+                {
+                  "label": "Correct a broadcast listing",
+                  "href": "help/?topic=broadcasts"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "linux-audio",
+          "title": "Linux audio routing",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Choose the intended input or application output in your broadcaster. Use your desktop’s audio routing tools to verify the path before going live."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Audio routing and avoiding feedback",
+                  "href": "help/?topic=audio-routing"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "help",
+          "title": "If something is stuck",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Ask in #tilderadio with your software, operating system and exact error. Keep credentials out of messages. Website access, station assignments and streaming access are separate checks."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Troubleshooting",
+                  "href": "help/?topic=troubleshooting"
+                },
+                {
+                  "label": "Website login and access",
+                  "href": "help/?topic=login"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "website-map",
+        "streaming",
+        "booking"
+      ]
+    },
+    {
+      "id": "website-map",
+      "title": "Where to do what",
+      "summary": "A quick map of profiles, airtime bookings, preparations, live controls and archived broadcasts.",
+      "category": "start",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "navigation schedule plan listing booth profile difference timezone UTC",
+      "sections": [
+        {
+          "id": "map",
+          "title": "Choose the right page",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "I want to…",
+                "Go to…",
+                "What it changes"
+              ],
+              "rows": [
+                [
+                  "Book, move or cancel airtime",
+                  "DJ booth → Your assigned schedules",
+                  "The AzuraCast station schedule"
+                ],
+                [
+                  "Change my bio or recurring show name",
+                  "My profile",
+                  "Your public DJ page and recurring show defaults"
+                ],
+                [
+                  "Plan one episode and its song order",
+                  "Prepare a show",
+                  "A preparation for one broadcast window"
+                ],
+                [
+                  "Advance songs or manage tonight’s interaction",
+                  "Live / IRC",
+                  "The current verified broadcast"
+                ],
+                [
+                  "Fix titles, times or a past track list",
+                  "Sets / broadcasts",
+                  "The website’s public archive listing"
+                ],
+                [
+                  "Approve an available audio recording",
+                  "Recordings",
+                  "The recording attached to a published listing"
+                ],
+                [
+                  "Activate another DJ or assign a station",
+                  "Administration → DJs",
+                  "Website access and station/streamer assignments"
+                ]
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Open the DJ booth",
+                  "href": "dj/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "terms",
+          "title": "Show, episode, set and schedule",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "A recurring show belongs to your profile. An episode or set is one broadcast. A schedule entry reserves airtime. A preparation adds optional episode information and planned songs. A broadcast listing describes what appears in the archive. These are connected, but saving one does not create or replace the others."
+            }
+          ]
+        },
+        {
+          "id": "times",
+          "title": "Which timezone am I using?",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The schedule editor displays the assigned station’s timezone. Show preparation and broadcast-listing editors explicitly use UTC. Your profile’s show timezone selects weekday formats; it does not change the timezone of a booking or preparation. Check the labels beside the times before saving."
+            }
+          ]
+        },
+        {
+          "id": "roles",
+          "title": "Why someone else has more buttons",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Ordinary DJs edit their assigned profile, station schedules, preparations and broadcast listings. Live controls belong to the verified live DJ. Administrators have broader access. Reading this Help area grants no editing access. Optional Carrier/recording tools may be unavailable when the station has not enabled them."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "profile",
+        "booking",
+        "prepared-shows",
+        "broadcasts"
+      ]
+    },
+    {
+      "id": "login",
+      "title": "Sign in and get editing access",
+      "summary": "Use your DJ streaming account, then check website activation, your profile link and station assignments.",
+      "category": "start",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "login password authenticate azuracast credentials disabled assignment streamer id station",
+      "sections": [
+        {
+          "id": "sign-in",
+          "title": "Sign in",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Open the DJ booth and enter your personal AzuraCast DJ streaming username and password.",
+                "If access is disabled, ask an administrator to enable the corresponding website DJ account.",
+                "If your profile is unlinked or no station appears, ask the administrator to link your public profile and assign the correct station DJ account."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "DJ login",
+                  "href": "dj/login.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "access",
+          "title": "A login and an assignment are different",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "A working streaming password proves your DJ identity. Website activation controls login/editing. A profile link controls which public DJ page and broadcast listings you manage. Station assignments choose which station schedules and live streamer you can control. Changing a public name does not change those account IDs."
+            }
+          ]
+        },
+        {
+          "id": "errors",
+          "title": "Common login messages",
+          "blocks": [
+            {
+              "type": "list",
+              "items": [
+                "Password not accepted: check the DJ streaming credentials, not an AzuraCast administrator login.",
+                "Website access disabled: contact the station administrator.",
+                "Too many attempts: wait five minutes before retrying.",
+                "Form expired: reload the login page for a fresh form.",
+                "Temporarily unavailable: the authentication service cannot currently verify the account; retry later."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "sign-out",
+          "title": "Shared computers",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Use Sign out in the DJ booth when you are finished. Never send your password or a linking code to a public channel."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "administration",
+        "irc-link",
+        "troubleshooting"
+      ]
+    },
+    {
+      "id": "streaming",
+      "title": "Configure your streaming software",
+      "summary": "Enter the Icecast connection details in BUTT, Mixxx or another compatible broadcaster.",
+      "category": "streaming",
+      "audience": [
+        "dj"
+      ],
+      "keywords": "butt mixxx broadcast port mount 8005 128 mp3 ogg icecast connection SSL",
+      "sections": [
+        {
+          "id": "connection",
+          "title": "TildeRadio connection details",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Field",
+                "Main stream"
+              ],
+              "rows": [
+                [
+                  "Type",
+                  "Icecast; Mixxx calls it Icecast 2"
+                ],
+                [
+                  "Host / server",
+                  "azuracast.tilderadio.org"
+                ],
+                [
+                  "Port",
+                  "8005"
+                ],
+                [
+                  "Mount",
+                  "/"
+                ],
+                [
+                  "Username",
+                  "Your DJ streaming username"
+                ],
+                [
+                  "Password",
+                  "Your DJ streaming password"
+                ]
+              ]
+            },
+            {
+              "type": "paragraph",
+              "text": "These values retain the station’s existing handbook settings. A different assigned station may use different ports. Use the account-specific connection information supplied by the administrator. Listening URLs are not broadcaster connection URLs."
+            }
+          ]
+        },
+        {
+          "id": "butt",
+          "title": "BUTT",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Open Settings and add a server.",
+                "Select Icecast. Enter the host, port, mount, DJ username and DJ password.",
+                "Choose the intended audio input and a supported encoder format. The existing station handbook uses 128 kbps MP3 as a compatibility baseline.",
+                "Test on the test station first, then connect to the main stream at your agreed airtime."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "AzuraCast broadcaster instructions",
+                  "href": "https://www.azuracast.com/docs/user-guide/streaming-software/"
+                },
+                {
+                  "label": "Example BUTT configuration",
+                  "href": "butt.cfg.txt"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mixxx",
+          "title": "Mixxx",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Open Preferences → Live Broadcasting. Select Icecast 2 and enter your station connection information. Set the encoder format supported by your setup; AzuraCast’s guide also describes Ogg Vorbis. Test the connection and audio before your slot."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Official AzuraCast software guide",
+                  "href": "https://www.azuracast.com/docs/user-guide/streaming-software/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "security",
+          "title": "Passwords and transport",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Keep saved broadcaster configurations private. If TLS/SSL is available, use the station’s exact TLS connection instructions. Do not guess that the DJ port accepts TLS because the website uses HTTPS. Ask the administrator when the broadcaster reports a certificate or connection error."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "test-stream",
+        "audio-routing",
+        "troubleshooting"
+      ]
+    },
+    {
+      "id": "test-stream",
+      "title": "Test your stream before a show",
+      "summary": "Check audio, routing, metadata and the connection without taking over the main station.",
+      "category": "streaming",
+      "audience": [
+        "dj"
+      ],
+      "keywords": "test station 8015 8010 sound silent clipping levels",
+      "sections": [
+        {
+          "id": "test-station",
+          "title": "Use the test station",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The existing test broadcaster port is 8015 on azuracast.tilderadio.org. Confirm test-station credentials/access with the administrator; a main-station DJ account is not a promise of test access."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Open the test station",
+                  "href": "https://azuracast.tilderadio.org/public/test"
+                },
+                {
+                  "label": "Direct OGG test stream",
+                  "href": "https://azuracast.tilderadio.org/radio/8010/radio.ogg"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "checklist",
+          "title": "A short test",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Select the intended microphone, mixer or application audio in the broadcaster.",
+                "Play a short track and speak into the microphone if you plan to use one.",
+                "Monitor from a separate device or headphones. Allow for streaming delay.",
+                "Check that neither source clips and that the microphone/music balance is comfortable.",
+                "Change artist/title metadata and confirm the listener view updates.",
+                "Disconnect the test stream and select the main-station connection before show time."
+              ]
+            }
+          ]
+        },
+        {
+          "id": "feedback",
+          "title": "Avoid a feedback loop",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Do not send your own delayed station playback back into the broadcaster. Keep monitoring separate from the audio source you transmit."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "streaming",
+        "audio-routing",
+        "troubleshooting"
+      ]
+    },
+    {
+      "id": "audio-routing",
+      "title": "Audio routing and microphone checks",
+      "summary": "Choose what the broadcaster hears and keep monitoring out of the transmitted audio.",
+      "category": "streaming",
+      "audience": [
+        "dj"
+      ],
+      "keywords": "linux pipewire pulseaudio pactl pavucontrol microphone feedback loopback null sink mixer",
+      "sections": [
+        {
+          "id": "routing",
+          "title": "Start with the signal path",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Identify the music/application output and microphone you intend to transmit.",
+                "Select the intended input or mixer in your broadcaster.",
+                "Use your desktop mixer or routing tool to send only those sources to that input.",
+                "Listen through headphones or a separate device and check music/microphone levels on the test station."
+              ]
+            },
+            {
+              "type": "paragraph",
+              "text": "Keep desktop notifications and station playback out of the transmitted path unless you intentionally want them on air."
+            }
+          ]
+        },
+        {
+          "id": "linux",
+          "title": "Linux with PipeWire or PulseAudio compatibility",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Device and application names depend on your desktop. Your audio mixer can show the broadcaster’s recording input; choose the correct device or monitor. PipeWire also provides pw-link to inspect and connect ports. Use its official reference for the commands supported by your installation."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "PipeWire pw-link reference",
+                  "href": "https://docs.pipewire.org/page_man_pw-link_1.html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "legacy",
+          "title": "Optional legacy null-sink example",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "For a setup that intentionally uses PulseAudio-compatible virtual sinks, this creates a named output whose monitor can be selected in the broadcaster. Route the chosen application into it through your mixer. This is an optional advanced example, not a requirement for normal broadcasting."
+            },
+            {
+              "type": "code",
+              "text": "pactl load-module module-null-sink sink_name=tilderadio_mix sink_properties=device.description=TildeRadio_Mix\npavucontrol"
+            },
+            {
+              "type": "paragraph",
+              "text": "Select Monitor of TildeRadio_Mix as the broadcaster input and direct the intended application output into TildeRadio_Mix. Microphone mixing requires an additional deliberate route. Record returned module IDs so you can unload only modules you created. Do not restart your audio server or set every volume to maximum as a troubleshooting shortcut."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "test-stream",
+        "streaming"
+      ]
+    },
+    {
+      "id": "profile",
+      "title": "Edit your profile and recurring show",
+      "summary": "Update your public biography, links, avatar and the show details Carrier uses as defaults.",
+      "category": "planning",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "bio biography avatar genres favorites show title timezone formats weekday JSON git",
+      "sections": [
+        {
+          "id": "edit",
+          "title": "Use the website editor",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Sign in and open My profile in the DJ booth.",
+                "Edit your public name, biography, avatar, links and any optional personal details.",
+                "Set the recurring show title, description, genres and show timezone.",
+                "Save and check your public DJ page."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "My profile",
+                  "href": "dj/profile.php"
+                },
+                {
+                  "label": "DJ directory",
+                  "href": "djs/"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "text": "If the page is unavailable, ask an administrator to link your account to the correct profile. A profile edit is not an account password change."
+            }
+          ]
+        },
+        {
+          "id": "formats",
+          "title": "Optional weekday formats",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The advanced formats field accepts JSON. Each format has a lowercase ID and weekday names in days, with optional title, tagline, description and genres. Carrier resolves the format using your show timezone. Keep one-show episode titles in a preparation or Live / IRC."
+            },
+            {
+              "type": "code",
+              "text": "[\n  {\"id\": \"pull\", \"days\": [\"tuesday\"], \"title\": \"Tuesday selections\"},\n  {\"id\": \"dig\", \"days\": [\"thursday\"], \"title\": \"Thursday discoveries\"}\n]"
+            }
+          ]
+        },
+        {
+          "id": "visibility",
+          "title": "Public information",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Publish only information you want listeners to see. An unpublished profile is hidden from the public catalog; the administrator still manages the account separately. Never put streaming credentials in biography, links, notes or JSON."
+            }
+          ]
+        },
+        {
+          "id": "advanced",
+          "title": "Repository editing is still available",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Experienced contributors can continue using profile JSON files and the validator. The website editor is the normal DJ workflow; Git knowledge is not required."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Advanced profile file reference",
+                  "href": "help/?topic=profile-files"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "website-map",
+        "prepared-shows",
+        "broadcasts"
+      ]
+    },
+    {
+      "id": "booking",
+      "title": "Book, change or cancel airtime",
+      "summary": "Use your assigned station schedule and understand overlap rejection and station timezones.",
+      "category": "planning",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "schedule airtime slot overlap conflict timeslot timezone overnight recurring days cancel delete",
+      "sections": [
+        {
+          "id": "book",
+          "title": "Book a slot",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Open the DJ booth and find Your assigned schedules.",
+                "Choose the station you want to broadcast on.",
+                "Reload its schedule and choose the dates/days and start/end times shown by the editor.",
+                "Save. The editor checks against other entries and rejects an overlapping timeslot."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Your assigned schedules",
+                  "href": "dj/#dj-booth-schedules"
+                },
+                {
+                  "label": "Public station schedule",
+                  "href": "schedule/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "overlaps",
+          "title": "If a slot is already taken",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The new or edited overlapping booking is rejected. Choose a free time or coordinate a handoff/change with the affected DJ and an administrator. A rejected save does not reserve the slot. If the schedule changed while the form was open, reload it before trying again."
+            }
+          ]
+        },
+        {
+          "id": "timezones",
+          "title": "Dates, weekdays and overnight shows",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Use the station timezone displayed in the schedule editor. Recheck day selections and dates when a show crosses midnight. This differs from the UTC times used by preparations and broadcast listings."
+            }
+          ]
+        },
+        {
+          "id": "change",
+          "title": "Move or cancel an existing booking",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Open your entry in the assigned station schedule. Save its revised times or use its remove control and confirmation. Ordinary DJs manage only their assigned DJ’s entries; administrators can manage station entries more broadly. Cancelling a booking does not delete a captured archive set."
+            }
+          ]
+        },
+        {
+          "id": "preparation",
+          "title": "Then prepare the episode if you want",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Preparation is optional and separate from scheduling. A saved playlist, a public preview or a planned archive listing does not book airtime."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Prepare a show",
+                  "href": "help/?topic=prepared-shows"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "prepared-shows",
+        "troubleshooting",
+        "website-map"
+      ]
+    },
+    {
+      "id": "prepared-shows",
+      "title": "Prepare an episode and song list",
+      "summary": "Save episode details and optional song order before going live, then confirm actual playback during the show.",
+      "category": "planning",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "playlist setlist song order copy plan UTC artist title tab spreadsheet immutable reminder upcoming preview",
+      "sections": [
+        {
+          "id": "create",
+          "title": "Create a preparation",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Book your airtime first. Open Prepare a show → Prepare a new show.",
+                "Choose your assigned station and expected start/end in UTC. The window must be at most twelve hours.",
+                "Add an episode title and any topic, mood, prompt, note or link.",
+                "Optionally enter ordered songs as Artist | Title, one per line. Two spreadsheet columns separated by a tab also work.",
+                "Choose public title/topic preview, a private linked-account reminder or song announcements only if wanted.",
+                "Save before going live and allow website synchronization to complete."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Prepare a show",
+                  "href": "dj/plans.php"
+                }
+              ]
+            },
+            {
+              "type": "code",
+              "text": "Artist One | Song One\nArtist Two | Song Two"
+            }
+          ]
+        },
+        {
+          "id": "matching",
+          "title": "How Carrier chooses it",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Carrier uses your verified station/streamer assignment and expected time window to select one matching enabled preparation. If none or several match, it uses ordinary metadata capture. A preparation is copied once when attached; later edits to the original do not rewrite the live set."
+            }
+          ]
+        },
+        {
+          "id": "playback",
+          "title": "The list does not mark songs as played",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Playback begins at song zero. Start song one with Start next song or !track next, then advance when the next song actually starts. Jumping to a later number timestamps only that song. Unplayed songs stay out of public playback feeds."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Advance songs and choose tracking mode",
+                  "href": "help/?topic=playlist"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "copy",
+          "title": "Edit, copy or cancel",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "You can edit an unused preparation, copy one for a new broadcast, or cancel it. An attached preparation is immutable; change the live controls or its completed broadcast listing instead. A copy requires fresh times and starts with automatic song announcements off. Cancelling preparation leaves the AzuraCast booking intact."
+            }
+          ]
+        },
+        {
+          "id": "privacy",
+          "title": "Public preview and reminders",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Publishing a preview exposes the upcoming episode title/topic, not the unplayed playlist. A private reminder goes to a linked, verified IRC services account when the integration can deliver it. Neither option is required to broadcast."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Upcoming previews",
+                  "href": "community/upcoming.php"
+                },
+                {
+                  "label": "Link IRC",
+                  "href": "help/?topic=irc-link"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "playlist",
+        "song-announcements",
+        "booking"
+      ]
+    },
+    {
+      "id": "live-controls",
+      "title": "Run your live show from the website",
+      "summary": "Find song advances, episode details, listener queues, polls and handoff controls in one place.",
+      "category": "live",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "live IRC requests question queue poll listener goal handoff mood topic prompt",
+      "sections": [
+        {
+          "id": "open",
+          "title": "Open Live / IRC",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Sign in and open Live / IRC. Carrier must see your live stream and verify it against the assigned station DJ. Your show title, listeners, current song and tracking mode appear here."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Live / IRC",
+                  "href": "dj/carrier.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "controls",
+          "title": "Pick the controls you need",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Control",
+                "Use it for"
+              ],
+              "rows": [
+                [
+                  "Start next / selected song",
+                  "Confirm playback in a prepared playlist"
+                ],
+                [
+                  "Tracking mode",
+                  "Choose prepared playback or captured metadata"
+                ],
+                [
+                  "Song announcements",
+                  "Enable or disable automatic song messages for this show"
+                ],
+                [
+                  "Live show information",
+                  "Episode title, topic, mood, prompt, note and link"
+                ],
+                [
+                  "Requests / question queues",
+                  "Open requests and resolve queued listener items"
+                ],
+                [
+                  "Listener goal / poll",
+                  "Optional participation during the show"
+                ],
+                [
+                  "Handoff",
+                  "Name the DJ expected to take over"
+                ],
+                [
+                  "Mastodon note",
+                  "One optional DJ note for the set, when configured"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "availability",
+          "title": "If controls are missing",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Only the verified live DJ and administrators can change the current broadcast. Wait for a radio poll/synchronization cycle after connecting, then refresh the page. If Carrier is offline or assignments cannot be verified, live controls fail closed; existing profile, schedule and broadcast editors remain available."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Troubleshooting live controls",
+                  "href": "help/?topic=troubleshooting"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "retry",
+          "title": "After a slow or failed action",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Reload and inspect the current song number or queue state before trying a new action. A retried pending website action keeps its identity to prevent double advances. Selecting the already current song preserves its timestamp."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "playlist",
+        "song-announcements",
+        "listener-controls",
+        "handoff"
+      ]
+    },
+    {
+      "id": "irc-link",
+      "title": "Link your IRC account to your DJ login",
+      "summary": "Use a private one-time code to connect a verified IRC services account on each network.",
+      "category": "live",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "link services account tag nickserv sasl nickname network identity code expiry permission verified",
+      "sections": [
+        {
+          "id": "link",
+          "title": "Link an account",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Sign in to the website and open Live / IRC.",
+                "Generate a linking code under Your IRC accounts.",
+                "Sign in to IRC services on the network where Carrier is connected.",
+                "Send !link CODE privately to Carrier. Do not post the code in a channel.",
+                "Refresh Live / IRC to check the linked account/network."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Generate a linking code",
+                  "href": "dj/carrier.php"
+                }
+              ]
+            },
+            {
+              "type": "code",
+              "text": "/msg carrier !link YOUR_ONE_TIME_CODE"
+            }
+          ]
+        },
+        {
+          "id": "identity",
+          "title": "Why nickname matching is not enough",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "New playlist and announcement controls use verified IRC services accounts. Changing your nickname keeps the link. Links are scoped to the IRC network; link separately on another network. Your account must still be the verified live DJ or an authorized administrator. Existing explicit bot account mappings may also grant access."
+            }
+          ]
+        },
+        {
+          "id": "codes",
+          "title": "Codes expire",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "A code lasts five minutes and can be used once. If you exposed it publicly or it expired, generate a new one. Disconnect unwanted links from the same page; administrators can revoke links for other users."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "live-controls",
+        "playlist",
+        "song-announcements",
+        "login"
+      ]
+    },
+    {
+      "id": "playlist",
+      "title": "Advance songs and choose tracking mode",
+      "summary": "Timestamp actual prepared playback without losing the metadata Carrier captures independently.",
+      "category": "live",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "!track !next start next song jump number metadata prepared captured timestamps positions replay",
+      "sections": [
+        {
+          "id": "advance",
+          "title": "Confirm each song start",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "With an attached prepared playlist, use Start next song in Live / IRC or !track next when song one begins.",
+                "Repeat when each following song begins.",
+                "To jump, select a song number on the website or use !track N. Skipped songs are not marked played.",
+                "Use !track without arguments to check the current position."
+              ]
+            },
+            {
+              "type": "code",
+              "text": "!track\n!track next\n!track 5"
+            },
+            {
+              "type": "paragraph",
+              "text": "!next always means the next scheduled show; it does not advance a song."
+            }
+          ]
+        },
+        {
+          "id": "timestamps",
+          "title": "Repeated selections and replay",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Selecting the already current song preserves its start time. A retried website advance does not run twice. To deliberately replay the same song, advance to a different number and then select it again."
+            }
+          ]
+        },
+        {
+          "id": "mode",
+          "title": "Prepared playlist or captured metadata?",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Prepared mode publishes confirmed songs from your prepared list. Metadata mode uses the stream’s captured artist/title information. Carrier captures raw metadata in both modes, preserving both histories. An empty preparation uses metadata mode."
+            },
+            {
+              "type": "paragraph",
+              "text": "Switching to metadata ends the current prepared play at that time. Switching back retains history; select or advance a song to start its next timestamp. Selecting the already active tracking mode leaves playback intact."
+            }
+          ]
+        },
+        {
+          "id": "missing",
+          "title": "No active prepared playlist",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "If Carrier says no prepared playlist is active, check that exactly one preparation matched your live identity/window. You can still broadcast normally using metadata capture. Correct missing track information later in Sets / broadcasts."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Prepare a show",
+                  "href": "help/?topic=prepared-shows"
+                },
+                {
+                  "label": "Fix a track list after the show",
+                  "href": "help/?topic=broadcasts"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "song-announcements",
+        "prepared-shows",
+        "live-controls"
+      ]
+    },
+    {
+      "id": "song-announcements",
+      "title": "Turn automatic song announcements on or off",
+      "summary": "Keep IRC song messages quiet by default, or enable them for one broadcast from the website or bot.",
+      "category": "live",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "!songs announce announcements automatic quiet silent bot song notification off default on",
+      "sections": [
+        {
+          "id": "toggle",
+          "title": "Choose once per show",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Automatic song announcements are off for each new show unless you explicitly enable them in its preparation. In Live / IRC, use Enable song announcements or Disable song announcements. From your verified IRC account, use the commands below."
+            },
+            {
+              "type": "code",
+              "text": "!songs on\n!songs off\n!songs status"
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Live / IRC",
+                  "href": "dj/carrier.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "scope",
+          "title": "What the preference applies to",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The setting belongs to the current broadcast and survives a bot restart in that broadcast. It does not follow you into the next show. A copied preparation starts with the option unchecked. Website and IRC update the same setting; refresh the website to see an IRC change."
+            }
+          ]
+        },
+        {
+          "id": "messages",
+          "title": "What gets announced",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "In metadata mode, a newly captured song produces Now playing. In prepared mode, advancing an actual song produces Track N/total. Enabling mid-show waits for the next song change. Duplicate polls, repeated current-song selections and retried website actions do not repeat messages."
+            }
+          ]
+        },
+        {
+          "id": "still-working",
+          "title": "Off keeps the tracking active",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Turning this off does not stop metadata capture, playback timestamps, archive updates or manual !np / !track replies. Existing show, station and listener-event announcements remain separate. Invited IRC channels also have their own station-announcement subscription."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Invited-channel settings",
+                  "href": "help/?topic=invite-carrier"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "playlist",
+        "irc-link",
+        "invite-carrier"
+      ]
+    },
+    {
+      "id": "listener-controls",
+      "title": "Requests, questions, goals and polls",
+      "summary": "Open the interaction you want and resolve private queues during your live show.",
+      "category": "live",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "requests questions !requests !qanswer !qskip !played !reject !goal !poll queue dedicate listener",
+      "sections": [
+        {
+          "id": "requests",
+          "title": "Requests start closed",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Open requests in Live / IRC or use !requests on. Listeners can then submit requests. Review the queue and mark an item played or rejected; those controls update the queue and do not start audio or advance the prepared playlist."
+            },
+            {
+              "type": "code",
+              "text": "!requests on\n!requests list\n!played 3\n!reject 4\n!requests off"
+            }
+          ]
+        },
+        {
+          "id": "questions",
+          "title": "Question queue",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Listeners can ask through IRC or the live activity page. The live DJ can view queued questions, answer one on air, or skip it. Unanswered questions and request queues remain private."
+            },
+            {
+              "type": "code",
+              "text": "!questions\n!qanswer 2\n!qskip 3"
+            },
+            {
+              "type": "paragraph",
+              "text": "Answering through Carrier announces the question; your answer is what you say on the stream."
+            }
+          ]
+        },
+        {
+          "id": "goals",
+          "title": "Listener goals",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Set an optional listener-count goal and text, or clear it. The bot reports when the target is reached."
+            },
+            {
+              "type": "code",
+              "text": "!goal 10 tonight we try the mystery record\n!goal clear"
+            }
+          ]
+        },
+        {
+          "id": "polls",
+          "title": "Polls",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Create a question with at least two options separated by |. Listeners use !vote N or the website voting form. Votes can change until the poll closes."
+            },
+            {
+              "type": "code",
+              "text": "!poll start next mood? | ambient | loud | strange\n!poll\n!poll stop"
+            }
+          ]
+        }
+      ],
+      "related": [
+        "listener-participation",
+        "games",
+        "live-controls"
+      ]
+    },
+    {
+      "id": "handoff",
+      "title": "Finish your show or hand off to another DJ",
+      "summary": "Tell Carrier who is next, disconnect cleanly and review the finished set.",
+      "category": "live",
+      "audience": [
+        "dj"
+      ],
+      "keywords": "handoff relay next DJ autodj end stop stream disconnect final set",
+      "sections": [
+        {
+          "id": "handoff",
+          "title": "A planned handoff",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Name the expected DJ in Live / IRC or use !handoff nextdj before disconnecting. Carrier can recognize that DJ after a short AutoDJ gap. This records the expectation; it does not book their airtime or connect their broadcaster."
+            },
+            {
+              "type": "code",
+              "text": "!handoff nextdj"
+            }
+          ]
+        },
+        {
+          "id": "finish",
+          "title": "When you are finished",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Coordinate timing with the next DJ when someone is following.",
+                "Disconnect your live broadcaster so the next DJ or normal station automation can take over.",
+                "Allow Carrier to close/export the set, then open Sets / broadcasts.",
+                "Correct missing titles or track metadata and review an available recording if wanted."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Manage your broadcasts",
+                  "href": "dj/broadcasts.php"
+                },
+                {
+                  "label": "Recordings",
+                  "href": "help/?topic=recordings"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "broadcasts",
+        "recordings",
+        "booking"
+      ]
+    },
+    {
+      "id": "broadcasts",
+      "title": "Add, edit, hide or restore a broadcast listing",
+      "summary": "Correct a missing or incomplete archive entry while retaining the original captured data.",
+      "category": "archive",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "set broadcast session CRUD add edit remove delete hide restore missing title track metadata JSON archive",
+      "sections": [
+        {
+          "id": "edit",
+          "title": "Correct a captured set",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Open Sets / broadcasts from the DJ booth.",
+                "Choose the set and edit its episode/show details, public DJ name, UTC times or recording link.",
+                "Save and check the public archive listing."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Sets / broadcasts",
+                  "href": "dj/broadcasts.php"
+                },
+                {
+                  "label": "Public archive",
+                  "href": "episodes/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "tracks",
+          "title": "Fix missing artist/title information",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The track editor contains JSON. Leave Replace the track list unchecked to let captured playback continue updating. Check it only when you intend to publish your corrected list; it becomes a listing override rather than a new stream capture."
+            },
+            {
+              "type": "code",
+              "text": "[\n  {\"artist\": \"Artist\", \"title\": \"Song\", \"text\": \"Artist - Song\"}\n]"
+            },
+            {
+              "type": "paragraph",
+              "text": "Retain existing timestamps and durations if you want them preserved in your corrected list. Replacing with an empty list intentionally publishes no tracks."
+            }
+          ]
+        },
+        {
+          "id": "add",
+          "title": "Add a missing listing",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Choose Add a set, enter its owning profile, UTC times, status and metadata, and save. Ordinary DJs can create listings for their own assigned profile; administrators can choose an owner. A planned listing does not create an AzuraCast booking or a Carrier preparation."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Add a set",
+                  "href": "dj/broadcast.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "delete",
+          "title": "Delete means hide the listing",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The delete confirmation hides the listing from the website and public API. Carrier’s captured data and audio are retained. An administrator can restore a hidden listing. Deleting a listing does not delete its DJ account or schedule."
+            }
+          ]
+        },
+        {
+          "id": "stale",
+          "title": "If a save reports a stale form",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Reload the listing and review the latest captured information before saving again. The editor checks both listing version and source data to avoid silently overwriting a newer edit."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "recordings",
+        "website-map",
+        "playlist"
+      ]
+    },
+    {
+      "id": "recordings",
+      "title": "Review recordings and publish an episode",
+      "summary": "Approve an available audio recording or attach a recording URL to your broadcast listing.",
+      "category": "archive",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "recording audio download approve reject podcast rss feed discovery private published mp3",
+      "sections": [
+        {
+          "id": "review",
+          "title": "Review available recordings",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Open Recordings from the DJ booth. When recording discovery is enabled and a completed broadcast has available audio, a candidate may appear for its verified owner. Review it and approve or reject the candidate using the page controls."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Your recordings",
+                  "href": "dj/recordings.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "publication",
+          "title": "Approval and visibility",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Approval attaches that version of the recording to the listing. Public listening/download/feed access also requires a visible published listing and a valid approved recording. Discovery/download can be disabled by the station; every set is not guaranteed to have a recording. Unapproved private audio does not become public merely because a set exists."
+            }
+          ]
+        },
+        {
+          "id": "manual",
+          "title": "Already have a hosted recording?",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Edit your broadcast listing and enter its recording/audio URL. Use a URL you are permitted to publish. Keep the recorded show title and times accurate."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Edit broadcasts",
+                  "href": "dj/broadcasts.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "feeds",
+          "title": "Podcast feeds",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Published completed episodes with suitable recording information are available through the station’s podcast endpoint. Hidden listings and unapproved private recordings stay out of the feed."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Podcast feed",
+                  "href": "api/podcast/"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "broadcasts",
+        "troubleshooting"
+      ]
+    },
+    {
+      "id": "carrier-overview",
+      "title": "Carrier: start with what you want to do",
+      "summary": "A guide to the station bot, its listener features and its connection to your website DJ booth.",
+      "category": "carrier",
+      "audience": [
+        "dj",
+        "listener"
+      ],
+      "keywords": "carrier bot guide commands IRC stream set track live website",
+      "sections": [
+        {
+          "id": "how-it-works",
+          "title": "How Carrier fits in",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "AzuraCast supplies the live stream state. Your profile supplies recurring show details. The website supplies verified assignments and optional preparations. Carrier tracks numbered sets and interaction, then exports the archive. You connect/disconnect your broadcaster normally; there is no bot command to start the audio stream."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Website page map",
+                  "href": "help/?topic=website-map"
+                },
+                {
+                  "label": "Your first show",
+                  "href": "help/?topic=start-here"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "station",
+          "title": "Check the station",
+          "blocks": [
+            {
+              "type": "code",
+              "text": "!np\n!next\n!listeners\n!dj\n!schedule"
+            },
+            {
+              "type": "paragraph",
+              "text": "!next is the next scheduled DJ, not the next prepared song."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Searchable command reference",
+                  "href": "help/?topic=commands"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "couch",
+          "title": "Join the couch",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "!tunein [tilde] checks you into the live show’s voluntary roll call. !tuneout removes your check-in. !couch and !tildes show the room."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Listener participation",
+                  "href": "help/?topic=listener-participation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "live",
+          "title": "Take part in a show",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Give props, ask a question, react, request a song when requests are open, or vote. Use IRC or the website live activity page where offered."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Listener activity page",
+                  "href": "community/live.php"
+                },
+                {
+                  "label": "Listener commands",
+                  "href": "help/?topic=listener-participation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dj",
+          "title": "Control your own broadcast",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Use Live / IRC for episode details, prepared-song timestamps, song announcements, listener queues, goals and polls. Link a verified IRC services account for DJ controls."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Live controls",
+                  "href": "help/?topic=live-controls"
+                },
+                {
+                  "label": "Link IRC",
+                  "href": "help/?topic=irc-link"
+                },
+                {
+                  "label": "Prepared songs",
+                  "href": "help/?topic=playlist"
+                },
+                {
+                  "label": "Automatic song messages",
+                  "href": "help/?topic=song-announcements"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "website",
+          "title": "Review the finished set",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Carrier exports captured sets to the website. You can correct the listing or track metadata and approve available audio after the show."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Broadcast listings",
+                  "href": "help/?topic=broadcasts"
+                },
+                {
+                  "label": "Recordings",
+                  "href": "help/?topic=recordings"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "mastodon",
+          "title": "Optional Mastodon notes",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "When the station has configured Mastodon, the live DJ can send one note for the set. Station automatic posts are configured separately."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Mastodon notes",
+                  "href": "help/?topic=mastodon"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "handoff",
+          "title": "Hand off",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "!handoff nextdj names the expected replacement. It does not connect or schedule that DJ."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Finish or hand off",
+                  "href": "help/?topic=handoff"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "games",
+          "title": "Room games",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Polls, challenges, bingo, tilde battles and The Button are optional parts of live interaction."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Games and temporary commands",
+                  "href": "help/?topic=games"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "set-commands",
+          "title": "Temporary show commands",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "!setcmd name response creates a command for one live set. !delcmd name removes it. Built-in commands cannot be replaced."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Temporary commands",
+                  "href": "help/?topic=games#temporary"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "history",
+          "title": "History and statistics",
+          "blocks": [
+            {
+              "type": "code",
+              "text": "!last\n!set 184\n!djstats deepend\n!stationstats\n!records\n!achievements"
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "All bot commands",
+                  "href": "help/?topic=commands"
+                },
+                {
+                  "label": "Public archive",
+                  "href": "episodes/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "invite",
+          "title": "Bring Carrier to another channel",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Invite it on a connected network. Channel announcement subscriptions are separate from the live DJ’s song-message preference."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Invited-channel setup",
+                  "href": "help/?topic=invite-carrier"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "flow",
+          "title": "A show from start to finish",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Book airtime, optionally prepare the episode, connect at your slot, confirm planned playback if used, disconnect cleanly, then review the listing."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Start-to-finish DJ checklist",
+                  "href": "help/?topic=start-here"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "commands",
+        "irc-link",
+        "song-announcements"
+      ]
+    },
+    {
+      "id": "listener-participation",
+      "title": "Listen and take part",
+      "summary": "Find the player, IRC commands, questions, requests, reactions and polls.",
+      "category": "listeners",
+      "audience": [
+        "listener",
+        "dj"
+      ],
+      "keywords": "listen couch tunein props ask react request dedicate vote public live interaction",
+      "sections": [
+        {
+          "id": "listen",
+          "title": "Listen first",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Use the website player or a stream URL from !listen. Browse the schedule for airtime, DJs for profiles and the archive for past broadcasts. Use the upcoming page for published episode previews."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Listen",
+                  "href": "listen/"
+                },
+                {
+                  "label": "Schedule",
+                  "href": "schedule/"
+                },
+                {
+                  "label": "Upcoming previews",
+                  "href": "community/upcoming.php"
+                },
+                {
+                  "label": "Live activity",
+                  "href": "community/live.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "irc",
+          "title": "In IRC",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "What it does"
+              ],
+              "rows": [
+                [
+                  "!np / !listeners / !dj",
+                  "Check the current station state"
+                ],
+                [
+                  "!tunein [tilde] / !tuneout",
+                  "Join or leave the live show’s voluntary couch roll call"
+                ],
+                [
+                  "!couch / !tildes",
+                  "See the room and represented communities"
+                ],
+                [
+                  "!props",
+                  "Give the live DJ props"
+                ],
+                [
+                  "!ask question",
+                  "Queue a question for the DJ"
+                ],
+                [
+                  "!react word / !reactions / !vibe",
+                  "React or inspect the room’s reaction summary"
+                ],
+                [
+                  "!request Artist - Song",
+                  "Request a song when the DJ has requests open"
+                ],
+                [
+                  "!dedicate Artist - Song | nick | message",
+                  "Submit a dedication when requests are open"
+                ],
+                [
+                  "!poll / !vote N",
+                  "See an open poll or vote for an option"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "website",
+          "title": "Without IRC",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The live activity page offers questions, open requests, reactions and poll voting while Carrier is available. It does not require a DJ login. Queued questions/requests are not a public message board; the DJ chooses which to answer or play."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Open live activity",
+                  "href": "community/live.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "pace",
+          "title": "Keep it usable",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Commands and submissions have cooldowns or limits. If a request is closed or you receive a wait message, respect it. A DJ deciding to close requests or disable song announcements is a show preference."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "commands",
+        "games",
+        "contributions"
+      ]
+    },
+    {
+      "id": "invite-carrier",
+      "title": "Invite Carrier and choose channel announcements",
+      "summary": "Use commands in another IRC channel while controlling whether it receives station event messages.",
+      "category": "carrier",
+      "audience": [
+        "dj",
+        "listener",
+        "admin"
+      ],
+      "keywords": "invite channel announce subscription operator owner part carrier announcements on off",
+      "sections": [
+        {
+          "id": "invite",
+          "title": "Invite on a connected network",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "If invites are enabled, invite Carrier normally. Invited channels are remembered across restarts. Use the bot’s actual nickname if it differs on that network."
+            },
+            {
+              "type": "code",
+              "text": "/invite carrier #yourchannel"
+            }
+          ]
+        },
+        {
+          "id": "settings",
+          "title": "Channel settings",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Effect"
+              ],
+              "rows": [
+                [
+                  "!carrier status",
+                  "Inspect this channel’s Carrier settings"
+                ],
+                [
+                  "!carrier announce on",
+                  "Subscribe this invited channel to station announcements"
+                ],
+                [
+                  "!carrier announce off",
+                  "Keep commands available while disabling station announcements"
+                ],
+                [
+                  "!carrier part",
+                  "Remove Carrier and forget the invited channel"
+                ]
+              ]
+            },
+            {
+              "type": "paragraph",
+              "text": "The inviter, a channel operator or a bot administrator can manage these settings, subject to the existing bot configuration."
+            }
+          ]
+        },
+        {
+          "id": "song-setting",
+          "title": "Two separate announcement choices",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "!carrier announce controls whether the invited channel receives station messages. !songs controls whether the live broadcast produces automatic new-song messages. Enabling one does not force the other on. Direct command replies such as !np still answer the requesting channel."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "The live DJ’s song setting",
+                  "href": "help/?topic=song-announcements"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "carrier-overview",
+        "commands"
+      ]
+    },
+    {
+      "id": "games",
+      "title": "Games and temporary show commands",
+      "summary": "Use optional challenges, bingo, tilde battles, The Button or a command that lasts for one set.",
+      "category": "carrier",
+      "audience": [
+        "dj",
+        "listener"
+      ],
+      "keywords": "challenge answer random results bingo battle button temporary setcmd delcmd fun",
+      "sections": [
+        {
+          "id": "challenges",
+          "title": "Challenges",
+          "blocks": [
+            {
+              "type": "code",
+              "text": "!challenge name a song you secretly love\n!answer your answer\n!challenge results\n!challenge random\n!challenge stop"
+            },
+            {
+              "type": "paragraph",
+              "text": "The DJ starts/manages the challenge; listeners submit answers."
+            }
+          ]
+        },
+        {
+          "id": "bingo",
+          "title": "Bingo",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "!bingo privately gives a listener a randomized 3×3 card for the live set. Some squares are marked automatically. The live DJ’s !bingo mark control handles manual marks."
+            },
+            {
+              "type": "code",
+              "text": "!bingo\n!bingo marks"
+            },
+            {
+              "type": "paragraph",
+              "text": "!bingo marks lists valid mark keys. The live DJ can use !bingo mark KEY for an event that has just happened."
+            }
+          ]
+        },
+        {
+          "id": "battles",
+          "title": "Tilde battles",
+          "blocks": [
+            {
+              "type": "code",
+              "text": "!battle start tilde.club | ctrl-c.club\n!battle\n!battle stop"
+            },
+            {
+              "type": "paragraph",
+              "text": "Listeners identify a community with !tunein your.tilde. The live DJ controls starting/stopping the battle."
+            }
+          ]
+        },
+        {
+          "id": "button",
+          "title": "The Button",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "!button is optional room activity with a cooldown. !fun lists the room’s extra commands."
+            }
+          ]
+        },
+        {
+          "id": "temporary",
+          "title": "Commands for this set",
+          "blocks": [
+            {
+              "type": "code",
+              "text": "!setcmd lore https://example.com/show-lore\n!lore\n!delcmd lore"
+            },
+            {
+              "type": "paragraph",
+              "text": "The live DJ can add a simple response for one set. Existing Carrier commands are reserved. The command ends with the set."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "listener-controls",
+        "commands"
+      ]
+    },
+    {
+      "id": "mastodon",
+      "title": "Send an optional Mastodon note",
+      "summary": "Use the one-per-set DJ note when the station has enabled its Mastodon integration.",
+      "category": "live",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "mastodon federation transmission post note announcement social cooldown",
+      "sections": [
+        {
+          "id": "note",
+          "title": "One DJ note for the set",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "During your live set, enter the Mastodon note in Live / IRC or use !show mastodon with the text. The station must have configured posting; an unavailable integration does not become available merely because the form is present."
+            },
+            {
+              "type": "code",
+              "text": "!show mastodon tonight is mostly weird synths"
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Live / IRC",
+                  "href": "dj/carrier.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "scope",
+          "title": "Optional station posts",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Automatic live/show/record posts use the bot’s station configuration, eligibility rules and cooldowns. Your song-announcement preference controls IRC song messages, not Mastodon. Avoid repeating a failed action until you have checked its result."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "live-controls",
+        "song-announcements"
+      ]
+    },
+    {
+      "id": "administration",
+      "title": "Activate DJs and assign their stations",
+      "summary": "Use verified username pickers, link profiles and manage website roles without changing streaming accounts.",
+      "category": "admin",
+      "audience": [
+        "admin"
+      ],
+      "keywords": "admin administrator activation DJ accounts streamer id username picker station mapping roles profile disabled delete restore",
+      "sections": [
+        {
+          "id": "activate",
+          "title": "Add or activate a website DJ",
+          "blocks": [
+            {
+              "type": "steps",
+              "items": [
+                "Open Administration → DJs and choose the account editor.",
+                "Choose the authentication station and select the AzuraCast DJ username from the directory. You normally do not need to look up a streamer ID manually.",
+                "Enable website login, choose the website role and link the public DJ profile.",
+                "Choose each station assignment and the corresponding DJ username in that station.",
+                "Save. The selected upstream account is verified again."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Website DJs",
+                  "href": "dj/admin/accounts.php"
+                },
+                {
+                  "label": "Profiles",
+                  "href": "dj/admin/profiles.php"
+                },
+                {
+                  "label": "Stations",
+                  "href": "dj/admin/stations.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "ids",
+          "title": "Why assignments use IDs",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The identity is a station/streamer pair, not a display name. A DJ may use different streamer accounts in different stations. The username directory makes selection easier; manual IDs remain a fallback when lookup is unavailable. Keep existing assignments unless you intend to change them."
+            }
+          ]
+        },
+        {
+          "id": "roles",
+          "title": "Website roles and protected administrators",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "A website administrator can manage other DJs, profiles, schedules and listings. Protected administrator access comes from private server configuration and cannot be removed through the ordinary account form. New assignments do not grant access to the server or Docker."
+            }
+          ]
+        },
+        {
+          "id": "delete",
+          "title": "Disable or delete website access",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Disabling prevents website editing/login. Deleting the website DJ removes website access and station assignments while retaining the AzuraCast streaming account, public profile and captured broadcasts. Manage those separately if needed. Deleted website accounts can be restored through the DJ list."
+            }
+          ]
+        },
+        {
+          "id": "audit",
+          "title": "Review activity",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Use Activity to inspect website changes. Carrier integration also shows synchronization/health and recent integration events."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Website activity",
+                  "href": "dj/admin/audit.php"
+                },
+                {
+                  "label": "Integration status",
+                  "href": "dj/admin/carrier.php"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "integration-status",
+        "website-map",
+        "login"
+      ]
+    },
+    {
+      "id": "integration-status",
+      "title": "Check Carrier and recording availability",
+      "summary": "Understand synchronization, verified live identity and optional services before troubleshooting an editor.",
+      "category": "admin",
+      "audience": [
+        "admin"
+      ],
+      "keywords": "health offline carrier sync verification broadcasts recordings discovery schedule API directory timeout fail closed",
+      "sections": [
+        {
+          "id": "status",
+          "title": "Start with integration status",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Administration → Carrier integration shows health, synchronization and recent actions. Check that account assignments are current and the radio data is recent. Website live writes synchronize first; periodic synchronization keeps the permission snapshot fresh."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Carrier integration status",
+                  "href": "dj/admin/carrier.php"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "failure",
+          "title": "What fails closed",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Carrier controls require a recent permission snapshot and current live identity. An offline bot, stale sync or unavailable upstream verification prevents live writes. Profile, schedule and broadcast editing use their existing services and remain available when their own checks succeed."
+            }
+          ]
+        },
+        {
+          "id": "recordings",
+          "title": "Recording discovery is optional",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Discovery requires an ended broadcast with a verified identity and available AzuraCast recording. The administrator controls discovery/download configuration. DJ approval and listing visibility govern publication. A missing candidate does not mean the listing or captured track data has been deleted."
+            }
+          ]
+        },
+        {
+          "id": "operator",
+          "title": "Server deployment is separate",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Use the repository’s versioned deployment guides for installation, private keys, Unix socket permissions, source updates and code rollback. DJs should not need those details to operate a show. Server credentials and configuration are never included in this public Help catalog."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Website repository documentation",
+                  "href": "https://github.com/TildeRadio/site/tree/master/docs"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "troubleshooting",
+        "recordings",
+        "administration"
+      ]
+    },
+    {
+      "id": "troubleshooting",
+      "title": "Something is not working",
+      "summary": "Check the right layer for login, streaming, schedule, playlist, live-control or recording problems.",
+      "category": "start",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "error help troubleshoot failure offline unavailable 403 conflict stale expired no sound cannot connect",
+      "sections": [
+        {
+          "id": "login",
+          "title": "Login works for streaming, but not the website",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Ask an administrator to check website activation, profile link and station assignments. The streaming account and website role are separate. A password error still refers to your DJ streaming credentials."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Login checklist",
+                  "href": "help/?topic=login"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "connection",
+          "title": "Broadcaster cannot connect or audio is silent",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Recheck the supplied host, DJ port, mount, Icecast mode and personal DJ credentials. Test your input routing and levels. Include the exact broadcaster error when asking for help; never include the password."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Streaming setup",
+                  "href": "help/?topic=streaming"
+                },
+                {
+                  "label": "Test station checklist",
+                  "href": "help/?topic=test-stream"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "schedule",
+          "title": "Schedule save rejected",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "A slot may overlap another DJ, its current version may have changed, or the upstream schedule could not be confirmed. Reload before retrying, inspect the station timezone and choose an available time. Do not treat a failed save as a booking."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Booking guide",
+                  "href": "help/?topic=booking"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "live",
+          "title": "My live controls are missing",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Confirm your broadcaster is on the main assigned station and the public site reports a live DJ. Wait for a poll/synchronization cycle, then reload Live / IRC. Ask the administrator to check the actual station/streamer assignment and Carrier status. A matching displayed DJ name alone does not prove permission."
+            }
+          ]
+        },
+        {
+          "id": "playlist",
+          "title": "My preparation did not attach",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Check its station, enabled state, owner and UTC window. Exactly one preparation must match. If it was already used or several match, Carrier uses ordinary metadata capture. Continue the show and correct the archive later if needed."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Preparation rules",
+                  "href": "help/?topic=prepared-shows"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "irc",
+          "title": "IRC says I am not the live DJ",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Sign in to IRC services and link that account on that network. A nickname is not sufficient for new playlist/announcement controls. Check that your website assignment matches the actual live streamer."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Link your IRC account",
+                  "href": "help/?topic=irc-link"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "songs",
+          "title": "Song announcements are on, but no message appears",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "In prepared mode, advance the song when it starts. In metadata mode, send a genuinely new artist/title. Enabling mid-song does not announce it retroactively. An invited channel must also subscribe to station announcements. !songs does not mute other station event messages."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Song-announcement settings",
+                  "href": "help/?topic=song-announcements"
+                },
+                {
+                  "label": "Invited-channel subscription",
+                  "href": "help/?topic=invite-carrier"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "recording",
+          "title": "No recording appears",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The broadcast may still be live, recording may be disabled, no upstream recording may exist, or discovery may not have verified that broadcast. Ask the administrator to check availability. You can attach an existing permitted recording URL through your listing editor."
+            }
+          ]
+        },
+        {
+          "id": "timeout",
+          "title": "A button timed out",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Reload and inspect the result before choosing another action. Retried action IDs protect live writes, but another newly generated Next action is a separate advance. A stale form needs a reload, not a forced resubmission."
+            }
+          ]
+        },
+        {
+          "id": "ask",
+          "title": "Ask for help with useful details",
+          "blocks": [
+            {
+              "type": "list",
+              "items": [
+                "Your software and operating system.",
+                "Which website page or command you used.",
+                "The exact error and approximate time.",
+                "Your DJ username, station name and affected set number if relevant.",
+                "No passwords, private keys or linking codes."
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Ask in #tilderadio",
+                  "href": "https://tilde.chat/kiwi/#tilderadio"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "login",
+        "live-controls",
+        "integration-status"
+      ]
+    },
+    {
+      "id": "contributions",
+      "title": "Contribute audio or a special event",
+      "summary": "Make a station ID, jingle, one-off show, takeover or relay without needing Git knowledge.",
+      "category": "listeners",
+      "audience": [
+        "listener",
+        "dj"
+      ],
+      "keywords": "community contribute station ID jingle audio license event takeover relay submissions git",
+      "sections": [
+        {
+          "id": "audio",
+          "title": "IDs and jingles",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Bring a short station ID or jingle to #tilderadio. Include its title, creator credit and the license/permission you want attached. The contribution page shows the station’s current preferred formats and duration guidance."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Current contribution instructions",
+                  "href": "community/contribute/#audio"
+                },
+                {
+                  "label": "Community audio shelf",
+                  "href": "community/"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "events",
+          "title": "Pitch a special broadcast",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Include the concept, rough length, possible dates/times, participants and whether it needs a live slot or several handoffs. Agree the plan with the station before publishing it."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Event contribution guide",
+                  "href": "community/contribute/#events"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "git",
+          "title": "Repository submissions are optional",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Experienced contributors can use the existing audio and metadata files described in the contribution guide. Everyone else can bring the idea/file to IRC and arrange a suitable submission."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Repository audio instructions",
+                  "href": "community/contribute/#repository"
+                },
+                {
+                  "label": "Join IRC",
+                  "href": "https://tilde.chat/kiwi/#tilderadio"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "listener-participation",
+        "start-here"
+      ]
+    },
+    {
+      "id": "profile-files",
+      "title": "Advanced: edit profile JSON in Git",
+      "summary": "Keep the existing file-based contribution workflow available alongside the website editor.",
+      "category": "admin",
+      "audience": [
+        "dj",
+        "admin"
+      ],
+      "keywords": "git JSON profile sample validation formats file slug",
+      "sections": [
+        {
+          "id": "files",
+          "title": "The existing file workflow",
+          "blocks": [
+            {
+              "type": "code",
+              "text": "git clone https://github.com/TildeRadio/site.git\ncd site\ncp data/djs/example.json.sample data/djs/your-nick.json\n$EDITOR data/djs/your-nick.json\nphp bin/validate-djs.php"
+            },
+            {
+              "type": "paragraph",
+              "text": "Use lowercase letters, numbers and hyphens for the profile filename/slug. Never add credentials. Run the validator and keep changes scoped to your profile and intended avatar files."
+            }
+          ]
+        },
+        {
+          "id": "reference",
+          "title": "Field reference and weekday formats",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "The repository README documents optional biography, avatar, links, recurring show, timezone, formats and favorites. The website editor is normally easier for DJs."
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Profile JSON field reference",
+                  "href": "https://github.com/TildeRadio/site/blob/master/data/djs/README.md"
+                },
+                {
+                  "label": "Website profile editor guide",
+                  "href": "help/?topic=profile"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "profile",
+        "website-map"
+      ]
+    },
+    {
+      "id": "public-api",
+      "title": "Public feeds and developer reference",
+      "summary": "Find read-only station JSON, previews, episode listings and podcast feeds.",
+      "category": "listeners",
+      "audience": [
+        "listener",
+        "admin"
+      ],
+      "keywords": "API JSON endpoint podcast rss terminal curl now history planned schedule episodes djs developer",
+      "sections": [
+        {
+          "id": "endpoints",
+          "title": "Public read-only endpoints",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Path",
+                "Information"
+              ],
+              "rows": [
+                [
+                  "/api/now/",
+                  "Current station state and song"
+                ],
+                [
+                  "/api/history/",
+                  "Recent station track history"
+                ],
+                [
+                  "/api/schedule/",
+                  "Upcoming station schedule"
+                ],
+                [
+                  "/api/djs/",
+                  "Public DJ profiles"
+                ],
+                [
+                  "/api/episodes/",
+                  "Public live/completed episode listings"
+                ],
+                [
+                  "/api/planned/",
+                  "Published upcoming episode previews"
+                ],
+                [
+                  "/api/podcast/",
+                  "Podcast feed for eligible recorded episodes"
+                ]
+              ]
+            },
+            {
+              "type": "links",
+              "items": [
+                {
+                  "label": "Existing API reference",
+                  "href": "api/?format=html"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "limits",
+          "title": "Public means public information",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "No station API key is required for these public feeds. They do not expose unplayed private playlists, private listener queues or unpublished recordings. Website listing corrections/visibility affect the public archive. Private authentication, schedule management and Carrier control are separate authenticated services."
+            }
+          ]
+        }
+      ],
+      "related": [
+        "recordings",
+        "broadcasts"
+      ]
+    },
+    {
+      "id": "commands",
+      "title": "Carrier command reference",
+      "summary": "Search or browse commands by station, DJ controls, listeners, games, history and channel settings.",
+      "category": "carrier",
+      "audience": [
+        "dj",
+        "listener",
+        "admin"
+      ],
+      "keywords": "command reference help all bot aliases syntax",
+      "sections": [
+        {
+          "id": "basics",
+          "title": "Read this first",
+          "blocks": [
+            {
+              "type": "paragraph",
+              "text": "Examples use the default ! prefix. A network may use a different configured prefix. Some controls require a live set, a verified services account or an administrator. Existing DJ grants may also authorize older show controls; link your account for the new playlist/song controls. Commands have cooldowns and may reply privately."
+            }
+          ]
+        },
+        {
+          "id": "station",
+          "title": "Station and schedule",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Who / when",
+                "Purpose"
+              ],
+              "rows": [
+                [
+                  "!np / !nowplaying",
+                  "Anyone",
+                  "Current song and live station state"
+                ],
+                [
+                  "!listeners",
+                  "Anyone",
+                  "Current listener count"
+                ],
+                [
+                  "!dj [name]",
+                  "Anyone",
+                  "Current DJ or a named profile"
+                ],
+                [
+                  "!next / !upnext / !un",
+                  "Anyone",
+                  "Next scheduled show; never advances a playlist"
+                ],
+                [
+                  "!unn / !upnextnext",
+                  "Anyone",
+                  "Show after the next one"
+                ],
+                [
+                  "!schedule [N]",
+                  "Anyone",
+                  "Upcoming schedule entries"
+                ],
+                [
+                  "!listen / !streams / !radiochannels",
+                  "Anyone",
+                  "Listening URLs"
+                ],
+                [
+                  "!site",
+                  "Anyone",
+                  "Website URL"
+                ],
+                [
+                  "!status",
+                  "Anyone",
+                  "Station status"
+                ],
+                [
+                  "!utc / !utcnow / !now",
+                  "Anyone",
+                  "Current UTC time"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "dj",
+          "title": "DJ and verified playlist controls",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Who / when",
+                "Purpose"
+              ],
+              "rows": [
+                [
+                  "!link CODE",
+                  "Verified services account; private message",
+                  "Link website identity on this IRC network"
+                ],
+                [
+                  "!track",
+                  "Anyone during a live set",
+                  "Current prepared-song position"
+                ],
+                [
+                  "!track next / !track N",
+                  "Verified live DJ or administrator account",
+                  "Timestamp actual prepared playback"
+                ],
+                [
+                  "!songs on / off",
+                  "Verified live DJ or administrator account",
+                  "Automatic song messages for this broadcast only"
+                ],
+                [
+                  "!songs / !songs status",
+                  "Anyone during a live set",
+                  "Read the current song-message preference"
+                ],
+                [
+                  "!show",
+                  "Anyone when available",
+                  "Show context"
+                ],
+                [
+                  "!show episode / topic / mood / prompt / note / link TEXT",
+                  "Live DJ; supported staging for next scheduled DJ",
+                  "Set one-show metadata"
+                ],
+                [
+                  "!show clear FIELD",
+                  "Authorized DJ",
+                  "Clear one-show metadata"
+                ],
+                [
+                  "!show mastodon TEXT",
+                  "Live DJ",
+                  "One optional Mastodon note for the set"
+                ],
+                [
+                  "!handoff NAME",
+                  "Live DJ",
+                  "Name the expected next DJ"
+                ],
+                [
+                  "!setcmd NAME RESPONSE / !delcmd NAME",
+                  "Live DJ",
+                  "Manage a command for this set"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "queues",
+          "title": "DJ listener controls",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Who / when",
+                "Purpose"
+              ],
+              "rows": [
+                [
+                  "!requests on / off / list",
+                  "Live DJ for changes/private queue",
+                  "Open, close or inspect requests"
+                ],
+                [
+                  "!played N / !reject N",
+                  "Live DJ",
+                  "Resolve a request; does not play audio"
+                ],
+                [
+                  "!questions",
+                  "Live DJ",
+                  "Private question queue"
+                ],
+                [
+                  "!qanswer N / !qskip N",
+                  "Live DJ",
+                  "Answer/skip queued question"
+                ],
+                [
+                  "!goal N [text] / !goal clear",
+                  "Live DJ",
+                  "Set or clear listener goal"
+                ],
+                [
+                  "!poll start QUESTION | OPTION | OPTION",
+                  "Live DJ",
+                  "Start a poll"
+                ],
+                [
+                  "!poll stop",
+                  "Live DJ",
+                  "Close a poll"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "listeners",
+          "title": "The room",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Who / when",
+                "Purpose"
+              ],
+              "rows": [
+                [
+                  "!tunein [tilde] / !here [tilde]",
+                  "Listener during live show",
+                  "Voluntary couch check-in"
+                ],
+                [
+                  "!tuneout",
+                  "Listener",
+                  "Remove own check-in"
+                ],
+                [
+                  "!couch / !rollcall / !tildes",
+                  "Anyone",
+                  "Couch and represented communities"
+                ],
+                [
+                  "!props",
+                  "Listener during live show",
+                  "Give DJ props"
+                ],
+                [
+                  "!ask TEXT",
+                  "Listener during live show",
+                  "Queue a question"
+                ],
+                [
+                  "!react WORD / !fire / !love / !bass / !lol / !wtf / !banger",
+                  "Listener during live show",
+                  "React using the configured words or shortcuts"
+                ],
+                [
+                  "!reactions / !vibe",
+                  "Anyone during live show",
+                  "Inspect room reaction summaries"
+                ],
+                [
+                  "!request ARTIST - SONG",
+                  "Listener when requests open",
+                  "Queue a request"
+                ],
+                [
+                  "!dedicate ARTIST - SONG | NICK | MESSAGE",
+                  "Listener when requests open",
+                  "Queue a dedication"
+                ],
+                [
+                  "!poll / !vote N",
+                  "Listener during live show",
+                  "Read poll or vote"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "games",
+          "title": "Games",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Who / when",
+                "Purpose"
+              ],
+              "rows": [
+                [
+                  "!challenge PROMPT / results / random / stop",
+                  "Live DJ for management",
+                  "Challenge and results"
+                ],
+                [
+                  "!answer TEXT",
+                  "Listener",
+                  "Submit challenge answer"
+                ],
+                [
+                  "!bingo / !bingo marks / !bingo mark KEY",
+                  "Listener / live DJ for manual marking",
+                  "Bingo card, valid keys or a manual mark"
+                ],
+                [
+                  "!battle / !battle start TILDE | TILDE / !battle stop",
+                  "Anyone for score; live DJ for management",
+                  "Tilde battle"
+                ],
+                [
+                  "!button",
+                  "Listener during live show",
+                  "Optional cooldown-based room action"
+                ],
+                [
+                  "!fun",
+                  "Anyone",
+                  "List extra room commands"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "history",
+          "title": "History and help",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Who / when",
+                "Purpose"
+              ],
+              "rows": [
+                [
+                  "!last",
+                  "Anyone",
+                  "Latest set"
+                ],
+                [
+                  "!set N",
+                  "Anyone",
+                  "A numbered set"
+                ],
+                [
+                  "!djstats [name] / !stationstats",
+                  "Anyone",
+                  "DJ or station statistics"
+                ],
+                [
+                  "!records / !achievements",
+                  "Anyone",
+                  "Observed station records and achievements"
+                ],
+                [
+                  "!randomdj / !roulette",
+                  "Anyone",
+                  "Pick a DJ profile"
+                ],
+                [
+                  "!help / !commands",
+                  "Anyone",
+                  "Bot help"
+                ],
+                [
+                  "!help dj / room / games / history",
+                  "Anyone",
+                  "Grouped bot help"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "id": "channel",
+          "title": "Invited channels and bot administration",
+          "blocks": [
+            {
+              "type": "table",
+              "headers": [
+                "Command",
+                "Who / when",
+                "Purpose"
+              ],
+              "rows": [
+                [
+                  "!carrier status",
+                  "Invited channel",
+                  "Channel settings"
+                ],
+                [
+                  "!carrier announce on / off",
+                  "Inviter, channel operator or bot administrator",
+                  "Channel station-announcement subscription"
+                ],
+                [
+                  "!carrier part",
+                  "Authorized channel manager",
+                  "Part/forget an invited channel"
+                ],
+                [
+                  "!trbot / !radiobot status / poll / reload / announce",
+                  "Bot administrator",
+                  "Existing bot operations; !carrier is reserved for channel settings"
+                ]
+              ]
+            }
+          ]
+        }
+      ],
+      "related": [
+        "irc-link",
+        "song-announcements",
+        "listener-controls"
+      ]
+    }
+  ]
+}

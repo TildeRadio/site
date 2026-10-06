@@ -49,6 +49,7 @@ $nav_section = trim($request_path, '/');
 $nav_section = $nav_section === '' || $nav_section === 'index.php'
     ? 'home'
     : explode('/', $nav_section, 2)[0];
+if (($page_nav_section ?? '') === 'help') { $nav_section = 'help'; }
 $nav_current = static fn (string $section): string => $nav_section === $section ? ' aria-current="page"' : '';
 ?>
 
@@ -69,7 +70,7 @@ $nav_current = static fn (string $section): string => $nav_section === $section 
         <?php endforeach; ?>
         <link rel="icon" type="image/png" href="<?= htmlspecialchars(asset('logos/tilderadio.png'), ENT_QUOTES, 'UTF-8') ?>">
         <?=isset($additional_head) ? PHP_EOL . "        " . $additional_head . PHP_EOL : ""?>
-        <script defer src="<?= htmlspecialchars(asset('js/site-player.js?v=20261005-carrier1'), ENT_QUOTES, 'UTF-8') ?>"></script>
+        <script defer src="<?= htmlspecialchars(asset('js/site-player.js?v=20261006-help1'), ENT_QUOTES, 'UTF-8') ?>"></script>
     </head>
 
     <body>
@@ -85,6 +86,7 @@ $nav_current = static fn (string $section): string => $nav_section === $section 
                     <a href="<?= htmlspecialchars(asset('djs/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('djs') ?>>djs</a>
                     <a href="<?= htmlspecialchars(asset('episodes/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('episodes') ?>>archive</a>
                     <a href="<?= htmlspecialchars(asset('community/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('community') ?>>community</a>
+                    <a href="<?= htmlspecialchars(asset('help/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('help') ?>>help</a>
                     <a href="<?= htmlspecialchars(asset('dj/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('dj') ?>>dj booth</a>
                     <a href="<?= htmlspecialchars(asset('listen/'), ENT_QUOTES, 'UTF-8') ?>"<?= $nav_current('listen') ?>>listen</a>
                 </nav>
