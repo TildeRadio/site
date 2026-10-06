@@ -1,0 +1,11 @@
+[Unit]
+Description=Keep TildeRadio website and Carrier synchronized
+
+[Timer]
+OnBootSec=20s
+OnUnitActiveSec=45s
+AccuracySec=1s
+Persistent=true
+
+[Install]
+WantedBy=timers.target

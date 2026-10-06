@@ -1,0 +1,12 @@
+{
+  "origin": "https://tilderadio.org",
+  "base_path": "",
+  "client_bootstrap": "/opt/tilderadio-dj-auth/website-client/bootstrap.php",
+  "client_config": "/etc/tilderadio/dj-auth-client.json",
+  "state_dir": "/var/lib/tilderadio-dj-auth-site",
+  "trusted_proxy_ips": [],
+  "accounts": {
+    "1:163": "deepend"
+  },
+  "administrators": ["1:163"]
+}

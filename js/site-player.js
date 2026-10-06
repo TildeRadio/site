@@ -249,11 +249,13 @@
         else window.scrollTo(0, 0);
     }
 
-    function navigate(url, pushState) {
+    function navigate(url, pushState, formBody) {
         if (navigationController) navigationController.abort();
         navigationController = new AbortController();
 
         fetch(url.href, {
+            method: formBody ? 'POST' : 'GET',
+            body: formBody || undefined,
             cache: 'no-store',
             credentials: 'same-origin',
             headers: {
@@ -305,6 +307,8 @@
                 syncGlobalPlayer();
                 scrollAfterNavigation(result.url);
                 window.dispatchEvent(new Event('tilderadio:after-navigate'));
+                var authAlert = importedMain.querySelector('[data-dj-auth-alert]');
+                if (authAlert) authAlert.focus();
             })
             .catch(function (error) {
                 if (error && error.name === 'AbortError') return;
@@ -334,6 +338,34 @@
 
     window.addEventListener('popstate', function () {
         navigate(new URL(window.location.href), false);
+    });
+
+    // Keep the existing audio element alive through DJ login/logout. These forms
+    // still use normal server-side POST/redirect/GET when JavaScript is unavailable.
+    document.addEventListener('submit', function (event) {
+        var form = event.target;
+        if (!(form instanceof HTMLFormElement) || !form.hasAttribute('data-tr-dj-auth') || audio.paused) return;
+        var url = new URL(form.action, window.location.href);
+        if (url.origin !== window.location.origin || form.method.toLowerCase() !== 'post') return;
+        event.preventDefault();
+        if (form.getAttribute('aria-busy') === 'true') return;
+        var submitter = event.submitter;
+        var submitterName = submitter && submitter.name;
+        var submitterValue = submitter && submitter.value;
+        form.setAttribute('aria-busy', 'true');
+        form.querySelectorAll('button[type="submit"]').forEach(function (button) { button.disabled = true; });
+        var body = new URLSearchParams();
+        new FormData(form).forEach(function (value, key) {
+            if (typeof value === 'string') body.append(key, value);
+        });
+        if (submitterName) body.append(submitterName, submitterValue || '');
+        navigate(url, true, body);
+    });
+
+    window.addEventListener('pageshow', function (event) {
+        if (event.persisted && document.querySelector('[data-tr-dj-auth]')) {
+            navigate(new URL(window.location.href), false);
+        }
     });
 
     syncGlobalPlayer();

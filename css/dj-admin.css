@@ -1,0 +1,94 @@
+.dj-admin { margin: 2rem auto; max-width: 76rem; }
+.dj-admin-heading { display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.dj-admin-heading h1 { margin: .8rem 0 1.2rem; font-size: clamp(1.7rem, 4vw, 2.7rem); }
+.dj-admin-nav { display: flex; gap: .5rem; flex-wrap: wrap; border-bottom: 1px solid var(--tr-line); padding-bottom: 1rem; margin-bottom: 2rem; }
+.dj-admin-nav a { border: 1px solid var(--tr-line); border-radius: .3rem; padding: .65rem 1rem; text-decoration: none; }
+.dj-admin-nav a[aria-current] { background: var(--tr-accent); border-color: var(--tr-accent); color: var(--tr-bg); font-weight: 700; }
+.dj-admin-notice { padding: 1rem; border-left: 3px solid var(--tr-accent); background: var(--tr-surface); }
+.dj-admin-toolbar, .dj-admin-actions { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin: 1.25rem 0; }
+.dj-admin-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); gap: 1rem; margin: 2rem 0; }
+.dj-admin-stats a { border: 1px solid var(--tr-line); background: var(--tr-surface); border-radius: .35rem; padding: 1.5rem; text-decoration: none; }
+.dj-admin-stats strong { display: block; color: var(--tr-fg); font-size: 2rem; margin-bottom: .5rem; }
+.dj-admin-table-wrap { overflow-x: auto; border: 1px solid var(--tr-line); border-radius: .35rem; }
+.dj-admin table { width: 100%; border-collapse: collapse; font-size: .95rem; }
+.dj-admin th, .dj-admin td { text-align: left; padding: 1rem; border-bottom: 1px solid var(--tr-line); vertical-align: top; }
+.dj-admin th { color: var(--tr-secondary); background: var(--tr-surface); font-weight: 700; }
+.dj-admin caption { padding: 1rem; text-align: left; font-weight: 700; }
+.dj-admin td small { display: block; color: var(--tr-muted); margin-top: .4rem; }
+.dj-admin-form { display: grid; gap: .8rem; max-width: 60rem; }
+.dj-admin-form label { font-weight: 700; }
+.dj-admin-control { display: grid; gap: .5rem; min-width: 0; align-content: start; }
+.dj-admin-link-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 1rem; }
+.dj-admin-form input:not([type=checkbox]), .dj-admin-form select, .dj-admin-form textarea {
+    width: 100%; box-sizing: border-box; border: 1px solid var(--tr-line-strong); border-radius: .3rem;
+    background: var(--tr-bg); color: var(--tr-fg); padding: .8rem; min-height: 2.8rem; font: inherit;
+}
+.dj-admin-form textarea { line-height: 1.6; resize: vertical; }
+.dj-admin-form fieldset { border: 1px solid var(--tr-line); border-radius: .35rem; padding: 1.25rem; margin: 1rem 0; display: grid; gap: .8rem; }
+.dj-admin-form legend { padding: 0 .6rem; font-weight: 700; }
+.dj-admin-form .dj-admin-check { display: flex; gap: .75rem; align-items: center; font-weight: 400; min-height: 2.8rem; }
+.dj-admin-check input[type=checkbox] { width: 1.25rem; height: 1.25rem; accent-color: var(--tr-accent); }
+.dj-admin-form p, .dj-admin-help { color: var(--tr-secondary); line-height: 1.6; }
+.dj-admin input:focus-visible, .dj-admin textarea:focus-visible, .dj-admin select:focus-visible, .dj-admin a:focus-visible, .dj-admin summary:focus-visible {
+    outline: 2px solid var(--tr-accent-bright); outline-offset: 4px;
+}
+.dj-admin button:disabled { cursor: wait; opacity: .65; }
+.dj-admin-danger { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid #845a54; }
+.dj-admin-danger .dj-auth-button { background: #e6a69e; border-color: #e6a69e; color: #20100e; }
+.dj-admin details { border: 1px solid var(--tr-line); border-radius: .35rem; padding: 1rem; margin: 1.5rem 0; }
+.dj-admin summary { cursor: pointer; min-height: 2.75rem; display: flex; align-items: center; font-weight: 700; }
+.dj-admin .dj-admin-code { font-family: monospace; font-size: .9rem; }
+.dj-admin-days { display: flex; flex-wrap: wrap; gap: 1rem; }
+.dj-admin-empty { padding: 2rem; border: 1px dashed var(--tr-line-strong); border-radius: .35rem; }
+.dj-editor { margin: 0 auto; }
+.dj-editor .dj-admin-heading { align-items: flex-start; border-bottom: 1px solid var(--tr-line); padding-bottom: .7rem; margin-bottom: 1rem; }
+.dj-editor .dj-admin-heading h1 { font-size: clamp(1.6rem, 4vw, 2.2rem); overflow-wrap: anywhere; }
+.dj-editor .dj-admin-heading > div { min-width: 0; }
+.dj-editor .dj-admin-heading > a { display: inline-flex; align-items: center; min-height: 2.75rem; font-size: .9rem; }
+.dj-editor .dj-admin-nav { margin-bottom: 1.5rem; gap: .5rem; border-bottom: 0; padding-bottom: 0; }
+.dj-editor .dj-admin-nav a { min-height: 2.75rem; display: inline-flex; align-items: center; justify-content: center; font-size: .85rem; }
+.dj-editor .dj-admin-form { max-width: none; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.dj-editor .dj-admin-form > *, .dj-editor .dj-admin-form fieldset > * { grid-column: 1 / -1; }
+.dj-editor .dj-admin-form > .dj-admin-control, .dj-editor .dj-admin-form fieldset > .dj-admin-control { grid-column: auto; }
+.dj-editor .dj-admin-form > .dj-admin-control-wide, .dj-editor .dj-admin-form fieldset > .dj-admin-control-wide { grid-column: 1 / -1; }
+.dj-editor .dj-admin-form fieldset > .dj-admin-check-inline { grid-column: auto; align-self: end; }
+.dj-editor .dj-admin-form fieldset { min-inline-size: 0; background: var(--tr-surface); grid-template-columns: repeat(2, minmax(0, 1fr)); margin: .35rem 0; border-radius: .5rem; gap: 1.2rem 1rem; }
+.dj-editor .dj-admin-form legend { color: var(--tr-accent-bright); }
+.dj-editor .dj-admin-form p { margin: 0; font-size: .85rem; overflow-wrap: anywhere; }
+.dj-editor .dj-admin-form label { font-size: .9rem; }
+.dj-editor .dj-admin-form textarea { min-height: 7rem; }
+.dj-editor .dj-admin-form .dj-admin-actions { padding: 1rem; margin: .5rem 0; border: 1px solid var(--tr-line); border-radius: .5rem; background: var(--tr-surface); }
+.dj-editor .dj-admin-form .dj-admin-days { display: flex; flex-wrap: wrap; gap: .5rem 1rem; }
+.dj-editor .dj-admin-danger { padding: 1.25rem; border: 1px solid #845a54; border-radius: .5rem; }
+.dj-broadcast-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1.5rem; }
+.dj-broadcast-toolbar > div:first-child { flex: 1 1 22rem; }
+.dj-broadcast-toolbar p { margin-top: 0; color: var(--tr-secondary); font-size: .9rem; }
+.dj-broadcast-toolbar .dj-broadcast-count { color: var(--tr-muted); font-size: .8rem; margin-bottom: 0; }
+.dj-broadcast-toolbar .dj-admin-actions { margin: 0; }
+.dj-broadcast-list { display: grid; gap: .8rem; margin: 0; padding: 0; list-style: none; }
+.dj-broadcast-row { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 1rem; border: 1px solid var(--tr-line); border-radius: .5rem; padding: 1.1rem 1.25rem; background: var(--tr-surface); }
+.dj-broadcast-info { min-width: 0; }
+.dj-broadcast-row h2 { font-size: 1rem; margin: 0 0 .6rem; overflow-wrap: anywhere; }
+.dj-broadcast-meta { display: flex; flex-wrap: wrap; gap: .3rem 1.2rem; font-size: .8rem; color: var(--tr-secondary); overflow-wrap: anywhere; }
+.dj-broadcast-pagination { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.25rem; }
+@media (max-width: 600px) {
+    .dj-admin { margin-top: 1rem; }
+    .dj-admin-nav a { flex: 1 0 auto; text-align: center; }
+    .dj-admin th, .dj-admin td { padding: .75rem; }
+    .dj-admin-form fieldset { padding: 1rem; }
+    .dj-editor .dj-admin-form, .dj-editor .dj-admin-form fieldset, .dj-admin-link-row { grid-template-columns: 1fr; }
+    .dj-broadcast-row { grid-template-columns: minmax(0, 1fr) auto; gap: .75rem; padding: 1rem; }
+    .dj-broadcast-info { grid-column: 1 / -1; }
+    .dj-broadcast-row > .dj-action-link { justify-self: end; }
+    .dj-broadcast-toolbar .dj-admin-actions { width: 100%; }
+    .dj-broadcast-toolbar .dj-auth-button { width: 100%; }
+}
+
+/* New booth tools share the existing responsive editor, without changing public styles. */
+.dj-editor section { margin-block: 1.5rem; }
+.dj-editor select { max-width: 100%; min-width: 0; }
+.dj-editor .dj-admin-inline { display: flex; flex-wrap: wrap; gap: .75rem; align-items: center; margin-block: .75rem; }
+.dj-editor code, .dj-editor dd, .dj-editor .dj-broadcast-card p { overflow-wrap: anywhere; }
+.dj-editor fieldset label { display: block; padding-block: .4rem; }
+.dj-editor button, .dj-editor input, .dj-editor select { min-height: 2.75rem; }
+.dj-editor a:focus-visible, .dj-editor button:focus-visible { outline: 3px solid #8cff9b; outline-offset: 3px; }

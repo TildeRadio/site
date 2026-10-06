@@ -181,14 +181,16 @@ function tr_now_playing(): array
     $streamerName = trim((string) ($live['streamer_name'] ?? ''));
     $isLive = !empty($live['is_live']);
 
-    return [
+    $result = [
         'available' => true,
         'station' => [
+            'id' => is_numeric($station['id'] ?? null) ? (int) $station['id'] : TR_STATION_ID,
             'name' => trim((string) ($station['name'] ?? 'tilderadio')) ?: 'tilderadio',
             'shortcode' => trim((string) ($station['shortcode'] ?? TR_STATION_SHORTCODE)) ?: TR_STATION_SHORTCODE,
             'listen_url' => trim((string) ($station['listen_url'] ?? 'https://tilderadio.org/listen')) ?: 'https://tilderadio.org/listen',
         ],
         'is_live' => $isLive,
+        'broadcast_start' => is_numeric($live['broadcast_start'] ?? null) ? (int) $live['broadcast_start'] : null,
         'dj' => $isLive && $streamerName !== '' ? $streamerName : null,
         'listeners' => $listenerCount,
         'now_playing' => [
@@ -201,6 +203,8 @@ function tr_now_playing(): array
         'history' => $history,
         'updated_at' => time(),
     ];
+    require_once __DIR__ . '/Admin/PublicCarrier.php';
+    return \TildeRadio\Site\Admin\PublicCarrier::now($result);
 }
 
 function tr_slug(string $value): string
@@ -384,7 +388,7 @@ function tr_episode_archive_path(): string
  *
  * @return array{version:int,generated_at:?int,episodes:array<int,array<string,mixed>>}
  */
-function tr_episode_archive(): array
+function tr_episode_source_archive(): array
 {
     $empty = ['version' => 1, 'generated_at' => null, 'episodes' => []];
     $path = tr_episode_archive_path();
@@ -427,6 +431,15 @@ function tr_episode_archive(): array
         'generated_at' => is_int($decoded['generated_at'] ?? null) ? $decoded['generated_at'] : null,
         'episodes' => $episodes,
     ];
+}
+
+/** @return array{version:int,generated_at:?int,episodes:array<int,array<string,mixed>>} */
+function tr_episode_archive(): array
+{
+    $archive = tr_episode_source_archive();
+    require_once __DIR__ . '/Admin/PublicBroadcasts.php';
+    $archive['episodes'] = \TildeRadio\Site\Admin\PublicBroadcasts::apply($archive['episodes']);
+    return $archive;
 }
 
 /**
@@ -491,13 +504,9 @@ function tr_episode_title(array $episode): string
  */
 function tr_dj_metadata(): array
 {
-    $file = dirname(__DIR__) . '/data/djs.php';
-    if (!is_file($file)) {
-        return [];
-    }
+    require_once __DIR__ . '/Admin/PublicProfiles.php';
 
-    $data = require $file;
-    return is_array($data) ? $data : [];
+    return \TildeRadio\Site\Admin\PublicProfiles::metadata(dirname(__DIR__));
 }
 
 /**
@@ -559,13 +568,25 @@ function tr_schedule(int $days = 14): array
  * Build a DJ catalog from the live schedule, then layer configured metadata on
  * top. This means a newly scheduled DJ automatically gets a basic profile.
  */
-function tr_dj_catalog(): array
+function tr_dj_catalog(bool $includeHiddenSchedule = false): array
+{
+    return tr_dj_catalog_from_records(tr_schedule(), tr_dj_metadata(), $includeHiddenSchedule);
+}
+
+/** Build the catalog from already fetched records; visibility must not erase scheduled broadcasts. */
+function tr_dj_catalog_from_records(array $schedule, array $metadata, bool $includeHiddenSchedule = false): array
 {
     $catalog = [];
+    $hidden = [];
+    foreach ($metadata as $key => $meta) {
+        if (is_array($meta) && ($meta['published'] ?? true) === false) {
+            $hidden[tr_slug((string) ($meta['slug'] ?? $key))] = true;
+        }
+    }
 
-    foreach (tr_schedule() as $event) {
+    foreach ($schedule as $event) {
         $slug = $event['slug'];
-        if ($slug === '') {
+        if ($slug === '' || (isset($hidden[$slug]) && !$includeHiddenSchedule)) {
             continue;
         }
 
@@ -580,13 +601,16 @@ function tr_dj_catalog(): array
                 'show' => null,
                 'upcoming' => [],
             ];
+            if (isset($hidden[$slug])) {
+                $catalog[$slug]['_profile_hidden'] = true;
+            }
         }
 
         $catalog[$slug]['upcoming'][] = $event;
     }
 
-    foreach (tr_dj_metadata() as $key => $meta) {
-        if (!is_array($meta)) {
+    foreach ($metadata as $key => $meta) {
+        if (!is_array($meta) || ($meta['published'] ?? true) === false) {
             continue;
         }
 
