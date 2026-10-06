@@ -57,6 +57,7 @@ $values = $_SERVER['REQUEST_METHOD'] === 'POST' ? $_POST : [
     'playlist' => implode("\n", array_map(static fn (array $track): string => $track['artist'] . ' | ' . $track['title'], $plan['tracks'] ?? [])),
     'public' => ($plan['public'] ?? false) ? '1' : '',
     'reminder' => ($plan['reminder'] ?? false) ? '1' : '',
+    'song_announcements' => $copy === null && ($plan['song_announcements'] ?? false) ? '1' : '',
 ] + ($plan['show'] ?? []);
 tr_admin_begin($id === null ? 'Prepare a new show' : 'Edit prepared show', 'plans', $error);
 ?>
@@ -82,6 +83,8 @@ tr_admin_begin($id === null ? 'Prepare a new show' : 'Edit prepared show', 'plan
 <p class="dj-admin-control-wide">You can paste artist and title columns from a spreadsheet. Leave the list empty to use existing metadata capture. Songs become confirmed playback only when advanced with the website button or <code>!track next</code> / <code>!track N</code>.</p>
 <label class="dj-admin-checkbox"><input type="checkbox" name="public" value="1"<?= ($values['public'] ?? '') === '1' ? ' checked' : '' ?>> Publish the upcoming episode title and topic</label>
 <label class="dj-admin-checkbox"><input type="checkbox" name="reminder" value="1"<?= ($values['reminder'] ?? '') === '1' ? ' checked' : '' ?>> Queue a private IRC reminder for my linked account</label>
+<label class="dj-admin-checkbox"><input type="checkbox" name="song_announcements" value="1"<?= ($values['song_announcements'] ?? '') === '1' ? ' checked' : '' ?>> Automatically announce new songs in Carrier’s IRC channels for this show</label>
+<p class="dj-admin-control-wide">Off by default for each new show. You can change this during your broadcast in Live / IRC or with <code>!songs on</code> / <code>!songs off</code>. Song capture and playlist timestamps continue in either mode.</p>
 <button class="dj-auth-button" type="submit" name="action" value="save">Save preparation</button>
 </form>
 <?php if ($id !== null) : ?>

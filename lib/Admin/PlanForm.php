@@ -29,7 +29,8 @@ final class PlanForm
         }
         return ['starts_at' => $start, 'ends_at' => $end, 'show' => $show,
             'tracks' => self::tracks(Input::text($post['playlist'] ?? '', 'playlist', 180000)),
-            'public' => ($post['public'] ?? '') === '1', 'reminder' => ($post['reminder'] ?? '') === '1'];
+            'public' => ($post['public'] ?? '') === '1', 'reminder' => ($post['reminder'] ?? '') === '1',
+            'song_announcements' => ($post['song_announcements'] ?? '') === '1'];
     }
 
     /** @return list<array{artist:string,title:string}> */

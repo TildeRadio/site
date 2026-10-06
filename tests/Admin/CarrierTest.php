@@ -86,6 +86,20 @@ final class CarrierTest extends TestCase
         self::assertSame('Updated', $this->store->plan($id)['show']['episode']);
     }
 
+    public function testSongAnnouncementsAreOptInAndStayWithTheirOwnedPreparation(): void
+    {
+        self::assertFalse($this->plan()['song_announcements']);
+        self::assertFalse($this->plan(['song_announcements' => 'on'])['song_announcements']);
+        $id = $this->store->savePlan($this->cat, null, $this->cat, 1, $this->plan(['song_announcements' => '1']), 0);
+        self::assertTrue($this->store->plan($id)['song_announcements']);
+        $plans = array_values(array_filter($this->store->carrierRecords(), static fn (array $record): bool => $record['kind'] === 'plan'));
+        self::assertTrue($plans[0]['data']['song_announcements']);
+        $this->denied(fn () => $this->store->savePlan($this->other, $id, $this->cat, 1, $this->plan(), 1), 403);
+        $this->store->savePlan($this->cat, $id, $this->cat, 1, $this->plan(), 1);
+        self::assertFalse($this->store->plan($id)['song_announcements']);
+        self::assertCount(2, $this->store->plan($id)['tracks']);
+    }
+
     public function testUsedPreparationIsImmutableAndCancellationPreservesItsRecord(): void
     {
         $id = $this->store->savePlan($this->cat, null, $this->cat, 1, $this->plan(), 0);

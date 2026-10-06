@@ -99,10 +99,16 @@ try:
         schedule.write_text(json.dumps(upstream))
         status, html, _ = cat.request('/dj/plan.php')
         assert status == 200
+        checkbox = re.search(r'<input[^>]+name="song_announcements"[^>]*>', html)[0]
+        assert 'checked' not in checkbox
         token = re.search(r'name="csrf" value="([^"]+)"', html)[1]
         stamp = lambda n: datetime.fromtimestamp(n, timezone.utc).strftime('%Y-%m-%dT%H:%M')
         assert cat.request('/dj/plan.php', {'csrf': token, 'version': '0', 'station_id': '1', 'starts_at': stamp(engine.clock[0]),
-                    'ends_at': stamp(engine.clock[0] + 3600), 'episode': 'Real contract show', 'playlist': 'Artist | One\nArtist | Two'})[0] == 303
+                    'ends_at': stamp(engine.clock[0] + 3600), 'episode': 'Real contract show', 'playlist': 'Artist | One\nArtist | Two', 'song_announcements': '1'})[0] == 303
+        _, html, _ = cat.request('/dj/plan.php?id=1')
+        assert 'checked' in re.search(r'<input[^>]+name="song_announcements"[^>]*>', html)[0]
+        _, html, _ = cat.request('/dj/plan.php?copy=1')
+        assert 'checked' not in re.search(r'<input[^>]+name="song_announcements"[^>]*>', html)[0]
         # Generating a linking code runs the real paged website snapshot first.
         _, html, _ = execute(lambda: cat.request('/dj/carrier.php'))
         form = next(f for f in re.findall(r'<form\b.*?</form>', html, re.S) if 'Generate a linking code' in f)
@@ -111,6 +117,7 @@ try:
         assert engine.integration.live_actor_ids() == {'1:4'}
         engine.integration.begin(1, 'cat', engine.clock[0])
         assert engine.integration.prepared()['plan_id'] == 1
+        assert engine.integration.song_announcements_enabled()
         _, html, _ = execute(lambda: cat.request('/dj/carrier.php'))
         form = next(f for f in re.findall(r'<form\b.*?</form>', html, re.S) if 'Start next song' in f)
         post = {name: re.search(r'name="' + name + r'" value="([^"]+)"', form)[1] for name in ['csrf', 'action_id']}
@@ -120,7 +127,30 @@ try:
         assert execute(lambda: cat.request('/dj/carrier.php', post))[0] == 303
         assert engine.integration.prepared()['position'] == 1
         assert engine.integration.activity(False)['current_track']['title'] == 'One'
-        print('Cross-project contract passed: real PHP plan, paged sync, private upstream ID, bot attachment, live action and duplicate POST protection.')
+        channels = lambda: [line for target, line in engine.bot.irc.lines if target == 'channel']
+        assert channels() == ['Track 1/2: Artist - One']
+        _, html, _ = execute(lambda: cat.request('/dj/carrier.php'))
+        form = next(f for f in re.findall(r'<form\b.*?</form>', html, re.S) if 'Disable song announcements' in f)
+        post = {name: re.search(r'name="' + name + r'" value="([^"]+)"', form)[1] for name in ['csrf', 'action_id', 'value']}
+        assert execute(lambda: cat.request('/dj/carrier.php', post | {'csrf': 'bad'}))[0] == 403
+        assert engine.integration.song_announcements_enabled()
+        assert execute(lambda: cat.request('/dj/carrier.php', post | {'actor': '1:163', 'session_id': '999', 'action': 'track'}))[0] == 303
+        assert not engine.integration.song_announcements_enabled()
+        _, html, _ = execute(lambda: cat.request('/dj/carrier.php'))
+        assert 'Enable song announcements' in html
+        form = next(f for f in re.findall(r'<form\b.*?</form>', html, re.S) if 'Start next song' in f)
+        post = {name: re.search(r'name="' + name + r'" value="([^"]+)"', form)[1] for name in ['csrf', 'action_id']}
+        assert execute(lambda: cat.request('/dj/carrier.php', post | {'value': 'next'}))[0] == 303
+        assert engine.integration.prepared()['position'] == 2
+        assert len(channels()) == 1
+        from tilderadio_bot.models import IRCMessage
+        engine.bot.storage.execute('INSERT INTO irc_links VALUES(?,?,?,?)', ('default', 'cat-services', '1:4', engine.clock[0]))
+        msg = IRCMessage({'account': 'cat-services'}, 'cat-nick!x@host', 'PRIVMSG', [], network='default')
+        engine.bot.cmd_songs(msg, '#radio', ['on'])
+        _, html, _ = execute(lambda: cat.request('/dj/carrier.php'))
+        assert 'Disable song announcements' in html
+        assert len(channels()) == 1
+        print('Cross-project contract passed: plan opt-in/copy defaults, real sync, bound live toggle, CSRF, IRC/website agreement, song announcements and duplicate POST protection.')
 finally:
     endpoint.close()
     engine.tearDown()
