@@ -16,8 +16,8 @@ with auth.fixture() as (origin, state, client, port):
     config.unlink()
     public = auth.Browser(origin)
     for path, required in [
-        ('/help/', ['What would you like to do?', '29 guides', 'data-tr-help-search']),
-        ('/help/?q=%21songs', ['Turn automatic song announcements', 'Jump to:']),
+        ('/help/', ['<h1 id="help-title">Help</h1>', '29 guides', 'data-tr-help-search']),
+        ('/help/?q=%21songs', ['Song announcements', 'Jump to:']),
         ('/help/?category=archive&audience=dj', ['2 guides', 'recordings']),
         ('/help/?topic=commands', ['!track next', '!songs on', '!carrier announce']),
         ('/djinfo/', ['id="testing"', 'id="going-live"']),

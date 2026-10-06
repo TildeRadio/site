@@ -136,7 +136,7 @@ function nextNavigation(win) {
  assert.equal(win.document.getElementById('tr-audio'),audio);
  assert.equal(win.location.pathname,'/help/');
  assert.equal(new URL(win.location.href).searchParams.get('q'),'!songs');
- assert.ok(win.document.querySelector('#help-content').textContent.includes('Turn automatic song announcements'));
+ assert.ok(win.document.querySelector('#help-content').textContent.includes('Song announcements'));
  assert.equal(win.document.querySelector('.site-nav [aria-current=page]').textContent,'help');
  const result=win.document.querySelector('.tr-help-card h3 a');
  assert.equal(new URL(result.href).searchParams.get('q'),'!songs');

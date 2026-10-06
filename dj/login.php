@@ -48,7 +48,7 @@ $page_stylesheets = ['css/dj-auth.css'];
 require dirname(__DIR__) . '/header.php';
 ?>
 <section class="tr-section dj-auth" aria-labelledby="dj-login-title">
-    <div class="dj-auth-heading"><span class="tr-badge">DJ booth</span><h1 class="tr-title" id="dj-login-title">Welcome back.</h1></div>
+    <h1 id="dj-login-title">DJ login</h1>
     <p class="dj-auth-intro">Sign in with your TildeRadio DJ streaming account.</p>
     <?php if ($error !== null) : ?>
         <p class="dj-auth-error" role="alert" tabindex="-1" data-dj-auth-alert><?= tr_dj_h($error) ?></p>
@@ -61,7 +61,7 @@ require dirname(__DIR__) . '/header.php';
         <input id="dj-password" name="password" type="password" autocomplete="current-password" maxlength="1024" required>
         <button type="submit" class="dj-auth-button">Sign in</button>
     </form>
-    <p class="dj-auth-help"><a href="<?= tr_dj_h(asset('help/?topic=login')) ?>">Login help</a> &middot; <a href="<?= tr_dj_h(asset('help/?topic=start-here')) ?>">Your first show: start here</a></p>
+    <p class="dj-auth-help"><a href="<?= tr_dj_h(asset('help/?topic=login')) ?>">Login help</a> &middot; <a href="<?= tr_dj_h(asset('help/?topic=start-here')) ?>">First show guide</a></p>
     <p class="dj-auth-help">Need an account or a password reset? Contact the station administrator.</p>
 </section>
 <?php require dirname(__DIR__) . '/footer.php'; ?>

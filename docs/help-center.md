@@ -8,7 +8,7 @@ catalog. Their existing section anchors remain available.
 
 ## Reading and searching
 
-- The landing page offers a first-show checklist and before/during/after-show paths.
+- The landing page groups guides by topic, with links to the first-show guide, streaming setup and Carrier commands.
 - Browse eight topics or filter for DJs, listeners or administrators.
 - Search titles, summaries, instructions and command examples. All search words
   must occur; title/summary/keyword matches rank ahead of incidental body matches.
@@ -74,19 +74,21 @@ under `docs/`. Operator deployment documentation remains versioned in `docs/`;
 public guides link to it where appropriate. Never put private keys, configuration,
 passwords or real linking codes in this public catalog.
 
-## Install this patch
+## Install the Help update
 
-The download was built against TildeRadio/site `master` at
+The complete Help replacement patch was built against TildeRadio/site `master` at
 `d521d4386a5282000c1e34079e5bedce79ea0c45`, including the merged song-announcement
-feature. Apply it to the matching checkout/current branch. Start with
+feature. If the earlier Help patch is already installed, apply `tilderadio-site-copy-layout-cleanup.patch` instead. Apply only one patch. The cleanup changes presentation and guide text; it retains the existing routes, forms and access checks.
+
+Apply it to the matching checkout/current branch. Start with
 `git status --short` and `git apply --check`; review any unrelated local edits or
 failed hunks before applying. Do not use `--reject` or overwrite a failed hunk.
 
 In a source checkout:
 
 ```sh
-git apply --check /path/to/tilderadio-site-help-center.patch
-git apply /path/to/tilderadio-site-help-center.patch
+git apply --check /path/to/tilderadio-site-help-replacement.patch
+git apply /path/to/tilderadio-site-help-replacement.patch
 composer dump-autoload --no-interaction
 php bin/lint-dj-auth.php
 ```

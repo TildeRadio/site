@@ -88,7 +88,7 @@ function tr_admin_begin(string $heading, string $section, ?string $error = null)
     $title = $self ? 'DJ booth' : 'Administration';
     $page_stylesheets = ['css/dj-auth.css', 'css/dj-admin.css'];
     require dirname(__DIR__, 2) . '/header.php';
-    echo '<section class="tr-section dj-admin' . ($self ? ' dj-editor' : '') . '"><div class="dj-admin-heading"><div><span class="tr-badge">' . ($self ? 'DJ booth' : 'Administration') . '</span><h1>' . tr_dj_h($heading) . '</h1></div><a href="' . tr_dj_h(tr_admin_url('../')) . '">Back to DJ booth</a></div>';
+    echo '<section class="tr-section dj-admin' . ($self ? ' dj-editor' : '') . '"><div class="dj-admin-heading"><div><h1>' . tr_dj_h($heading) . '</h1></div><a href="' . tr_dj_h(tr_admin_url('../')) . '">Back to DJ booth</a></div>';
     echo '<nav class="dj-admin-nav" aria-label="' . ($self ? 'DJ controls' : 'Administration') . '">';
     $navigation = $self
         ? ['overview' => ['Booth', ''], 'profiles' => ['My profile', 'profile.php'], 'broadcasts' => ['Sets / broadcasts', 'broadcasts.php'], 'accounts' => ['My schedules', '#dj-booth-schedules']]
@@ -104,7 +104,7 @@ function tr_admin_begin(string $heading, string $section, ?string $error = null)
     echo '</nav>';
     $helpTopic = $self ? (['profiles' => 'profile', 'broadcasts' => 'broadcasts', 'accounts' => 'booking', 'plans' => 'prepared-shows', 'carrier' => 'live-controls', 'recordings' => 'recordings'][$section] ?? 'website-map')
         : ($section === 'carrier' ? 'integration-status' : 'administration');
-    echo '<p class="dj-auth-help"><a href="' . tr_dj_h(asset('help/?topic=' . $helpTopic)) . '">Help with these controls &rarr;</a> &middot; <a href="' . tr_dj_h(asset('help/')) . '">Search all guides</a></p>';
+    echo '<p class="dj-auth-help"><a href="' . tr_dj_h(asset('help/?topic=' . $helpTopic)) . '">Help</a> &middot; <a href="' . tr_dj_h(asset('help/')) . '">All guides</a></p>';
     $flash = $_SESSION['admin_flash'] ?? null;
     unset($_SESSION['admin_flash']);
     if (is_string($flash)) {

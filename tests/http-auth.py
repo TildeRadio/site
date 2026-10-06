@@ -323,7 +323,7 @@ def run(origin, state, client_config, backend_port):
     assert browser.request("/dj/login.php", {"csrf": token, "username": "x" * 5000})[0] == 413
     before = browser.login()
     status, html, _ = browser.request("/dj/")
-    assert status == 200 and "Administrator" in html and "Hello, deepend." in html
+    assert status == 200 and "Administrator" in html and "Signed in as <strong>deepend</strong>" in html
     stolen_old = Browser(origin)
     stolen_old.cookie = before
     assert stolen_old.request("/dj/")[0] == 303
@@ -335,12 +335,12 @@ def run(origin, state, client_config, backend_port):
     assert browser.request("/dj/")[0] == 303
     browser.login("cat")
     status, html, _ = browser.request("/dj/")
-    assert status == 200 and "Administrator" not in html and "Hello, &lt;Cat&gt;." in html
-    assert "deepend" not in html and "Your login is ready" in html
+    assert status == 200 and "Administrator" not in html and "Signed in as <strong>cat</strong>" in html
+    assert "deepend" not in html and "No profile linked" in html
     age_session(browser, state, "checked", 61)
     client_config.write_text(json.dumps({"mode": "unavailable"}))
     status, html, _ = browser.request("/dj/")
-    assert status == 503 and "Hello," not in html
+    assert status == 503 and "Signed in as" not in html
     client_config.write_text(json.dumps({"mode": "revoked"}))
     assert browser.request("/dj/")[0] == 303
     client_config.write_text(json.dumps({"mode": "active"}))

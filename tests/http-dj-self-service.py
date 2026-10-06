@@ -59,7 +59,7 @@ def run(origin, state, *_):
     })[0] == 303
     assert cat.request("/dj/admin/")[0] == 403
     html = page(cat, "/dj/")
-    assert "Edit your profile and show" in html and "schedule.php?" in html
+    assert 'href="/dj/profile.php"' in html and "schedule.php?" in html
     html = page(cat, "/dj/profile.php?slug=deepend")
     assert 'Permanent URL slug: <strong>cat</strong>' in html
     version = field(html, "version")

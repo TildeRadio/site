@@ -92,3 +92,23 @@
 .dj-editor fieldset label { display: block; padding-block: .4rem; }
 .dj-editor button, .dj-editor input, .dj-editor select { min-height: 2.75rem; }
 .dj-editor a:focus-visible, .dj-editor button:focus-visible { outline: 3px solid #8cff9b; outline-offset: 3px; }
+
+/* Match the public pages: plain navigation, square form fields and thin rules. */
+.dj-admin { margin: 0; }
+.dj-admin-heading h1, .dj-editor .dj-admin-heading h1 { font-size: 1.55rem; margin: 0 0 1rem; }
+.dj-admin-nav, .dj-editor .dj-admin-nav { gap: .5rem 1.2rem; border-bottom: 1px solid var(--tr-line); padding-bottom: .7rem; margin-bottom: 1rem; }
+.dj-admin-nav a, .dj-editor .dj-admin-nav a { padding: .25rem 0; border: 0; border-radius: 0; min-height: 2rem; font-size: .85rem; }
+.dj-admin-nav a[aria-current] { background: none; color: var(--tr-fg); font-weight: 400; text-decoration: underline; text-underline-offset: .3em; }
+.dj-admin-stats { gap: 1rem; }
+.dj-admin-stats a { background: none; border: 0; border-bottom: 1px solid var(--tr-line); border-radius: 0; padding: .7rem 0; font-size: .85rem; }
+.dj-admin-stats strong { display: inline; font-size: 1rem; margin-right: .5rem; }
+.dj-admin-table-wrap, .dj-admin details, .dj-admin-empty { border-radius: 0; }
+.dj-admin-form input:not([type=checkbox]), .dj-admin-form select, .dj-admin-form textarea,
+.dj-admin-form fieldset, .dj-editor .dj-admin-form fieldset, .dj-editor .dj-admin-form .dj-admin-actions,
+.dj-editor .dj-admin-danger { border-radius: 0; }
+.dj-editor .dj-admin-form fieldset, .dj-editor .dj-admin-form .dj-admin-actions { background: none; }
+.dj-editor .dj-admin-form .dj-admin-actions { border: 0; border-top: 1px solid var(--tr-line); padding: 1rem 0; }
+.dj-admin-empty { border: 0; padding: 1rem 0; }
+.dj-editor a:focus-visible, .dj-editor button:focus-visible { outline: 1px solid var(--tr-accent-bright); outline-offset: 3px; }
+
+.dj-broadcast-row { background: none; border: 0; border-bottom: 1px solid var(--tr-line); border-radius: 0; padding: 1rem 0; }

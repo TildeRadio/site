@@ -76,11 +76,14 @@ function tr_help_block(array $block): void
  * @param array<string,mixed> $article
  * @param array<string,string> $search
  */
-function tr_help_card(array $article, string $category, ?string $section = null, array $search = []): void
+function tr_help_card(array $article, string $category, ?string $section = null, array $search = [], int $heading = 3): void
 {
-    echo '<article class="tr-help-card"><span class="tr-help-kicker">' . tr_help_h($category) . '</span>';
-    echo '<h3><a href="' . tr_help_h(tr_help_url(['topic' => $article['id']] + $search)) . '">' . tr_help_h($article['title']) . '</a></h3><p>' . tr_help_h($article['summary']) . '</p>';
-    echo '<p class="tr-help-meta">' . tr_help_h(implode(' · ', array_map(static fn (string $role): string => ['dj' => 'DJs', 'listener' => 'Listeners', 'admin' => 'Administrators'][$role], $article['audience']))) . '</p>';
+    $heading = $heading === 4 ? 'h4' : 'h3';
+    echo '<article class="tr-help-card">';
+    if ($category !== '') {
+        echo '<span class="tr-help-kicker">' . tr_help_h($category) . '</span>';
+    }
+    echo '<' . $heading . '><a href="' . tr_help_h(tr_help_url(['topic' => $article['id']] + $search)) . '">' . tr_help_h($article['title']) . '</a></' . $heading . '><p>' . tr_help_h($article['summary']) . '</p>';
     if ($section !== null) {
         foreach ($article['sections'] as $part) {
             if ($part['id'] === $section) {
